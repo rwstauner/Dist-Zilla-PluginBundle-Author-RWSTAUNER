@@ -9,6 +9,9 @@ use Dist::Zilla 2.100922; # TestRelease
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
+#use Dist::Zilla::Plugin::CheckExtraTests ();
+use Dist::Zilla::Plugin::CompileTests 1.100740 ();
+#use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
 use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
@@ -83,7 +86,7 @@ sub configure {
 
 	# munge files
 		'PkgVersion',
-		# 'Prepender',
+		# 'Prepender' 1.100960
 		( $self->is_task
 			?  'TaskWeaver'
 			: [ 'PodWeaver' => { config_plugin => $self->weaver_config } ]
@@ -123,6 +126,7 @@ sub configure {
 			MetaYAML
 			MetaJSON
 		),
+		# 'Authority' 0.01
 
 		[
 			Prereqs => 'TestMoreWithSubtests' => {
@@ -146,6 +150,7 @@ sub configure {
 
 	# generated t/ tests
 		[ CompileTests => { fake_home => 1 } ],
+		# ReportVersions::Tiny 1.01
 
 	# generated xt/ tests
 		qw(
