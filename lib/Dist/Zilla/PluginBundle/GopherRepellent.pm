@@ -122,7 +122,7 @@ sub configure {
 		),
 		[
 			MetaNoIndex => {
-				directory => [qw/inc t xt examples corpus share/],
+				directory => [qw/corpus examples inc share t xt/],
 #				'package' => [qw/DB/]
 			}
 		],
@@ -242,7 +242,13 @@ It is roughly equivalent to:
 	; disable with 'auto_prereqs = 0'
 
 	[MetaNoIndex]           ; encourage CPAN not to index:
-	                        ; directories: inc t xt examples corpus share
+	directory = corpus
+	directory = examples
+	directory = inc
+	directory = share
+	directory = t
+	directory = xt
+
 	[MetaProvides::Package] ; describe packages included in the dist
 	meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
 
