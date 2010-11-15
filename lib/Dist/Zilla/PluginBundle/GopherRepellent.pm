@@ -109,7 +109,7 @@ sub configure {
 			Repository => { github_http => 0 }
 		],
 		( $self->auto_prereqs
-			? [ 'AutoPrereqs' => { $self->skip_prereqs ? (skip => $self->skip_prereqs) : () } ]
+			? [ 'AutoPrereqs' => $self->config_slice({ skip_prereqs => 'skip' }) ]
 			: ()
 		),
 		[
