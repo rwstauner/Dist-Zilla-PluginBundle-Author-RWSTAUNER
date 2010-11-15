@@ -249,6 +249,15 @@ This Bundle was heavily influenced by the bundles of
 L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
 L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
 
+=head1 RATIONALE
+
+I built my own PluginBundles
+after my ini files started getting unruly.
+
+It also made sense to me to build a separate
+PluginBundle for C<$work> which could use this one
+and then set a few attributes.
+
 =head1 CAVEATS
 
 This bundle is essentially BeLike::RWSTAUNER.
@@ -262,5 +271,14 @@ So this is mostly for my own use
 (and for people I work with who are less inclined to roll their own),
 but perhaps my choices and documentation will help others along the way
 (or encouarage someone to set me straight).
+
+=head1 SEE ALSO
+
+=for :list
+* L<Dist::Zilla>
+* L<Pod::Weaver>
+* L<http://www.lucasarts.com/games/monkeyisland>
+The Secret of Monkey Island (E<copy> Lucas Arts)
+- the inspiration for the name of this bundle
 
 =cut
