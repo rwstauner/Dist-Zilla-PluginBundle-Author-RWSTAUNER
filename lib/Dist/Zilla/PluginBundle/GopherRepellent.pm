@@ -11,6 +11,8 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
 use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
+use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
+use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::PortabilityTests ();
@@ -107,20 +109,20 @@ sub configure {
 			? [ 'AutoPrereqs' => { $self->skip_prereqs ? (skip => $self->skip_prereqs) : () } ]
 			: ()
 		),
+		[
+			MetaNoIndex => {
+				directory => [qw/inc t xt examples corpus share/],
+#				'package' => [qw/DB/]
+			}
+		],
+		['MetaProvides::Package' => { meta_noindex => 1 } ], # AFTER MetaNoIndex
+
 		qw(
 			MinimumPerl
 			MetaConfig
 			MetaYAML
 			MetaJSON
 		),
-
-#		[
-#			MetaNoIndex => { 
-#				directory => [qw/t xt examples corpus/],
-#				'package' => [qw/DB/]
-#			} 
-#		],
-#		['MetaProvides::Package' => { meta_noindex => 1 } ], # AFTER MetaNoIndex
 
 		[
 			Prereqs => 'TestMoreWithSubtests' => {
@@ -221,13 +223,18 @@ It is roughly equivalent to:
 
 	[AutoPrereqs]
 	; disable with 'auto_prereqs = 0'
+
+	[MetaNoIndex]           ; encourage CPAN not to index:
+	                        ; directories: inc t xt examples corpus share
+	[MetaProvides::Package] ; describe packages included in the dist
+	meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
+
 	[MinimumPerl]           ; automatically determine Perl version required
 
-	[MetaConfig]            ; include Dist::Zilla info in distmeta
+	[MetaConfig]            ; include Dist::Zilla info in distmeta (dzil core)
 	[MetaYAML]              ; include META.yml (v1.4) (dzil core [@Basic])
 	[MetaJSON]              ; include META.json (v2) (more info than META.yml)
 
-	; build system
 	[ExtraTests]            ; build system (dzil core [@Basic])
 	[ExecDir]               ; include 'bin/*' as executables
 	[ShareDir]              ; include 'share/' for File::ShareDir
