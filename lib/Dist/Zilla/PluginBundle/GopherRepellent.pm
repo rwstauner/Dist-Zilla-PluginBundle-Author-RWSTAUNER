@@ -110,6 +110,7 @@ sub configure {
 				log_format => 'format:%h %s%n'
 			}
 		],
+		# @APOCALYPTIC: generate MANIFEST.SKIP ?
 
 	# metadata
 		[
@@ -180,6 +181,8 @@ sub configure {
 		),
 
 	# release
+	# @Apocalyptic: -e File::Spec->catfile( File::HomeDir->my_home, '.pause' )
+	#            or -e File::Spec->catfile( '.', '.pause' ) )
 		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
 	);
 
