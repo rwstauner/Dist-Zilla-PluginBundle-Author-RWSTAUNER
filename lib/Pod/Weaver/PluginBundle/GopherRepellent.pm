@@ -4,6 +4,11 @@ package Pod::Weaver::PluginBundle::GopherRepellent;
 use strict;
 use warnings;
 
+use Pod::Weaver::PluginBundle::Default ();
+#use Pod::Weaver::Plugin::WikiDoc ();
+use Pod::Weaver::Section::Support 1.001 (); # not on CPAN
+use Pod::Elemental::Transformer::List ();
+
 use Pod::Weaver::Config::Assembler;
 sub _exp { Pod::Weaver::Config::Assembler->expand_package($_[0]) }
 

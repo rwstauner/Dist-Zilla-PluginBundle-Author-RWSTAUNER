@@ -8,7 +8,15 @@ use Moose::Autobox;
 use Dist::Zilla 2.100922; # TestRelease
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
-# TODO: use modules
+use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
+use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
+use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
+use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
+use Dist::Zilla::Plugin::PodWeaver ();
+use Dist::Zilla::Plugin::PortabilityTests ();
+use Dist::Zilla::Plugin::Repository 0.13 ();  # version 2 Meta Spec
+use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
+use Pod::Weaver::PluginBundle::GopherRepellent ();
 
 our $NAME = join('', '@', (__PACKAGE__ =~ /([^:]+)$/));
 
