@@ -299,7 +299,7 @@ PluginBundle for C<$work> which could use this one
 and then set a few attributes.
 
 This bundle is essentially C<BeLike::RWSTAUNER>.
-(And who would want to do that?)
+(Who would want to do that?)
 
 It is subject to change.
 
