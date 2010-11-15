@@ -42,6 +42,9 @@ sub mvp_bundle_config {
   }
 
   push @plugins, (
+    [ "$NAME/Leftovers", _exp('Leftovers'), {} ],
+    [ "$NAME/postlude",  _exp('Region'),    { region_name => 'postlude' } ],
+
 	# include Support section with various cpan links and github repo
     [ "$NAME/Support",   _exp('Support'),
 		{
@@ -50,8 +53,6 @@ sub mvp_bundle_config {
 		}
 	],
 
-    [ "$NAME/Leftovers", _exp('Leftovers'), {} ],
-    [ "$NAME/postlude",  _exp('Region'),    { region_name => 'postlude' } ],
     [ "$NAME/Authors",   _exp('Authors'),   {} ],
     [ "$NAME/Legal",     _exp('Legal'),     {} ],
     [ "$NAME/List",      _exp('-Transformer'), { 'transformer' => 'List' } ],
