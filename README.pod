@@ -1,0 +1,25 @@
+=head1 NAME
+
+Dist::Zilla::PluginBundle::GopherRepellent -
+keep those pesky gophers away from your dists!
+
+=head1 DESCRIPTION
+
+PluginBundles for building perl distributions
+with Dist::Zilla and Pod::Weaver.  
+
+I built my own
+after my ini files started getting unruly.
+
+It also made sense to me to build a separate
+PluginBundle for C<$work> which could use this one
+and then set a few attributes.
+
+=head1 SEE ALSO
+
+* The POD in the actual modules for more information.
+
+* The Secret of Monkey Island (E<copy> Lucas Arts)
+- the inspiration for the name of this bundle
+
+=cut
