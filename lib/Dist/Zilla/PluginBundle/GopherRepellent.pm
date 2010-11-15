@@ -258,16 +258,21 @@ It also made sense to me to build a separate
 PluginBundle for C<$work> which could use this one
 and then set a few attributes.
 
-=head1 CAVEATS
-
-This bundle is essentially BeLike::RWSTAUNER.
+This bundle is essentially C<BeLike::RWSTAUNER>.
 (And who would want to do that?)
 
 It is subject to change.
 
-I am still learning and exploring the possibilities.
+I am still new to Dist::Zilla
+and uploading to CPAN
+and am trying to learn how to make good/quality/kwalitee modules.
 
-So this is mostly for my own use
+Therefore this bundle may be useful for others
+who aren't quite sure what they want or how they want it,
+but would like to have as much generated as possible to make a "complete" dist.
+
+Beyond that audience
+this may be mostly for my own use
 (and for people I work with who are less inclined to roll their own),
 but perhaps my choices and documentation will help others along the way
 (or encouarage someone to set me straight).
