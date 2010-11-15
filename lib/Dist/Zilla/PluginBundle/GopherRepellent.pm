@@ -52,6 +52,13 @@ has is_task => (
 	default => sub { $_[0]->payload->{is_task} }
 );
 
+has releaser => (
+	is      => 'ro',
+	isa     => 'Str',
+	lazy    => 1,
+	default => sub { $_[0]->payload->{releaser} || 'UploadToCPAN' }
+);
+
 has skip_prereqs => (
 	is      => 'ro',
 	isa     => 'Str',
@@ -173,7 +180,7 @@ sub configure {
 		),
 
 	# release
-    	( $self->fake_release ? 'FakeRelease' : 'UploadToCPAN' ),
+		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
 	);
 
 #	$self->add_bundle('@Git' => {
@@ -264,6 +271,8 @@ It is roughly equivalent to:
 	[ConfirmRelease]        ; are you sure?
 	[UploadToCPAN]
 	; set 'fake_release = 1' to use [FakeRelease] instead
+	; set 'releaser = AlternatePlugin' to use a different releaser plugin
+	; 'fake_release' will override the 'releaser' (useful for sub-bundles)
 
 This Bundle was heavily influenced by the bundles of
 L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
