@@ -19,7 +19,7 @@ use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::PortabilityTests ();
-use Dist::Zilla::Plugin::Repository 0.13 ();  # version 2 Meta Spec
+use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
 use Pod::Weaver::PluginBundle::GopherRepellent ();
 
@@ -113,9 +113,11 @@ sub configure {
 		# @APOCALYPTIC: generate MANIFEST.SKIP ?
 
 	# metadata
-		[
-			Repository => { github_http => 0 }
-		],
+		qw(
+			Bugtracker
+			Repository
+		),
+			# GithubMeta overrides [Repository] if repository is on github
 		( $self->auto_prereqs
 			? [ 'AutoPrereqs' => $self->config_slice({ skip_prereqs => 'skip' }) ]
 			: ()
@@ -236,7 +238,6 @@ It is roughly equivalent to:
 
 	; metadata
 	[Repository]            ; determine git[hub] information
-	github_http = 0         ; let META.json show both url's
 
 	[AutoPrereqs]
 	; disable with 'auto_prereqs = 0'
