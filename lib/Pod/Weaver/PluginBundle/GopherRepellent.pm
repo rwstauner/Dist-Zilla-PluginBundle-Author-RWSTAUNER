@@ -65,47 +65,64 @@ sub mvp_bundle_config {
 
 =for Pod::Coverage mvp_bundle_config
 
+=head1 SYNOPSIS
+
+	# weaver.ini
+
+	[@GopherRepellent]
+
+or with a dist.ini like so:
+
+	# dist.ini
+
+	[@GopherRepellent]
+
+you don't need a weaver.ini at all.
+
 =head1 DESCRIPTION
 
-Roughly equivalent to:
+This PluginBundle is like the @Default
+with the following additions:
 
-	; like @Default {
-	[@CorePrep]
+=for :list
+* Inserts a SUPPORT section to the POD just before AUTHOR
+* Adds the List Transformer
 
-	[Name]
-	[Version]
+It is roughly equivalent to:
 
-	[Region  / prelude]
+	[@CorePrep]               ; [@Default]
 
-	[Generic / SYNOPSIS]
-	[Generic / DESCRIPTION]
-	[Generic / OVERVIEW]
+	[Name]                    ; [@Default]
+	[Version]                 ; [@Default]
 
-	[Collect / ATTRIBUTES]
+	[Region  / prelude]       ; [@Default]
+
+	[Generic / SYNOPSIS]      ; [@Default]
+	[Generic / DESCRIPTION]   ; [@Default]
+	[Generic / OVERVIEW]      ; [@Default]
+
+	[Collect / ATTRIBUTES]    ; [@Default]
 	command = attr
 
-	[Collect / METHODS]
+	[Collect / METHODS]       ; [@Default]
 	command = method
 
-	[Collect / FUNCTIONS]
+	[Collect / FUNCTIONS]     ; [@Default]
 	command = func
 
-	[Leftovers]
+	[Leftovers]               ; [@Default]
 
-	[Region  / postlude]
+	[Region  / postlude]      ; [@Default]
 
 	; custom section
-	[Support]
+	[Support]                 ; =head1 SUPPORT (bugs, cpants, git...)
 	repository_content =
 	repository_link = both
 
-	; finish @Default
-	[Authors]
-	[Legal]
-	; } end of @Default
+	[Authors]                 ; [@Default]
+	[Legal]                   ; [@Default]
 
-	; append customizations
-	[-Transformer]
+	[-Transformer]            ; =for :list
 	transformer = List
 
 =cut
