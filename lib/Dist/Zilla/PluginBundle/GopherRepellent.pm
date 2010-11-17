@@ -306,9 +306,10 @@ This bundle is essentially C<BeLike::RWSTAUNER>.
 
 It is subject to change.
 
-I am still new to Dist::Zilla
+I am still new to L<Dist::Zilla>
 and uploading to CPAN
-and am trying to learn how to make good/quality/kwalitee modules.
+and am trying to learn how to make
+good/quality/L<kwalitee|Module::CPANTS::Analyse> modules.
 
 Therefore this bundle may be useful for others
 who aren't quite sure what they want or how they want it,
