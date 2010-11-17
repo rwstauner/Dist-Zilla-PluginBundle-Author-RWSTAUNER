@@ -75,13 +75,13 @@ sub mvp_bundle_config {
 
 	[@GopherRepellent]
 
-or with a dist.ini like so:
+or with a F<dist.ini> like so:
 
 	# dist.ini
 
 	[@GopherRepellent]
 
-you don't need a weaver.ini at all.
+you don't need a F<weaver.ini> at all.
 
 =head1 DESCRIPTION
 
