@@ -6,7 +6,7 @@ use warnings;
 
 use Pod::Weaver::PluginBundle::Default ();
 #use Pod::Weaver::Plugin::WikiDoc ();
-use Pod::Weaver::Section::Support 1.001 (); # not on CPAN
+use Pod::Weaver::Section::Support 1.000 (); # pull request not on CPAN
 use Pod::Elemental::Transformer::List ();
 
 use Pod::Weaver::Config::Assembler;
@@ -48,8 +48,12 @@ sub mvp_bundle_config {
 	# include Support section with various cpan links and github repo
     [ "$NAME/Support",   _exp('Support'),
 		{
-			repository_content => '',
-			repository_link => 'both'
+			# these attributes are waiting in a pull request
+			eval { Pod::Weaver::Section::Support->can('repository_content') }
+			? (
+				repository_content => '',
+				repository_link => 'both'
+			) : ()
 		}
 	],
 
