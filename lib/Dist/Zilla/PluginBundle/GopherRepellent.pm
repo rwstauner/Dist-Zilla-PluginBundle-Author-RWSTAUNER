@@ -11,7 +11,7 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 #use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CompileTests 1.100740 ();
-#use Dist::Zilla::Plugin::GithubMeta 0.10 ();
+use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
 use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
@@ -113,11 +113,12 @@ sub configure {
 		# @APOCALYPTIC: generate MANIFEST.SKIP ?
 
 	# metadata
-		qw(
-			Bugtracker
-			Repository
-		),
-			# GithubMeta overrides [Repository] if repository is on github
+		'Bugtracker',
+		# won't find git if not in repository root (!-e ".git")
+		'Repository',
+		# overrides [Repository] if repository is on github
+		'GithubMeta',
+
 		( $self->auto_prereqs
 			? [ 'AutoPrereqs' => $self->config_slice({ skip_prereqs => 'skip' }) ]
 			: ()
@@ -237,7 +238,8 @@ It is roughly equivalent to:
 	log_format = format:%h %s%n
 
 	; metadata
-	[Repository]            ; determine git[hub] information
+	[Repository]            ; determine git information (if -e ".git")
+	[GithubMeta]            ; overrides [Repository] if repository is on github
 
 	[AutoPrereqs]
 	; disable with 'auto_prereqs = 0'
