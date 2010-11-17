@@ -210,8 +210,8 @@ no Moose;
 
 =head1 DESCRIPTION
 
-This is a L<Dist::Zilla::PluginBundle> to help
-keep those pesky gophers away from your dists.
+This is a L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
+to help keep those pesky gophers away from your dists.
 
 It is roughly equivalent to:
 
