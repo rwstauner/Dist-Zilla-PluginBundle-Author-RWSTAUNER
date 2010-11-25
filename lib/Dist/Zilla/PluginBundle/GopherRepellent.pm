@@ -9,15 +9,21 @@ use Dist::Zilla 2.100922; # TestRelease
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
+use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CompileTests 1.100740 ();
-use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
 use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
+use Dist::Zilla::Plugin::GithubMeta 0.10 ();
+use Dist::Zilla::Plugin::KwaliteeTests ();
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
+use Dist::Zilla::Plugin::MinimumVersionTests ();
+use Dist::Zilla::Plugin::PkgVersion ();
+use Dist::Zilla::Plugin::PodCoverageTests ();
 use Dist::Zilla::Plugin::PodSpellingTests ();
+use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::PortabilityTests ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
