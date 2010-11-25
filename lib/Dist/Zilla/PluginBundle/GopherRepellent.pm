@@ -322,7 +322,7 @@ Beyond that audience
 this may be mostly for my own use
 (and for people I work with who are less inclined to roll their own),
 but perhaps my choices and documentation will help others along the way
-(or encouarage someone to set me straight).
+(or encourage someone to set me straight).
 
 =head1 SEE ALSO
 
