@@ -61,6 +61,8 @@ sub mvp_bundle_config {
     [ "$NAME/Authors",   _exp('Authors'),   {} ],
     [ "$NAME/Legal",     _exp('Legal'),     {} ],
     [ "$NAME/List",      _exp('-Transformer'), { 'transformer' => 'List' } ],
+
+	[ "$NAME/StopWords", _exp('-StopWords'), {} ],
   );
 
   return @plugins;
@@ -129,5 +131,7 @@ It is roughly equivalent to:
 
 	[-Transformer]            ; enable =for :list
 	transformer = List
+
+	[-StopWords]              ; generate some stopwords and gather them together
 
 =cut
