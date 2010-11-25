@@ -276,6 +276,7 @@ It is roughly equivalent to:
 	[MetaTests]             ; test META
 	[PodSyntaxTests]        ; test POD
 	[PodCoverageTests]      ; test documentation coverage
+	[PodSpellingTests]      ; spell check POD
 	[PortabilityTests]      ; test portability (why? who doesn't use Linux?)
 	[KwaliteeTests]         ; CPANTS
 	[MinimumVersionTests]   ; test that the automatic plugin worked
