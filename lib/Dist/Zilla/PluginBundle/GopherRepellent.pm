@@ -17,6 +17,7 @@ use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
+use Dist::Zilla::Plugin::PodSpellingTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::PortabilityTests ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
@@ -168,6 +169,7 @@ sub configure {
 			MetaTests
 			PodSyntaxTests
 			PodCoverageTests
+			PodSpellingTests
 			PortabilityTests
 			KwaliteeTests
 			MinimumVersionTests
