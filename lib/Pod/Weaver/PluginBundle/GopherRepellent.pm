@@ -21,6 +21,7 @@ sub mvp_bundle_config {
   push @plugins, (
     #[ "$NAME/WikiDoc",     _exp('-WikiDoc'), {} ],
     [ "$NAME/CorePrep",    _exp('@CorePrep'), {} ],
+
     [ "$NAME/Name",        _exp('Name'),      {} ],
     [ "$NAME/Version",     _exp('Version'),   {} ],
 
@@ -126,7 +127,7 @@ It is roughly equivalent to:
 	[Authors]                 ; [@Default]
 	[Legal]                   ; [@Default]
 
-	[-Transformer]            ; =for :list
+	[-Transformer]            ; enable =for :list
 	transformer = List
 
 =cut
