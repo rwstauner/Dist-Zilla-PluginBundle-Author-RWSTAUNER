@@ -202,6 +202,8 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
 
+=for stopwords PluginBundle PluginBundles DAGOLDEN RJBS dists ini
+
 =for Pod::Coverage configure
 
 =head1 SYNOPSIS
