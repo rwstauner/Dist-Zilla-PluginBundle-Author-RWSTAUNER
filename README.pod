@@ -3,7 +3,7 @@
 I<< Keep those pesky gophers away from your dists! >>
 
 PluginBundles for building perl distributions
-with Dist::Zilla and Pod::Weaver.  
+with L<Dist::Zilla> and L<Pod::Weaver>.
 
 I built my own
 after my ini files started getting unruly.
