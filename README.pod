@@ -18,7 +18,8 @@ and then set a few attributes.
 
 =item * The POD in the actual modules for more information.
 
-=item * The Secret of Monkey Island (E<copy> Lucas Arts)
+=item * L<http://www.lucasarts.com/games/monkeyisland>
+The Secret of Monkey Island (E<copy> Lucas Arts)
 - the inspiration for the name of this bundle
 
 =back
