@@ -136,7 +136,11 @@ sub configure {
 #				'package' => [qw/DB/]
 			}
 		],
-		['MetaProvides::Package' => { meta_noindex => 1 } ], # AFTER MetaNoIndex
+		[ 	# AFTER MetaNoIndex
+			'MetaProvides::Package' => {
+				meta_noindex => 1
+			}
+		],
 
 		qw(
 			MinimumPerl
