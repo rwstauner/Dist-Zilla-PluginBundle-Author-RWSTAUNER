@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Moose;
 use Moose::Autobox;
-use Dist::Zilla 2.100922; # TestRelease
+use Dist::Zilla 4.102345;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
