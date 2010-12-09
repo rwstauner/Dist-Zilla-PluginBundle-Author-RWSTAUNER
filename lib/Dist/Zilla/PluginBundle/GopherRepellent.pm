@@ -240,6 +240,8 @@ It is roughly equivalent to:
 	[ManifestSkip]          ; custom stuff to skip
 
 	; munge files
+	[Authority]             ; inject $AUTHORITY into modules
+	do_metadata = 1         ; default
 	[PkgVersion]            ; inject $VERSION into modules
 
 	[PodWeaver]             ; munge POD in all modules
