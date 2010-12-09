@@ -135,8 +135,10 @@ sub configure {
 		),
 		[
 			MetaNoIndex => {
-				directory => [qw/corpus examples inc share t xt/],
-#				'package' => [qw/DB/]
+				# could use grep { -d $_ } but that will miss any generated files
+				directory => [qw(corpus examples inc share t xt)],
+#				'namespace' => [qw(Local t::lib)],
+#				'package' => [qw(DB)]
 			}
 		],
 		[ 	# AFTER MetaNoIndex
