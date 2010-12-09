@@ -17,6 +17,7 @@ use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
 use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::KwaliteeTests ();
+#use Dist::Zilla::Plugin::MetaData::BuiltWith (); # FIXME: see comment below
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
@@ -133,6 +134,7 @@ sub configure {
 			? [ 'AutoPrereqs' => $self->config_slice({ skip_prereqs => 'skip' }) ]
 			: ()
 		),
+#		[ 'MetaData::BuiltWith' => { show_uname => 1 } ], # currently DZ::Util::EmulatePhase causes problems
 		[
 			MetaNoIndex => {
 				# could use grep { -d $_ } but that will miss any generated files
