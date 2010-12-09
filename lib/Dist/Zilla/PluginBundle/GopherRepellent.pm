@@ -208,6 +208,8 @@ sub configure {
 		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
 	);
 
+	# TODO: query zilla for phase... if release, announce which releaser we're using
+
 #	$self->add_bundle('@Git' => {
 #		tag_format => '%v',
 #		push_to    => [ qw(origin github) ],
