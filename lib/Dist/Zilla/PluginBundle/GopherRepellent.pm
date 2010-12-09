@@ -23,6 +23,7 @@ use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::MinimumVersionTests ();
 use Dist::Zilla::Plugin::PkgVersion ();
 use Dist::Zilla::Plugin::PodCoverageTests ();
+use Dist::Zilla::Plugin::PodLinkTests ();
 use Dist::Zilla::Plugin::PodSpellingTests ();
 use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
@@ -180,6 +181,7 @@ sub configure {
 			MetaTests
 			PodSyntaxTests
 			PodCoverageTests
+			PodLinkTests
 			PodSpellingTests
 			PortabilityTests
 			KwaliteeTests
@@ -289,6 +291,7 @@ It is roughly equivalent to:
 	[MetaTests]             ; test META
 	[PodSyntaxTests]        ; test POD
 	[PodCoverageTests]      ; test documentation coverage
+	[PodLinkTests]          ; test L<> links in POD
 	[PodSpellingTests]      ; spell check POD
 	[PortabilityTests]      ; test portability (why? who doesn't use Linux?)
 	[KwaliteeTests]         ; CPANTS
