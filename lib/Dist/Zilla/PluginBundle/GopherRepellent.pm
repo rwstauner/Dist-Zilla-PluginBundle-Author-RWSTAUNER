@@ -9,6 +9,7 @@ use Dist::Zilla 2.100922; # TestRelease
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
+use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CompileTests 1.100740 ();
@@ -99,6 +100,7 @@ sub configure {
 		),
 
 	# munge files
+		[ 'Authority' => { do_metadata => 1 }],
 		'PkgVersion',
 		# 'Prepender' 1.100960
 		( $self->is_task
@@ -148,7 +150,6 @@ sub configure {
 			MetaYAML
 			MetaJSON
 		),
-		# 'Authority' 0.01
 
 		[
 			Prereqs => 'TestMoreWithSubtests' => {
