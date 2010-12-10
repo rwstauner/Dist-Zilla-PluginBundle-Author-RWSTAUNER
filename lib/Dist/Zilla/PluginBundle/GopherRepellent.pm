@@ -217,6 +217,17 @@ sub configure {
 
 }
 
+# As of Dist::Zilla 4.102345 pluginbundles don't have log and log_fatal methods
+# but hopefully someday they will... so define our own unless they exist.
+foreach my $method ( qw(log log_fatal) ){
+	unless( __PACKAGE__->can($method) ){
+		no strict 'refs';
+		*$method = $method =~ /fatal/
+			? sub { die($_[1]) }
+			: sub { warn("[$NAME] $_[1]") };
+	}
+}
+
 __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
