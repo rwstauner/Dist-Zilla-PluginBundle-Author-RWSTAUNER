@@ -24,7 +24,6 @@ use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::MinimumVersionTests ();
 use Dist::Zilla::Plugin::PkgVersion ();
 use Dist::Zilla::Plugin::PodCoverageTests ();
-use Dist::Zilla::Plugin::PodLinkTests ();
 use Dist::Zilla::Plugin::PodSpellingTests ();
 use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
@@ -62,6 +61,17 @@ has is_task => (
 	default => sub { $_[0]->payload->{is_task} }
 );
 
+has pod_link_tests => (
+	is      => 'ro',
+	isa     => 'Bool',
+	lazy    => 1,
+	default => sub {
+		exists $_[0]->payload->{pod_link_tests}
+		     ? $_[0]->payload->{pod_link_tests}
+		     : 1
+	}
+);
+
 has releaser => (
 	is      => 'ro',
 	isa     => 'Str',
@@ -85,6 +95,19 @@ has weaver_config => (
 
 sub configure {
 	my ($self) = @_;
+
+	# optional... it was difficult to install these
+	my $pod_link_tests = $self->pod_link_tests &&
+		eval 'require Dist::Zilla::Plugin::PodLinkTests';
+
+	if( $pod_link_tests ){
+		$pod_link_tests = ['PodLinkTests'];
+	}
+	else {
+		$pod_link_tests = [];
+		$self->log('PodLinkTests disabled -- unable to load')
+			if $self->pod_link_tests;
+	}
 
 	$self->log_fatal("you must not specify both weaver_config and is_task")
 		if $self->is_task and $self->weaver_config ne $NAME;
@@ -185,7 +208,9 @@ sub configure {
 			MetaTests
 			PodSyntaxTests
 			PodCoverageTests
-			PodLinkTests
+		),
+			@$pod_link_tests,
+		qw(
 			PodSpellingTests
 			PortabilityTests
 			KwaliteeTests
@@ -310,7 +335,7 @@ It is roughly equivalent to:
 	[MetaTests]             ; test META
 	[PodSyntaxTests]        ; test POD
 	[PodCoverageTests]      ; test documentation coverage
-	[PodLinkTests]          ; test L<> links in POD
+	[PodLinkTests]          ; test L<> links in POD (if available)
 	[PodSpellingTests]      ; spell check POD
 	[PortabilityTests]      ; test portability (why? who doesn't use Linux?)
 	[KwaliteeTests]         ; CPANTS
