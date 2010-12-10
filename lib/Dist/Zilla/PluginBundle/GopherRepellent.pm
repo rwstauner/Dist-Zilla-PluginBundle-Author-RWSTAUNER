@@ -267,6 +267,16 @@ no Moose;
 
 	[@GopherRepellent]
 
+Possible options and their default values:
+
+	auto_prereqs   = 1  ; enable AutoPrereqs
+	fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
+	is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
+	pod_link_tests = 1  ; use the PodLinkTests plugin if available
+	releaser       = UploadToCPAN
+	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
+	weaver_config  = @GopherRepellent
+
 =head1 DESCRIPTION
 
 This is a L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
