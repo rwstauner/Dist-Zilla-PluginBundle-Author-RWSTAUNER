@@ -6,7 +6,7 @@ use warnings;
 
 use Pod::Weaver::PluginBundle::Default ();
 #use Pod::Weaver::Plugin::WikiDoc ();
-use Pod::Weaver::Section::Support 1.000 (); # pull request not on CPAN
+use Pod::Weaver::Section::Support 1.001 ();
 use Pod::Elemental::Transformer::List ();
 
 use Pod::Weaver::Config::Assembler;
