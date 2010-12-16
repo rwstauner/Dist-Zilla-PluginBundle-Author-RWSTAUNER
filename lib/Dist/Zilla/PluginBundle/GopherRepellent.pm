@@ -210,6 +210,7 @@ sub configure {
 			PodCoverageTests
 		),
 			@$pod_link_tests,
+		# Test::Pod::Spelling::CommonMistakes ?
 		qw(
 			PodSpellingTests
 			PortabilityTests
