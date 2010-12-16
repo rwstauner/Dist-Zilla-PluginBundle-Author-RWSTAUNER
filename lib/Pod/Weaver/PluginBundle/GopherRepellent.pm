@@ -48,6 +48,8 @@ sub mvp_bundle_config {
     [ "$NAME/Leftovers", _exp('Leftovers'), {} ],
     [ "$NAME/postlude",  _exp('Region'),    { region_name => 'postlude' } ],
 
+	# TODO: consider SeeAlso if it ever allows comments with the links
+
 	# include Support section with various cpan links and github repo
     [ "$NAME/Support",   _exp('Support'),
 		{
