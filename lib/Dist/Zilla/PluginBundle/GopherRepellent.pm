@@ -232,6 +232,9 @@ sub configure {
 	# @Apocalyptic: -e File::Spec->catfile( File::HomeDir->my_home, '.pause' )
 	#            or -e File::Spec->catfile( '.', '.pause' ) )
 		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
+
+		#[ InstallRelease => { install_command = 'cpanm --local-lib .' } ]
+
 	);
 
 	# TODO: query zilla for phase... if release, announce which releaser we're using
