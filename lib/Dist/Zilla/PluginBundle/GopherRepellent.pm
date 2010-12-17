@@ -30,6 +30,7 @@ use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::PortabilityTests ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
+use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
 use Pod::Weaver::PluginBundle::GopherRepellent ();
 
@@ -200,7 +201,9 @@ sub configure {
 
 	# generated t/ tests
 		[ CompileTests => { fake_home => 1 } ],
-		# ReportVersions::Tiny 1.01
+		qw(
+			ReportVersions::Tiny
+		),
 
 	# generated xt/ tests
 		qw(
@@ -347,6 +350,7 @@ It is roughly equivalent to:
 	; generate t/ tests
 	[CompileTests]          ; make sure .pm files all compile
 	fake_home = 1           ; fakes $ENV{HOME} just in case
+	[ReportVersions::Tiny]  ; show module versions used in test reports
 
 	; generate xt/ tests
 	[MetaTests]             ; test META
