@@ -52,14 +52,7 @@ sub mvp_bundle_config {
 
 	# include Support section with various cpan links and github repo
     [ "$NAME/Support",   _exp('Support'),
-		{
-			# these attributes are waiting in a pull request
-			eval { Pod::Weaver::Section::Support->can('repository_content') }
-			? (
-				repository_content => '',
-				repository_link => 'both'
-			) : ()
-		}
+		{ repository_content => '', repository_link => 'both' }
 	],
 
     [ "$NAME/Authors",   _exp('Authors'),   {} ],
