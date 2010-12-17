@@ -13,6 +13,7 @@ use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CompileTests 1.100740 ();
+use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
 use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
 use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
@@ -193,11 +194,9 @@ sub configure {
 			ExecDir
 			ShareDir
 			MakeMaker
+			ModuleBuild
+			DualBuilders
 		),
-
-		#;[ModuleBuild]
-		#;[DualBuilders]
-		#;prefer = make
 
 	# generated t/ tests
 		[ CompileTests => { fake_home => 1 } ],
@@ -340,7 +339,10 @@ It is roughly equivalent to:
 	[ExtraTests]            ; build system (dzil core [@Basic])
 	[ExecDir]               ; include 'bin/*' as executables
 	[ShareDir]              ; include 'share/' for File::ShareDir
+
 	[MakeMaker]             ; create Makefile.PL
+	[ModuleBuild]           ; create Build.PL
+	[DualBuilders]          ; only require one of the above two (prefer 'build')
 
 	; generate t/ tests
 	[CompileTests]          ; make sure .pm files all compile
