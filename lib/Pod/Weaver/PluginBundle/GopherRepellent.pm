@@ -4,11 +4,13 @@ package Pod::Weaver::PluginBundle::GopherRepellent;
 use strict;
 use warnings;
 
+use Pod::Weaver 3.101632 ();
 use Pod::Weaver::PluginBundle::Default ();
 use Pod::Weaver::Plugin::StopWords 1.000001 ();
 use Pod::Weaver::Plugin::Transformer ();
 #use Pod::Weaver::Plugin::WikiDoc ();
 use Pod::Weaver::Section::Support 1.001 ();
+use Pod::Elemental 0.102360 ();
 use Pod::Elemental::Transformer::List ();
 
 use Pod::Weaver::Config::Assembler;
