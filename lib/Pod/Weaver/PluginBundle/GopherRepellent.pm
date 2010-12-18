@@ -8,7 +8,7 @@ use Pod::Weaver 3.101632 ();
 use Pod::Weaver::PluginBundle::Default ();
 use Pod::Weaver::Plugin::StopWords 1.000001 ();
 use Pod::Weaver::Plugin::Transformer ();
-#use Pod::Weaver::Plugin::WikiDoc ();
+use Pod::Weaver::Plugin::WikiDoc ();
 use Pod::Weaver::Section::Support 1.001 ();
 use Pod::Elemental 0.102360 ();
 use Pod::Elemental::Transformer::List ();
@@ -23,7 +23,7 @@ our $NAME = join('', '@', (__PACKAGE__ =~ /([^:]+)$/));
 sub mvp_bundle_config {
   my @plugins;
   push @plugins, (
-    #[ "$NAME/WikiDoc",     _exp('-WikiDoc'), {} ],
+    [ "$NAME/WikiDoc",     _exp('-WikiDoc'), {} ],
     [ "$NAME/CorePrep",    _exp('@CorePrep'), {} ],
 
     [ "$NAME/Name",        _exp('Name'),      {} ],
