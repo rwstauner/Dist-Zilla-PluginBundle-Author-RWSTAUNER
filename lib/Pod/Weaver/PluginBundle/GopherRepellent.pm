@@ -33,6 +33,7 @@ sub mvp_bundle_config {
     [ "$NAME/Synopsis",    _exp('Generic'), { header      => 'SYNOPSIS'    } ],
     [ "$NAME/Description", _exp('Generic'), { header      => 'DESCRIPTION' } ],
     [ "$NAME/Overview",    _exp('Generic'), { header      => 'OVERVIEW'    } ],
+    [ "$NAME/Usage",       _exp('Generic'), { header      => 'USAGE'       } ],
 
     #[ "$NAME/Stability",   _exp('Generic'), { header      => 'STABILITY'   } ],
   );
