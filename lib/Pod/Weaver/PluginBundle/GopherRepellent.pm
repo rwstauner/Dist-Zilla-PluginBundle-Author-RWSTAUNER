@@ -78,7 +78,7 @@ sub mvp_bundle_config {
 
 1;
 
-=for stopwords PluginBundle
+=for stopwords PluginBundle WikiDoc
 
 =for Pod::Coverage mvp_bundle_config
 
@@ -104,6 +104,8 @@ with the following additions:
 =for :list
 * Inserts a SUPPORT section to the POD just before AUTHOR
 * Adds the List Transformer
+* Enables WikiDoc formatting
+* Generates and collects stopwords
 
 It is roughly equivalent to:
 
