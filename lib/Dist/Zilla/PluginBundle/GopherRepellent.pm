@@ -283,6 +283,8 @@ Possible options and their default values:
 	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
 	weaver_config  = @GopherRepellent
 
+The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
+
 =head1 DESCRIPTION
 
 This is a L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
