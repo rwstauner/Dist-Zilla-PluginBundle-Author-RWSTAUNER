@@ -21,9 +21,13 @@ our $NAME = join('', '@', (__PACKAGE__ =~ /([^:]+)$/));
 sub mvp_bundle_config {
   my @plugins;
   push @plugins, (
+	# plugin
     [ "$NAME/WikiDoc",     _exp('-WikiDoc'), {} ],
+	# default
     [ "$NAME/CorePrep",    _exp('@CorePrep'), {} ],
 
+	# sections
+	# default
     [ "$NAME/Name",        _exp('Name'),      {} ],
     [ "$NAME/Version",     _exp('Version'),   {} ],
 
@@ -31,11 +35,13 @@ sub mvp_bundle_config {
     [ "$NAME/Synopsis",    _exp('Generic'), { header      => 'SYNOPSIS'    } ],
     [ "$NAME/Description", _exp('Generic'), { header      => 'DESCRIPTION' } ],
     [ "$NAME/Overview",    _exp('Generic'), { header      => 'OVERVIEW'    } ],
+	# extra
     [ "$NAME/Usage",       _exp('Generic'), { header      => 'USAGE'       } ],
 
     #[ "$NAME/Stability",   _exp('Generic'), { header      => 'STABILITY'   } ],
   );
 
+	# default
   for my $plugin (
     [ 'Attributes', _exp('Collect'), { command => 'attr'   } ],
     [ 'Methods',    _exp('Collect'), { command => 'method' } ],
@@ -45,21 +51,25 @@ sub mvp_bundle_config {
     push @plugins, $plugin;
   }
 
+	# default
   push @plugins, (
     [ "$NAME/Leftovers", _exp('Leftovers'), {} ],
     [ "$NAME/postlude",  _exp('Region'),    { region_name => 'postlude' } ],
 
 	# TODO: consider SeeAlso if it ever allows comments with the links
 
+	# extra
 	# include Support section with various cpan links and github repo
     [ "$NAME/Support",   _exp('Support'),
 		{ repository_content => '', repository_link => 'both' }
 	],
 
+	# default
     [ "$NAME/Authors",   _exp('Authors'),   {} ],
     [ "$NAME/Legal",     _exp('Legal'),     {} ],
-    [ "$NAME/List",      _exp('-Transformer'), { 'transformer' => 'List' } ],
 
+	# plugins
+	[ "$NAME/List",      _exp('-Transformer'), { 'transformer' => 'List' } ],
 	[ "$NAME/StopWords", _exp('-StopWords'), {} ],
   );
 
