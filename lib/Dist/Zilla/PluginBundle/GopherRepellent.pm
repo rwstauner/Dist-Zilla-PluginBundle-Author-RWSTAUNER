@@ -317,6 +317,7 @@ It is roughly equivalent to:
 	log_format = format:%h %s%n
 
 	; metadata
+	[Bugtracker]            ; include bugtracker URL and email address (uses RT)
 	[Repository]            ; determine git information (if -e ".git")
 	[GithubMeta]            ; overrides [Repository] if repository is on github
 
