@@ -16,8 +16,6 @@ use Pod::Elemental::Transformer::List ();
 use Pod::Weaver::Config::Assembler;
 sub _exp { Pod::Weaver::Config::Assembler->expand_package($_[0]) }
 
-# TODO: use modules
-
 our $NAME = join('', '@', (__PACKAGE__ =~ /([^:]+)$/));
 
 sub mvp_bundle_config {
