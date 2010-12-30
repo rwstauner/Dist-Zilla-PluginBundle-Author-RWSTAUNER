@@ -99,6 +99,7 @@ with the following additions:
 
 It is roughly equivalent to:
 
+	[WikiDoc]                 ; transform wikidoc sections to POD
 	[@CorePrep]               ; [@Default]
 
 	[Name]                    ; [@Default]
@@ -109,6 +110,7 @@ It is roughly equivalent to:
 	[Generic / SYNOPSIS]      ; [@Default]
 	[Generic / DESCRIPTION]   ; [@Default]
 	[Generic / OVERVIEW]      ; [@Default]
+	[Generic / USAGE]         ; Put USAGE section near the top
 
 	[Collect / ATTRIBUTES]    ; [@Default]
 	command = attr
