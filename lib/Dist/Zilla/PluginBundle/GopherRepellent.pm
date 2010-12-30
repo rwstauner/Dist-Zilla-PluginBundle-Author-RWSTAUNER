@@ -341,6 +341,9 @@ It is roughly equivalent to:
 	[MetaYAML]              ; include META.yml (v1.4) (dzil core [@Basic])
 	[MetaJSON]              ; include META.json (v2) (more info than META.yml)
 
+	[Prereqs / TestRequires]
+	Test::More = 0.96       ; require recent Test::More (including subtests)
+
 	[ExtraTests]            ; build system (dzil core [@Basic])
 	[ExecDir]               ; include 'bin/*' as executables
 	[ShareDir]              ; include 'share/' for File::ShareDir
