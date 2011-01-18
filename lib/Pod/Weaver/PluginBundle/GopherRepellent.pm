@@ -16,64 +16,81 @@ use Pod::Elemental::Transformer::List ();
 use Pod::Weaver::Config::Assembler;
 sub _exp { Pod::Weaver::Config::Assembler->expand_package($_[0]) }
 
-our $NAME = join('', '@', (__PACKAGE__ =~ /([^:]+)$/));
+sub _plain {
+	my ($plug) = @_;
+	(my $name = $plug) =~ s/^\W//;
+	return [ $name, _exp($plug), {} ];
+}
+
+sub _bundle_name {
+	my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
+	join('', '@', ($class =~ /([^:]+)$/));
+}
 
 sub mvp_bundle_config {
-  my @plugins;
-  push @plugins, (
-	# plugin
-    [ "$NAME/WikiDoc",     _exp('-WikiDoc'), {} ],
-	# default
-    [ "$NAME/CorePrep",    _exp('@CorePrep'), {} ],
+	my ($self, $bundle) = @_;
+	my @plugins;
 
-	# sections
-	# default
-    [ "$NAME/Name",        _exp('Name'),      {} ],
-    [ "$NAME/Version",     _exp('Version'),   {} ],
+	# NOTE: bundle name gets prepended to each plugin name at the end
 
-    [ "$NAME/Prelude",     _exp('Region'),  { region_name => 'prelude'     } ],
-    [ "$NAME/Synopsis",    _exp('Generic'), { header      => 'SYNOPSIS'    } ],
-    [ "$NAME/Description", _exp('Generic'), { header      => 'DESCRIPTION' } ],
-    [ "$NAME/Overview",    _exp('Generic'), { header      => 'OVERVIEW'    } ],
-	# extra
-    [ "$NAME/Usage",       _exp('Generic'), { header      => 'USAGE'       } ],
+	push @plugins, (
+		# plugin
+		_plain('-WikiDoc'),
+		# default
+		_plain('@CorePrep'),
 
-    #[ "$NAME/Stability",   _exp('Generic'), { header      => 'STABILITY'   } ],
-  );
+		# sections
+		# default
+		_plain('Name'),
+		_plain('Version'),
 
-	# default
-  for my $plugin (
-    [ 'Attributes', _exp('Collect'), { command => 'attr'   } ],
-    [ 'Methods',    _exp('Collect'), { command => 'method' } ],
-    [ 'Functions',  _exp('Collect'), { command => 'func'   } ],
-  ) {
-    $plugin->[2]{header} = uc $plugin->[0];
-    push @plugins, $plugin;
-  }
+		[ 'Prelude',     _exp('Region'),  { region_name => 'prelude' } ],
+	);
 
-	# default
-  push @plugins, (
-    [ "$NAME/Leftovers", _exp('Leftovers'), {} ],
-    [ "$NAME/postlude",  _exp('Region'),    { region_name => 'postlude' } ],
+	for my $plugin (
+		# default
+		[ 'Synopsis',    _exp('Generic'), {} ],
+		[ 'Description', _exp('Generic'), {} ],
+		[ 'Overview',    _exp('Generic'), {} ],
+		# extra
+		[ 'Usage',       _exp('Generic'), {} ],
 
-	# TODO: consider SeeAlso if it ever allows comments with the links
-
-	# extra
-	# include Support section with various cpan links and github repo
-    [ "$NAME/Support",   _exp('Support'),
-		{ repository_content => '', repository_link => 'both' }
-	],
+		# default
+		[ 'Attributes',  _exp('Collect'), { command => 'attr'   } ],
+		[ 'Methods',     _exp('Collect'), { command => 'method' } ],
+		[ 'Functions',   _exp('Collect'), { command => 'func'   } ],
+	) {
+		$plugin->[2]{header} = uc $plugin->[0];
+		push @plugins, $plugin;
+	}
 
 	# default
-    [ "$NAME/Authors",   _exp('Authors'),   {} ],
-    [ "$NAME/Legal",     _exp('Legal'),     {} ],
+	push @plugins, (
+		_plain('Leftovers'),
+		[ 'Postlude',    _exp('Region'),    { region_name => 'postlude' } ],
 
-	# plugins
-	[ "$NAME/List",      _exp('-Transformer'), { 'transformer' => 'List' } ],
-	[ "$NAME/StopWords", _exp('-StopWords'), {} ],
-  );
+		# TODO: consider SeeAlso if it ever allows comments with the links
 
-  return @plugins;
+		# extra
+		# include Support section with various cpan links and github repo
+		[ 'Support',     _exp('Support'),
+			{ repository_content => '', repository_link => 'both' }
+		],
+
+		# default
+		_plain('Authors'),
+		_plain('Legal'),
+
+		# plugins
+		[ 'List',        _exp('-Transformer'), { 'transformer' => 'List' } ],
+		_plain('-StopWords'),
+	);
+
+	# prepend bundle name to each plugin name
+	my $name = $self->_bundle_name;
+	@plugins = map { $_->[0] = "$name/$_->[0]"; $_ } @plugins;
+
+	return @plugins;
 }
 
 1;
