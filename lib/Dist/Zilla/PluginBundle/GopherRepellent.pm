@@ -35,7 +35,10 @@ use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
 use Pod::Weaver::PluginBundle::GopherRepellent ();
 
-our $NAME = join('', '@', (__PACKAGE__ =~ /([^:]+)$/));
+sub _bundle_name {
+	my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
+	join('', '@', ($class =~ /([^:]+)$/));
+}
 
 # attributes
 
@@ -93,7 +96,7 @@ has weaver_config => (
 	is      => 'ro',
 	isa     => 'Str',
 	lazy    => 1,
-	default => sub { $_[0]->payload->{weaver_config} || $NAME }
+	default => sub { $_[0]->payload->{weaver_config} || $_[0]->_bundle_name }
 );
 
 sub configure {
@@ -113,7 +116,7 @@ sub configure {
 	}
 
 	$self->log_fatal("you must not specify both weaver_config and is_task")
-		if $self->is_task and $self->weaver_config ne $NAME;
+		if $self->is_task and $self->weaver_config ne $self->_bundle_name;
 
 	$self->add_plugins(
 	
@@ -254,7 +257,7 @@ foreach my $method ( qw(log log_fatal) ){
 		no strict 'refs';
 		*$method = $method =~ /fatal/
 			? sub { die($_[1]) }
-			: sub { warn("[$NAME] $_[1]") };
+			: sub { warn("[${\$_[0]->_bundle_name}] $_[1]") };
 	}
 }
 
