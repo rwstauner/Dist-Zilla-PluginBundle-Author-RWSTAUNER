@@ -106,19 +106,42 @@ has weaver_config => (
 	default => sub { $_[0]->payload->{weaver_config} || $_[0]->_bundle_name }
 );
 
+# main
 sub configure {
 	my ($self) = @_;
 
-	my @plugins = $self->_bundled_plugins;
+	my $skip = $self->skip_plugins;
+	$skip &&= qr/$skip/;
 
-	if( my $skip = $self->skip_plugins ){
-		$skip = qr/$skip/;
-		@plugins = grep { (ref $_ ? $_->[0] : $_) !~ $skip } @plugins;
-	}
+	my $dynamic = $self->payload;
+	my @bundle = $self->_bundled_plugins;
+	my @plugins;
+
+	foreach my $spec ( @bundle ){
+		# convert lone string to arrayref with config hashref
+		$spec = [$spec, {}]
+			unless ref $spec;
+
+		# NOTE: $conf retains its reference to $spec->[1]
+		my ($name, $conf) = @$spec;
+
+		# exclude any plugins that match 'skip_plugins'
+		next if $skip && $name =~ $skip;
+
+		# search the dynamic config for anything matching the current plugin
+		while( my ($key, $val) = each %$dynamic ){
+			# match keys like (Plugin::Name):(attr)
+			next unless $key =~ /^(?:$name)\W+(\w+)$/;
+			$conf->{$1} = $val;
+		}
+
+		push(@plugins, $spec);
+	};
 
 	$self->add_plugins(@plugins);
 }
 
+# return a list of plugin specs (to be sent to add_plugins())
 sub _bundled_plugins {
 	my ($self) = @_;
 
