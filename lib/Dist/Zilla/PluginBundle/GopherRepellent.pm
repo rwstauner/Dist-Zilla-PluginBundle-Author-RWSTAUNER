@@ -102,6 +102,14 @@ has weaver_config => (
 sub configure {
 	my ($self) = @_;
 
+	my @plugins = $self->_bundled_plugins;
+
+	$self->add_plugins(@plugins);
+}
+
+sub _bundled_plugins {
+	my ($self) = @_;
+
 	# optional... it was difficult to install these
 	my $pod_link_tests = $self->pod_link_tests &&
 		eval 'require Dist::Zilla::Plugin::PodLinkTests';
@@ -118,7 +126,7 @@ sub configure {
 	$self->log_fatal("you must not specify both weaver_config and is_task")
 		if $self->is_task and $self->weaver_config ne $self->_bundle_name;
 
-	$self->add_plugins(
+	return (
 	
 	# provide version
 		'Git::DescribeVersion',
@@ -243,12 +251,12 @@ sub configure {
 
 	# TODO: query zilla for phase... if release, announce which releaser we're using
 
+}
+
 #	$self->add_bundle('@Git' => {
 #		tag_format => '%v',
 #		push_to    => [ qw(origin github) ],
 #	});
-
-}
 
 # As of Dist::Zilla 4.102345 pluginbundles don't have log and log_fatal methods
 # but hopefully someday they will... so define our own unless they exist.
