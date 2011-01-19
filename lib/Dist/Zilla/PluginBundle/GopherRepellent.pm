@@ -89,7 +89,7 @@ has skip_plugins => (
 	is      => 'ro',
 	isa     => 'Str',
 	lazy    => 1,
-	default => sub { $_[0]->payload->{skip_plugins} }
+	default => sub { $_[0]->payload->{skip_plugins} || '' }
 );
 
 has skip_prereqs => (
