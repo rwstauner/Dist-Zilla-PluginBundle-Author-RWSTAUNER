@@ -85,6 +85,13 @@ has releaser => (
 	default => sub { $_[0]->payload->{releaser} || 'UploadToCPAN' }
 );
 
+has skip_plugins => (
+	is      => 'ro',
+	isa     => 'Str',
+	lazy    => 1,
+	default => sub { $_[0]->payload->{skip_plugins} }
+);
+
 has skip_prereqs => (
 	is      => 'ro',
 	isa     => 'Str',
@@ -103,6 +110,11 @@ sub configure {
 	my ($self) = @_;
 
 	my @plugins = $self->_bundled_plugins;
+
+	if( my $skip = $self->skip_plugins ){
+		$skip = qr/$skip/;
+		@plugins = grep { (ref $_ ? $_->[0] : $_) !~ $skip } @plugins;
+	}
 
 	$self->add_plugins(@plugins);
 }
@@ -291,6 +303,7 @@ Possible options and their default values:
 	is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
 	pod_link_tests = 1  ; use the PodLinkTests plugin if available
 	releaser       = UploadToCPAN
+	skip_plugins   =    ; default empty; a regexp of plugin names to exclude
 	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
 	weaver_config  = @GopherRepellent
 
