@@ -41,71 +41,41 @@ sub _bundle_name {
 	join('', '@', ($class =~ /([^:]+)$/));
 }
 
-# attributes
+sub _default_attributes {
+	return {
+		auto_prereqs   => [Bool => 1],
+		fake_release   => [Bool => $ENV{DZIL_FAKERELEASE}],
+		is_task        => [Bool => 0],
+		pod_link_tests => [Bool => 1],
+		releaser       => [Str  => 'UploadToCPAN'],
+		skip_plugins   => [Str  => ''],
+		skip_prereqs   => [Str  => ''],
+		weaver_config  => [Str  => $_[0]->_bundle_name],
+	};
+}
 
-has auto_prereqs => (
-	is      => 'ro',
-	isa     => 'Bool',
-	lazy    => 1,
-	default => sub {
-		exists $_[0]->payload->{auto_prereqs}
-		     ? $_[0]->payload->{auto_prereqs}
-			 : 1
-	}
-);
+sub _generate_attribute {
+	my ($self, $key) = @_;
+	has $key => (
+		is      => 'ro',
+		isa     => $self->_default_attributes->{$key}[0],
+		lazy    => 1,
+		default => sub {
+			# if it exists in the payload
+			exists $_[0]->payload->{$key}
+				# use it
+				?  $_[0]->payload->{$key}
+				# else get it from the defaults (for subclasses)
+				:  $_[0]->_default_attributes->{$key}[1];
+		}
+	);
+}
 
-has fake_release => (
-	is      => 'ro',
-	isa     => 'Bool',
-	lazy    => 1,
-	default => sub { $_[0]->payload->{fake_release} || $ENV{DZIL_FAKERELEASE} }
-);
-
-has is_task => (
-	is      => 'ro',
-	isa     => 'Bool',
-	lazy    => 1,
-	default => sub { $_[0]->payload->{is_task} }
-);
-
-has pod_link_tests => (
-	is      => 'ro',
-	isa     => 'Bool',
-	lazy    => 1,
-	default => sub {
-		exists $_[0]->payload->{pod_link_tests}
-		     ? $_[0]->payload->{pod_link_tests}
-		     : 1
-	}
-);
-
-has releaser => (
-	is      => 'ro',
-	isa     => 'Str',
-	lazy    => 1,
-	default => sub { $_[0]->payload->{releaser} || 'UploadToCPAN' }
-);
-
-has skip_plugins => (
-	is      => 'ro',
-	isa     => 'Str',
-	lazy    => 1,
-	default => sub { $_[0]->payload->{skip_plugins} || '' }
-);
-
-has skip_prereqs => (
-	is      => 'ro',
-	isa     => 'Str',
-	lazy    => 1,
-	default => sub { $_[0]->payload->{skip_prereqs} || '' }
-);
-
-has weaver_config => (
-	is      => 'ro',
-	isa     => 'Str',
-	lazy    => 1,
-	default => sub { $_[0]->payload->{weaver_config} || $_[0]->_bundle_name }
-);
+{
+	# generate attributes
+	__PACKAGE__->_generate_attribute($_)
+		for keys %{ __PACKAGE__->_default_attributes };
+}
 
 # main
 sub configure {
