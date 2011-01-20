@@ -4,7 +4,6 @@ package Dist::Zilla::PluginBundle::GopherRepellent;
 use strict;
 use warnings;
 use Moose;
-use Moose::Autobox;
 use Dist::Zilla 4.102345;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
