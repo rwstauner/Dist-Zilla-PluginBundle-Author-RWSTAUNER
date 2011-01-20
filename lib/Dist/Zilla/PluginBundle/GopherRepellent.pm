@@ -131,9 +131,16 @@ sub configure {
 
 		# search the dynamic config for anything matching the current plugin
 		while( my ($key, $val) = each %$dynamic ){
-			# match keys like (Plugin::Name):(attr)
-			next unless $key =~ /^(?:$name)\W+(\w+)$/;
-			$conf->{$1} = $val;
+			# match keys like Plugin::Name:attr and PlugName/attr@
+			next unless
+				my ($attr, $over) = ($key =~ /^(?:$name)\W+(\w+)(\W*)$/);
+
+			# if its already an arrayref
+			if( ref(my $current = $conf->{$attr}) eq 'ARRAY' ){
+				# overwrite if specified, otherwise append
+				$val = $over ? [$val] : [@$current, $val];
+			}
+			$conf->{$attr} = $val;
 		}
 
 		push(@plugins, $spec);
