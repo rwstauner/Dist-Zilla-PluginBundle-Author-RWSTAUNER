@@ -286,7 +286,7 @@ __PACKAGE__->meta->make_immutable;
 no Moose;
 1;
 
-=for stopwords PluginBundle PluginBundles DAGOLDEN RJBS dists ini
+=for stopwords PluginBundle PluginBundles DAGOLDEN RJBS dists ini arrayrefs
 
 =for Pod::Coverage configure
 log log_fatal
@@ -354,7 +354,7 @@ Arrayref attributes will be appended to any in the bundle:
 	MetaNoIndex:directory = another-dir
 
 Since the Bundle initializes MetaNoIndex:directory to an arrayref
-of directories, 'another-dir' will be appended to that arrayref.
+of directories, C<another-dir> will be appended to that arrayref.
 
 You can overwrite the attribute by adding non-word characters to the end of it:
 
