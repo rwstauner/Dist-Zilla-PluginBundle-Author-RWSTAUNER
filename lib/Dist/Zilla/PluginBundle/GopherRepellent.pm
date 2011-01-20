@@ -7,6 +7,7 @@ use Moose;
 use Moose::Autobox;
 use Dist::Zilla 4.102345;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
+# Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::Plugin::Authority 1.001 ();
@@ -327,6 +328,17 @@ log log_fatal
 
 	[@GopherRepellent]
 
+=head1 DESCRIPTION
+
+This is a L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
+to help keep those pesky gophers away from your dists.
+
+This Bundle was heavily influenced by the bundles of
+L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
+L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
+
+=head1 CONFIGURATION
+
 Possible options and their default values:
 
 	auto_prereqs   = 1  ; enable AutoPrereqs
@@ -340,12 +352,65 @@ Possible options and their default values:
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
 
-=head1 DESCRIPTION
+B<Note> that you can also specify attributes for any of the bundled plugins.
+This works like L<Dist::Zilla::Role::Stash::Plugins> except that the role is
+not actually used (and there is no stash) because PluginBundles already have
+a dynamic configuration.
+The option should be the plugin name and the attribute separated by a colon
+(or a dot, or any other non-word character(s)).
 
-This is a L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
-to help keep those pesky gophers away from your dists.
+For example:
 
-It is roughly equivalent to:
+	[@GopherRepellent]
+	AutoPrereqs:skip = Bad::Module
+
+B<Note> that this is different than
+
+	[@GopherRepellent]
+	[AutoPrereqs]
+	skip = Bad::Module
+
+which will load the plugin a second time.
+The first example actually alters the plugin configuration
+as it is included by the Bundle.
+
+String (or boolean) attributes will overwrite any in the Bundle:
+
+	[@GopherRepellent]
+	CompileTests.fake_home = 0
+
+Arrayref attributes will be appended to any in the bundle:
+
+	[@GopherRepellent]
+	MetaNoIndex:directory = another-dir
+
+Since the Bundle initializes MetaNoIndex:directory to an arrayref
+of directories, 'another-dir' will be appended to that arrayref.
+
+You can overwrite the attribute by adding non-word characters to the end of it:
+
+	[@GopherRepellent]
+	MetaNoIndex:directory@ = another-dir
+	; or MetaNoIndex:directory[] = another-dir
+
+You can use any non-word characters: use what makes the most sense to you.
+B<Note> that you cannot specify an attribute more than once
+(since the configuration is dynamic
+and the Bundle cannot predeclare unknown attributes as arrayrefs).
+
+If your situation is more complicated you can use the C<skip_plugins>
+attribute to have the Bundle ignore that plugin
+and then you can add it yourself:
+
+	[MetaNoIndex]
+	directory = one-dir
+	directory = another-dir
+	[@GopherRepellent]
+	skip_plugins = MetaNoIndex
+
+=head1 EQUIVALENT F<dist.ini>
+
+This bundle is roughly equivalent to:
 
 	[Git::DescribeVersion]  ; count commits from last tag to provide version
 
@@ -432,10 +497,6 @@ It is roughly equivalent to:
 	; set 'releaser = AlternatePlugin' to use a different releaser plugin
 	; 'fake_release' will override the 'releaser' (useful for sub-bundles)
 
-This Bundle was heavily influenced by the bundles of
-L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
-L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
-
 =head1 RATIONALE
 
 I built my own PluginBundles
@@ -469,6 +530,7 @@ but perhaps my choices and documentation will help others along the way
 
 =for :list
 * L<Dist::Zilla>
+* L<Dist::Zilla::Role::PluginBundle::Easy>
 * L<Pod::Weaver>
 * L<http://www.lucasarts.com/games/monkeyisland>
 The Secret of Monkey Island (E<copy> Lucas Arts)
