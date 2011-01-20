@@ -122,8 +122,9 @@ sub configure {
 		$spec = [$spec, {}]
 			unless ref $spec;
 
-		# NOTE: $conf retains its reference to $spec->[1]
-		my ($name, $conf) = @$spec;
+		# use -1 in case there's a plugin class: [$name, $class, {}]
+		# NOTE: $conf retains its reference (modifications alter $spec)
+		my ($name, $conf) = @$spec[0, -1];
 
 		# exclude any plugins that match 'skip_plugins'
 		next if $skip && $name =~ $skip;
