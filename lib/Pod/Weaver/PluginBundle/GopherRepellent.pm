@@ -6,7 +6,7 @@ use warnings;
 
 use Pod::Weaver 3.101632 ();
 use Pod::Weaver::PluginBundle::Default ();
-use Pod::Weaver::Plugin::StopWords 1.000001 ();
+use Pod::Weaver::Plugin::StopWords 1.001005 ();
 use Pod::Weaver::Plugin::Transformer ();
 use Pod::Weaver::Plugin::WikiDoc ();
 use Pod::Weaver::Section::Support 1.001 ();
