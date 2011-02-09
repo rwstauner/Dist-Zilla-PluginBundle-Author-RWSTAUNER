@@ -12,10 +12,11 @@ use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
+use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
 use Dist::Zilla::Plugin::CompileTests 1.100740 ();
+use Dist::Zilla::Plugin::CPANChangesTests ();
 use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
 use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
-use Dist::Zilla::Plugin::GitFmtChanges 0.003 ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::KwaliteeTests ();
 #use Dist::Zilla::Plugin::MetaData::BuiltWith (); # FIXME: see comment below
@@ -23,6 +24,7 @@ use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::MinimumVersionTests ();
+use Dist::Zilla::Plugin::NextRelease ();
 use Dist::Zilla::Plugin::PkgVersion ();
 use Dist::Zilla::Plugin::PodCoverageTests ();
 ### Dist::Zilla::Plugin::PodLinkTests (); # suggested not required
@@ -154,6 +156,11 @@ sub _bundled_plugins {
 
 	# munge files
 		[ 'Authority' => { do_metadata => 1 }],
+		[
+			NextRelease => {
+				format => '%v %{yyyy-MM-dd}d'
+			}
+		],
 		'PkgVersion',
 		# 'Prepender' 1.100960
 		( $self->is_task
@@ -166,12 +173,6 @@ sub _bundled_plugins {
 			License
 			Readme
 		),
-		[
-			GitFmtChanges => {
-				file_name  => 'Changes',
-				log_format => 'format:%h %s%n'
-			}
-		],
 		# @APOCALYPTIC: generate MANIFEST.SKIP ?
 
 	# metadata
@@ -233,6 +234,7 @@ sub _bundled_plugins {
 
 	# generated xt/ tests
 		qw(
+			CPANChangesTests
 			MetaTests
 			PodSyntaxTests
 			PodCoverageTests
@@ -252,6 +254,7 @@ sub _bundled_plugins {
 	# before release
 			#CheckExtraTests
 		qw(
+			CheckChangesHasContent
 			TestRelease
 			ConfirmRelease
 		),
@@ -392,6 +395,8 @@ This bundle is roughly equivalent to:
 	; munge files
 	[Authority]             ; inject $AUTHORITY into modules
 	do_metadata = 1         ; default
+	[NextRelease]           ; simplify maintenance of Changes file
+	format = %v %{yyyy-MM-dd}d
 	[PkgVersion]            ; inject $VERSION into modules
 
 	[PodWeaver]             ; munge POD in all modules
@@ -402,9 +407,6 @@ This bundle is roughly equivalent to:
 	; generate files
 	[License]               ; generate distribution files (dzil core [@Basic])
 	[Readme]
-	[GitFmtChanges]         ; generate a Changes file from git log --oneline
-	file_name = Changes
-	log_format = format:%h %s%n
 
 	; metadata
 	[Bugtracker]            ; include bugtracker URL and email address (uses RT)
@@ -448,6 +450,7 @@ This bundle is roughly equivalent to:
 	[ReportVersions::Tiny]  ; show module versions used in test reports
 
 	; generate xt/ tests
+	[CPANChangesTests]      ; Test::CPAN::Changes
 	[MetaTests]             ; test META
 	[PodSyntaxTests]        ; test POD
 	[PodCoverageTests]      ; test documentation coverage
@@ -460,6 +463,7 @@ This bundle is roughly equivalent to:
 	[Manifest]              ; build MANIFEST file (dzil core [@Basic])
 	
 	; actions for releasing the distribution (dzil core [@Basic])
+	[CheckChangesHasContent]
 	[TestRelease]           ; run tests before releasing
 	[ConfirmRelease]        ; are you sure?
 	[UploadToCPAN]
