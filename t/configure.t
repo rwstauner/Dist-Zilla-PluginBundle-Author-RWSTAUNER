@@ -119,5 +119,6 @@ sub init_bundle {
 }
 sub releaser_is {
 	my ($bundle, $exp) = @_;
+	# NOTE: just looking for the last plugin in the array is fragile
 	like((@{$bundle->plugins})[-1]->[1], qr/\b$exp$/, "expected releaser: $exp");
 }
