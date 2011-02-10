@@ -481,8 +481,7 @@ It also made sense to me to build a separate
 PluginBundle for C<$work> which could use this one
 and then set a few attributes.
 
-This bundle is essentially C<BeLike::RWSTAUNER>.
-(Who would want to do that?)
+This bundle is essentially (and may one day become) C<@Author::RWSTAUNER>.
 
 It is subject to change.
 
