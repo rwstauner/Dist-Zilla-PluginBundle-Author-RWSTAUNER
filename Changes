@@ -1,0 +1,36 @@
+Revision history for {{$dist->name}}
+
+{{$NEXT}}
+
+1.000007 2011-01-19
+
+  - remove Moose::Autobox dependency
+  - allow attributes to be overridden in dist.ini for any included plugin
+  - add 'skip_plugins' option
+
+0.009007 2010-12-30
+
+  - Use Pod::Weaver::Plugin::WikiDoc
+
+0.008004 2010-12-16
+
+  - Require Dist::Zilla::Stash::PodWeaver
+
+  [Add Dist::Zilla Plugins]
+  - Authority
+  - DualBuilders (prefer 'build')
+  - PodLinkTests if available
+  - PodSpellingTests
+  - ReportVersions::Tiny
+
+  [Add Pod::Weaver Plugins]
+  - StopWords
+
+0.004001 2010-11-17
+
+  - Use Dist::Zilla::Plugin::GithubMeta
+  - Lower required version of Pod::Weaver::Section::Support
+
+0.003011 2010-11-15
+
+  - Initial Release to CPAN
