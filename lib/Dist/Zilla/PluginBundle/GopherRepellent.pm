@@ -43,6 +43,7 @@ sub _bundle_name {
 	join('', '@', ($class =~ /([^:]+)$/));
 }
 
+# TODO: consider an option for using ReportPhase
 sub _default_attributes {
 	return {
 		auto_prereqs   => [Bool => 1],
