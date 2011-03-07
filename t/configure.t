@@ -1,11 +1,11 @@
 use strict;
 use warnings;
-use Test::More;
+use Test::More 0.96;
 
 my $NAME = 'GopherRepellent';
 my $BNAME = "\@$NAME";
 my $mod = "Dist::Zilla::PluginBundle::$NAME";
-require_ok($mod);
+eval "require $mod" or die $@;
 
 # get default MetaNoIndex directory arrayref
 my $noindex = (grep { ref($_) && $_->[0] eq 'MetaNoIndex' }
