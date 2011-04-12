@@ -456,8 +456,8 @@ This bundle is roughly equivalent to:
 	[MetaTests]             ; test META
 	[PodSyntaxTests]        ; test POD
 	[PodCoverageTests]      ; test documentation coverage
-	[Test::Pod::LinkCheck]  ; test L<> links in POD
-	[Test::Pod::No404s]     ; test L<http://...> links in POD
+	[Test::Pod::LinkCheck]  ; test Pod links
+	[Test::Pod::No404s]     ; test Pod http links
 	[PodSpellingTests]      ; spell check POD
 	[PortabilityTests]      ; test portability (why? who doesn't use Linux?)
 	[KwaliteeTests]         ; CPANTS
