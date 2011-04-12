@@ -120,5 +120,7 @@ sub init_bundle {
 sub releaser_is {
 	my ($bundle, $exp) = @_;
 	# NOTE: just looking for the last plugin in the array is fragile
-	like((@{$bundle->plugins})[-1]->[1], qr/\b$exp$/, "expected releaser: $exp");
+	# ignore any Git:: plugins at the end
+	my $releaser = (grep { $_->[1] !~ /^Dist::Zilla::Plugin::Git::/ } reverse @{$bundle->plugins})[0];
+	like($releaser->[1], qr/\b$exp$/, "expected releaser: $exp");
 }

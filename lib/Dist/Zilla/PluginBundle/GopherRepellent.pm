@@ -53,6 +53,7 @@ sub _default_attributes {
 		skip_plugins   => [Str  => ''],
 		skip_prereqs   => [Str  => ''],
 		weaver_config  => [Str  => $_[0]->_bundle_name],
+		use_git_bundle => [Bool => 1],
 	};
 }
 
@@ -250,6 +251,16 @@ sub _bundled_plugins {
 			CheckChangesHasContent
 			TestRelease
 			ConfirmRelease
+		),
+
+		($self->use_git_bundle
+			? qw(
+				Git::Check
+				Git::Commit
+				Git::Tag
+				Git::Push
+			)
+			: ()
 		),
 
 	# release
