@@ -16,7 +16,7 @@ use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
 use Dist::Zilla::Plugin::CompileTests 1.100740 ();
 use Dist::Zilla::Plugin::CPANChangesTests ();
 use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
-use Dist::Zilla::Plugin::Git::DescribeVersion 0.006 ();
+use Dist::Zilla::Plugin::Git::NextVersion ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::KwaliteeTests ();
 #use Dist::Zilla::Plugin::MetaData::BuiltWith (); # FIXME: see comment below
@@ -147,7 +147,8 @@ sub _bundled_plugins {
 	return (
 	
 	# provide version
-		'Git::DescribeVersion',
+		#'Git::DescribeVersion',
+		'Git::NextVersion',
 
 	# gather and prune
 		qw(
@@ -387,7 +388,7 @@ and then you can add it yourself:
 
 This bundle is roughly equivalent to:
 
-	[Git::DescribeVersion]  ; count commits from last tag to provide version
+	[Git::NextVersion]      ; autoincrement version from last tag
 
 	; choose files to include (dzil core [@Basic])
 	[GatherDir]             ; everything under top dir
