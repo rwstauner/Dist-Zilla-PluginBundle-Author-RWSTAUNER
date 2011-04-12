@@ -2,6 +2,16 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+2.000 2011-04-12
+
+  - Rename module into Author:: namespace
+
+  - Use the @Git bundle by default
+
+  - Replace deprecated Dist::Zilla::Plugin::PodLinkTests with
+    Dist::Zilla::Plugin::Test::Pod::LinkCheck and
+    Dist::Zilla::Plugin::Test::Pod::No404s
+
 1.002 2011-04-11
 
   [Deprecations]
