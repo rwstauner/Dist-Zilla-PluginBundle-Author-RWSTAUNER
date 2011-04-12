@@ -1,4 +1,4 @@
-=head1 {{ (my $n = $dist->name) =~ s/-/::/g; $n }}
+=head1 Dist::Zilla::PluginBundle::Author::RWSTAUNER
 
 Author
 PluginBundles for building perl distributions
