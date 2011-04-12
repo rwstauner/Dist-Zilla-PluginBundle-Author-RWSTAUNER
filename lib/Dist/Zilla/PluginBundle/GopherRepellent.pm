@@ -27,7 +27,6 @@ use Dist::Zilla::Plugin::MinimumVersionTests ();
 use Dist::Zilla::Plugin::NextRelease ();
 use Dist::Zilla::Plugin::PkgVersion ();
 use Dist::Zilla::Plugin::PodCoverageTests ();
-### Dist::Zilla::Plugin::PodLinkTests (); # suggested not required
 use Dist::Zilla::Plugin::PodSpellingTests ();
 use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
@@ -50,7 +49,6 @@ sub _default_attributes {
 		auto_prereqs   => [Bool => 1],
 		fake_release   => [Bool => $ENV{DZIL_FAKERELEASE}],
 		is_task        => [Bool => 0],
-		pod_link_tests => [Bool => 1],
 		releaser       => [Str  => 'UploadToCPAN'],
 		skip_plugins   => [Str  => ''],
 		skip_prereqs   => [Str  => ''],
@@ -133,19 +131,6 @@ sub configure {
 # return a list of plugin specs (to be sent to add_plugins())
 sub _bundled_plugins {
 	my ($self) = @_;
-
-	# optional... it was difficult to install these
-	my $pod_link_tests = $self->pod_link_tests &&
-		eval 'require Dist::Zilla::Plugin::PodLinkTests';
-
-	if( $pod_link_tests ){
-		$pod_link_tests = ['PodLinkTests'];
-	}
-	else {
-		$pod_link_tests = [];
-		$self->log('PodLinkTests disabled -- unable to load')
-			if $self->pod_link_tests;
-	}
 
 	$self->log_fatal("you must not specify both weaver_config and is_task")
 		if $self->is_task and $self->weaver_config ne $self->_bundle_name;
@@ -248,7 +233,6 @@ sub _bundled_plugins {
 			PodSyntaxTests
 			PodCoverageTests
 		),
-			@$pod_link_tests,
 		# Test::Pod::Spelling::CommonMistakes ?
 		qw(
 			PodSpellingTests
@@ -335,7 +319,6 @@ Possible options and their default values:
 	auto_prereqs   = 1  ; enable AutoPrereqs
 	fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
 	is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
-	pod_link_tests = 1  ; use the PodLinkTests plugin if available
 	releaser       = UploadToCPAN
 	skip_plugins   =    ; default empty; a regexp of plugin names to exclude
 	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
