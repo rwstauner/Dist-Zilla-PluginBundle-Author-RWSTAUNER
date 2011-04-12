@@ -99,6 +99,15 @@ sub mvp_bundle_config {
 
 =for Pod::Coverage mvp_bundle_config
 
+=begin :prelude
+
+=head1 DEPRECATED
+
+This module is deprecated.
+It will soon be renamed into the Author namespace.
+
+=end :prelude
+
 =head1 SYNOPSIS
 
 	# weaver.ini

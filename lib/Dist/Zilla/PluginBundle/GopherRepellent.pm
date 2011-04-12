@@ -304,6 +304,15 @@ no Moose;
 =for Pod::Coverage configure
 log log_fatal
 
+=begin :prelude
+
+=head1 DEPRECATED
+
+This module is deprecated.
+It will soon be renamed into the Author namespace.
+
+=end :prelude
+
 =head1 SYNOPSIS
 
 	# dist.ini
