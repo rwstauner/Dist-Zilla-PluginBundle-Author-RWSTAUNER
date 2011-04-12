@@ -474,42 +474,11 @@ This bundle is roughly equivalent to:
 	; set 'releaser = AlternatePlugin' to use a different releaser plugin
 	; 'fake_release' will override the 'releaser' (useful for sub-bundles)
 
-=head1 RATIONALE
-
-I built my own PluginBundles
-after my ini files started getting unruly.
-
-It also made sense to me to build a separate
-PluginBundle for C<$work> which could use this one
-and then set a few attributes.
-
-This bundle is essentially (and may one day become) C<@Author::RWSTAUNER>.
-
-It is subject to change.
-
-I am still new to L<Dist::Zilla>
-and uploading to CPAN
-and am trying to learn how to make
-good/quality/L<kwalitee|Module::CPANTS::Analyse> modules.
-
-Therefore this bundle may be useful for others
-who aren't quite sure what they want or how they want it,
-but would like to have as much generated as possible to make a "complete" dist.
-
-Beyond that audience
-this may be mostly for my own use
-(and for people I work with who are less inclined to roll their own),
-but perhaps my choices and documentation will help others along the way
-(or encourage someone to set me straight).
-
 =head1 SEE ALSO
 
 =for :list
 * L<Dist::Zilla>
 * L<Dist::Zilla::Role::PluginBundle::Easy>
 * L<Pod::Weaver>
-* L<http://www.lucasarts.com/games/monkeyisland>
-The Secret of Monkey Island (E<copy> Lucas Arts)
-- the inspiration for the name of this bundle
 
 =cut
