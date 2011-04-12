@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use Test::More 0.96;
 
-my $NAME = 'GopherRepellent';
+my $NAME = 'Author::RWSTAUNER';
 my $BNAME = "\@$NAME";
 my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;

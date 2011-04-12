@@ -1,5 +1,5 @@
-package Dist::Zilla::PluginBundle::GopherRepellent;
-# ABSTRACT: keep those pesky gophers out of your dists!
+package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
+# ABSTRACT: RWSTAUNER's Dist::Zilla config
 
 use strict;
 use warnings;
@@ -35,7 +35,7 @@ use Dist::Zilla::Plugin::Prepender 1.100960 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
-use Pod::Weaver::PluginBundle::GopherRepellent ();
+use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 
 # cannot use $self->name for class methods
 sub _bundle_name {
@@ -312,12 +312,13 @@ It will soon be renamed into the Author namespace.
 
 	# dist.ini
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 
 =head1 DESCRIPTION
 
-This is a L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
-to help keep those pesky gophers away from your dists.
+This is an Author
+L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
+that I use for building my dists.
 
 This Bundle was heavily influenced by the bundles of
 L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
@@ -333,7 +334,7 @@ Possible options and their default values:
 	releaser       = UploadToCPAN
 	skip_plugins   =    ; default empty; a regexp of plugin names to exclude
 	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
-	weaver_config  = @GopherRepellent
+	weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
 
@@ -346,12 +347,12 @@ The option should be the plugin name and the attribute separated by a colon
 
 For example:
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 	AutoPrereqs:skip = Bad::Module
 
 B<Note> that this is different than
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 	[AutoPrereqs]
 	skip = Bad::Module
 
@@ -361,12 +362,12 @@ as it is included by the Bundle.
 
 String (or boolean) attributes will overwrite any in the Bundle:
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 	CompileTests.fake_home = 0
 
 Arrayref attributes will be appended to any in the bundle:
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 	MetaNoIndex:directory = another-dir
 
 Since the Bundle initializes MetaNoIndex:directory to an arrayref
@@ -374,7 +375,7 @@ of directories, C<another-dir> will be appended to that arrayref.
 
 You can overwrite the attribute by adding non-word characters to the end of it:
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 	MetaNoIndex:directory@ = another-dir
 	; or MetaNoIndex:directory[] = another-dir
 
@@ -390,7 +391,7 @@ and then you can add it yourself:
 	[MetaNoIndex]
 	directory = one-dir
 	directory = another-dir
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 	skip_plugins = MetaNoIndex
 
 =head1 EQUIVALENT F<dist.ini>
@@ -413,7 +414,7 @@ This bundle is roughly equivalent to:
 	[Prepender]             ; add header to source code files
 
 	[PodWeaver]             ; munge POD in all modules
-	config_plugin = @GopherRepellent
+	config_plugin = @Author::RWSTAUNER
 	; 'weaver_config' can be set to an alternate Bundle
 	; set 'is_task = 1' to use TaskWeaver instead
 

@@ -1,5 +1,5 @@
-package Pod::Weaver::PluginBundle::GopherRepellent;
-# ABSTRACT: keep those pesky gophers out of your POD!
+package Pod::Weaver::PluginBundle::Author::RWSTAUNER;
+# ABSTRACT: RWSTAUNER's Pod::Weaver config
 
 use strict;
 use warnings;
@@ -112,13 +112,13 @@ It will soon be renamed into the Author namespace.
 
 	# weaver.ini
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 
 or with a F<dist.ini> like so:
 
 	# dist.ini
 
-	[@GopherRepellent]
+	[@Author::RWSTAUNER]
 
 you don't need a F<weaver.ini> at all.
 
