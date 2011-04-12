@@ -9,6 +9,7 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
+use Dist::Zilla::PluginBundle::Git 1.110500 ();
 use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
