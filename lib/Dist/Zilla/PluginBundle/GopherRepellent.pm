@@ -32,6 +32,7 @@ use Dist::Zilla::Plugin::PodSpellingTests ();
 use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::PortabilityTests ();
+use Dist::Zilla::Plugin::Prepender 1.100960 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
@@ -163,7 +164,7 @@ sub _bundled_plugins {
 			}
 		],
 		'PkgVersion',
-		# 'Prepender' 1.100960
+		'Prepender',
 		( $self->is_task
 			?  'TaskWeaver'
 			: [ 'PodWeaver' => { config_plugin => $self->weaver_config } ]
@@ -399,6 +400,7 @@ This bundle is roughly equivalent to:
 	[NextRelease]           ; simplify maintenance of Changes file
 	format = %v %{yyyy-MM-dd}d
 	[PkgVersion]            ; inject $VERSION into modules
+	[Prepender]             ; add header to source code files
 
 	[PodWeaver]             ; munge POD in all modules
 	config_plugin = @GopherRepellent
