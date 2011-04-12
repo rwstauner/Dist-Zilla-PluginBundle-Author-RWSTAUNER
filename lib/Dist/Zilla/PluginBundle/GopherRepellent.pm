@@ -85,6 +85,12 @@ sub _generate_attribute {
 sub configure {
 	my ($self) = @_;
 
+	$self->log($_) for (
+		"!\n",
+		__PACKAGE__ . " is deprecated and will soon be removed.\n",
+		"!\n",
+	);
+
 	my $skip = $self->skip_plugins;
 	$skip &&= qr/$skip/;
 
