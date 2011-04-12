@@ -235,6 +235,8 @@ sub _bundled_plugins {
 			PortabilityTests
 			KwaliteeTests
 			MinimumVersionTests
+			Test::Pod::LinkCheck
+			Test::Pod::No404s
 		),
 
 	# manifest: must come after all generated files
@@ -454,7 +456,8 @@ This bundle is roughly equivalent to:
 	[MetaTests]             ; test META
 	[PodSyntaxTests]        ; test POD
 	[PodCoverageTests]      ; test documentation coverage
-	[PodLinkTests]          ; test L<> links in POD (if available)
+	[Test::Pod::LinkCheck]  ; test L<> links in POD
+	[Test::Pod::No404s]     ; test L<http://...> links in POD
 	[PodSpellingTests]      ; spell check POD
 	[PortabilityTests]      ; test portability (why? who doesn't use Linux?)
 	[KwaliteeTests]         ; CPANTS
