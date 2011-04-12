@@ -24,7 +24,7 @@ sub _plain {
 
 sub _bundle_name {
 	my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
-	join('', '@', ($class =~ /([^:]+)$/));
+	join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
 }
 
 sub mvp_bundle_config {

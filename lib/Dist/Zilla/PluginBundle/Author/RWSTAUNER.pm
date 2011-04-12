@@ -40,7 +40,7 @@ use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 # cannot use $self->name for class methods
 sub _bundle_name {
 	my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
-	join('', '@', ($class =~ /([^:]+)$/));
+	join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
 }
 
 # TODO: consider an option for using ReportPhase
