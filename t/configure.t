@@ -97,7 +97,7 @@ done_testing;
 # helper subs
 sub has_plugin {
 	my ($bundle, $plug) = @_;
-	scalar grep { $_->[0] =~ /^$BNAME\/($plug)$/ } @{$bundle->plugins};
+	scalar grep { $_->[1] =~ /::($plug)$/ } @{$bundle->plugins};
 }
 sub init_bundle {
 	my $bundle = $mod->new(name => $BNAME, payload => $_[0]);
