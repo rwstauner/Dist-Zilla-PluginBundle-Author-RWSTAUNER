@@ -270,10 +270,12 @@ sub _add_bundled_plugins {
 
   $self->add_bundle( '@Git' )
     if $self->use_git_bundle;
-  
-  $self->add_plugins([ InstallRelease =>
-    { install_command => $self->install_command } ])
-      if $self->install_command;
+
+  $self->add_plugins(
+    [ InstallRelease => { install_command => $self->install_command } ]
+  )
+    if $self->install_command;
+
 }
 
 # $self->add_bundle('@Git' => {
