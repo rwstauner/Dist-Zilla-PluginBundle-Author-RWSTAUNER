@@ -8,8 +8,8 @@ my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;
 
 # get default MetaNoIndex directory arrayref
-my $noindex = (grep { ref($_) && $_->[0] eq 'MetaNoIndex' }
-	init_bundle({})->_bundled_plugins)[0]->[1]->{directory};
+my $noindex = (grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
+	@{ init_bundle({})->plugins })[0]->[-1]->{directory};
 
 # test attributes that change plugin configurations
 my %default_exp = (

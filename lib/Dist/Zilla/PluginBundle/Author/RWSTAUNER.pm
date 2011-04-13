@@ -91,49 +91,54 @@ sub configure {
 	$skip &&= qr/$skip/;
 
 	my $dynamic = $self->payload;
-	my @bundle = $self->_bundled_plugins;
-	my @plugins;
 
-	foreach my $spec ( @bundle ){
-		# convert lone string to arrayref with config hashref
-		$spec = [$spec, {}]
-			unless ref $spec;
+	$self->_add_bundled_plugins;
+	my $plugins = $self->plugins;
 
-		# use -1 in case there's a plugin class: [$name, $class, {}]
+	my $i = -1;
+	while( ++$i < @$plugins ){
+		my $spec = $plugins->[$i] or next;
 		# NOTE: $conf retains its reference (modifications alter $spec)
-		my ($name, $conf) = @$spec[0, -1];
+		my ($name, $class, $conf) = @$spec;
+
+		# ignore the prefix (@Bundle/Name => Name) (DZP::Name => Name)
+		(my $alias   = $name ) =~ s/^${\ $self->name }\///;
+		(my $moniker = $class) =~ s/^Dist::Zilla::Plugin(?:Bundle):://;
 
 		# exclude any plugins that match 'skip_plugins'
-		next if $skip && $name =~ $skip;
+		if( $skip ){
+			# match on name (alias) or plugin class
+			if( $alias =~ $skip || $class =~ $skip ){
+				splice(@$plugins, $i, 1);
+				redo;
+			}
+		}
 
 		# search the dynamic config for anything matching the current plugin
+		my $plugin_attr = qr/^(?:$alias|.?$moniker)\W+(\w+)(\W*)$/;
 		while( my ($key, $val) = each %$dynamic ){
 			# match keys like Plugin::Name:attr and PlugName/attr@
 			next unless
-				my ($attr, $over) = ($key =~ /^(?:$name)\W+(\w+)(\W*)$/);
+				my ($attr, $over) = ($key =~ $plugin_attr);
 
 			# if its already an arrayref
 			if( ref(my $current = $conf->{$attr}) eq 'ARRAY' ){
 				# overwrite if specified, otherwise append
 				$val = $over ? [$val] : [@$current, $val];
 			}
+			# modify original
 			$conf->{$attr} = $val;
 		}
-
-		push(@plugins, $spec);
 	};
-
-	$self->add_plugins(@plugins);
 }
 
-# return a list of plugin specs (to be sent to add_plugins())
-sub _bundled_plugins {
+sub _add_bundled_plugins {
 	my ($self) = @_;
 
 	$self->log_fatal("you must not specify both weaver_config and is_task")
 		if $self->is_task and $self->weaver_config ne $self->_bundle_name;
 
-	return (
+	$self->add_plugins(
 	
 	# provide version
 		#'Git::DescribeVersion',
@@ -173,11 +178,14 @@ sub _bundled_plugins {
 		'Repository',
 		# overrides [Repository] if repository is on github
 		'GithubMeta',
+	);
 
-		( $self->auto_prereqs
-			? [ 'AutoPrereqs' => $self->config_slice({ skip_prereqs => 'skip' }) ]
-			: ()
-		),
+	$self->add_plugins(
+		[ AutoPrereqs => $self->config_slice({ skip_prereqs => 'skip' }) ]
+	)
+		if $self->auto_prereqs;
+
+	$self->add_plugins(
 #		[ 'MetaData::BuiltWith' => { show_uname => 1 } ], # currently DZ::Util::EmulatePhase causes problems
 		[
 			MetaNoIndex => {
@@ -240,7 +248,9 @@ sub _bundled_plugins {
 			Test::Pod::LinkCheck
 			Test::Pod::No404s
 		),
+	);
 
+	$self->add_plugins(
 	# manifest: must come after all generated files
 		'Manifest',
 
