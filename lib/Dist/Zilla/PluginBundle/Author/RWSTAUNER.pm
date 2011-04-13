@@ -152,6 +152,10 @@ sub _add_bundled_plugins {
 			PruneCruft
 			ManifestSkip
 		),
+		# not necessary in the released distribution
+		[ PruneFiles => 'PruneBuilderFiles'  => { match => '^(dist.ini)$' } ],
+		# this is just for github
+		[ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
 
 	# munge files
 		[ 'Authority' => { do_metadata => 1 }],
@@ -400,6 +404,8 @@ This bundle is roughly equivalent to:
 	[GatherDir]             ; everything under top dir
 	[PruneCruft]            ; default stuff to skip
 	[ManifestSkip]          ; custom stuff to skip
+	; use PruneFiles to specifically remove ^(dist.ini)$
+	; use PruneFiles to specifically remove ^(README.pod)$ (just for github)
 
 	; munge files
 	[Authority]             ; inject $AUTHORITY into modules
