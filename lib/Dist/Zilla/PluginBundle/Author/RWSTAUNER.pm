@@ -262,16 +262,6 @@ sub _add_bundled_plugins {
 			ConfirmRelease
 		),
 
-		($self->use_git_bundle
-			? qw(
-				Git::Check
-				Git::Commit
-				Git::Tag
-				Git::Push
-			)
-			: ()
-		),
-
 	# release
 		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
 
@@ -281,6 +271,8 @@ sub _add_bundled_plugins {
 
 	# TODO: query zilla for phase... if release, announce which releaser we're using
 
+	$self->add_bundle( '@Git' )
+		if $self->use_git_bundle;
 }
 
 #	$self->add_bundle('@Git' => {
@@ -485,6 +477,8 @@ This bundle is roughly equivalent to:
 	; set 'fake_release = 1' to use [FakeRelease] instead
 	; set 'releaser = AlternatePlugin' to use a different releaser plugin
 	; 'fake_release' will override the 'releaser' (useful for sub-bundles)
+
+	[@Git]                  ; use Git bundle to commit/tag/push after releasing
 
 =head1 SEE ALSO
 
