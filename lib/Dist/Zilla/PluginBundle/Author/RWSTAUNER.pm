@@ -1,3 +1,4 @@
+# vim: set ts=2 sts=2 sw=2 expandtab smarttab:
 package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
 
@@ -37,256 +38,278 @@ use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 
 # cannot use $self->name for class methods
 sub _bundle_name {
-	my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
-	join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
+  my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
+  join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
 }
 
 # TODO: consider an option for using ReportPhase
 sub _default_attributes {
-	return {
-		auto_prereqs   => [Bool => 1],
-		fake_release   => [Bool => $ENV{DZIL_FAKERELEASE}],
-		install_command => [Str  => 'cpanm -v -i . -l ~/perl5'],
-		is_task        => [Bool => 0],
-		releaser       => [Str  => 'UploadToCPAN'],
-		skip_plugins   => [Str  => ''],
-		skip_prereqs   => [Str  => ''],
-		# FIXME: haven't learned perlcritic yet
-		skip_tests     => [Str  => 'CriticTests'],
-		weaver_config  => [Str  => $_[0]->_bundle_name],
-		use_git_bundle => [Bool => 1],
-	};
+  return {
+    auto_prereqs    => [Bool => 1],
+    fake_release    => [Bool => $ENV{DZIL_FAKERELEASE}],
+    install_command => [Str  => 'cpanm -v -i . -l ~/perl5'],
+    is_task         => [Bool => 0],
+    releaser        => [Str  => 'UploadToCPAN'],
+    skip_plugins    => [Str  => ''],
+    skip_prereqs    => [Str  => ''],
+    # FIXME: haven't learned perlcritic yet
+    skip_tests      => [Str  => 'CriticTests'],
+    weaver_config   => [Str  => $_[0]->_bundle_name],
+    use_git_bundle  => [Bool => 1],
+  };
 }
 
 sub _generate_attribute {
-	my ($self, $key) = @_;
-	has $key => (
-		is      => 'ro',
-		isa     => $self->_default_attributes->{$key}[0],
-		lazy    => 1,
-		default => sub {
-			# if it exists in the payload
-			exists $_[0]->payload->{$key}
-				# use it
-				?  $_[0]->payload->{$key}
-				# else get it from the defaults (for subclasses)
-				:  $_[0]->_default_attributes->{$key}[1];
-		}
-	);
+  my ($self, $key) = @_;
+  has $key => (
+    is      => 'ro',
+    isa     => $self->_default_attributes->{$key}[0],
+    lazy    => 1,
+    default => sub {
+      # if it exists in the payload
+      exists $_[0]->payload->{$key}
+        # use it
+        ?  $_[0]->payload->{$key}
+        # else get it from the defaults (for subclasses)
+        :  $_[0]->_default_attributes->{$key}[1];
+    }
+  );
 }
 
 {
-	# generate attributes
-	__PACKAGE__->_generate_attribute($_)
-		for keys %{ __PACKAGE__->_default_attributes };
+  # generate attributes
+  __PACKAGE__->_generate_attribute($_)
+    for keys %{ __PACKAGE__->_default_attributes };
 }
 
 # main
 sub configure {
-	my ($self) = @_;
+  my ($self) = @_;
 
-	my $skip = $self->skip_plugins;
-	$skip &&= qr/$skip/;
+  my $skip = $self->skip_plugins;
+  $skip &&= qr/$skip/;
 
-	my $dynamic = $self->payload;
-	# sneak this config in behind @TestingMania's back
-	$dynamic->{'CompileTests:fake_home'} = 1;
+  my $dynamic = $self->payload;
+  # sneak this config in behind @TestingMania's back
+  $dynamic->{'CompileTests:fake_home'} = 1;
 
-	$self->_add_bundled_plugins;
-	my $plugins = $self->plugins;
+  $self->_add_bundled_plugins;
+  my $plugins = $self->plugins;
 
-	my $i = -1;
-	while( ++$i < @$plugins ){
-		my $spec = $plugins->[$i] or next;
-		# NOTE: $conf retains its reference (modifications alter $spec)
-		my ($name, $class, $conf) = @$spec;
+  my $i = -1;
+  while( ++$i < @$plugins ){
+    my $spec = $plugins->[$i] or next;
+    # NOTE: $conf retains its reference (modifications alter $spec)
+    my ($name, $class, $conf) = @$spec;
 
-		# ignore the prefix (@Bundle/Name => Name) (DZP::Name => Name)
-		(my $alias   = $name ) =~ s/^${\ $self->name }\///;
-		(my $moniker = $class) =~ s/^Dist::Zilla::Plugin(?:Bundle):://;
+    # ignore the prefix (@Bundle/Name => Name) (DZP::Name => Name)
+    (my $alias   = $name ) =~ s/^${\ $self->name }\///;
+    (my $moniker = $class) =~ s/^Dist::Zilla::Plugin(?:Bundle):://;
 
-		# exclude any plugins that match 'skip_plugins'
-		if( $skip ){
-			# match on name (alias) or plugin class
-			if( $alias =~ $skip || $class =~ $skip ){
-				splice(@$plugins, $i, 1);
-				redo;
-			}
-		}
+    # exclude any plugins that match 'skip_plugins'
+    if( $skip ){
+      # match on name (alias) or plugin class
+      if( $alias =~ $skip || $class =~ $skip ){
+        splice(@$plugins, $i, 1);
+        redo;
+      }
+    }
 
-		# search the dynamic config for anything matching the current plugin
-		my $plugin_attr = qr/^(?:$alias|.?$moniker)\W+(\w+)(\W*)$/;
-		while( my ($key, $val) = each %$dynamic ){
-			# match keys like Plugin::Name:attr and PlugName/attr@
-			next unless
-				my ($attr, $over) = ($key =~ $plugin_attr);
+    # search the dynamic config for anything matching the current plugin
+    my $plugin_attr = qr/^(?:$alias|.?$moniker)\W+(\w+)(\W*)$/;
+    while( my ($key, $val) = each %$dynamic ){
+      # match keys like Plugin::Name:attr and PlugName/attr@
+      next unless
+        my ($attr, $over) = ($key =~ $plugin_attr);
 
-			# if its already an arrayref
-			if( ref(my $current = $conf->{$attr}) eq 'ARRAY' ){
-				# overwrite if specified, otherwise append
-				$val = $over ? [$val] : [@$current, $val];
-			}
-			# modify original
-			$conf->{$attr} = $val;
-		}
-	};
+      # if its already an arrayref
+      if( ref(my $current = $conf->{$attr}) eq 'ARRAY' ){
+        # overwrite if specified, otherwise append
+        $val = $over ? [$val] : [@$current, $val];
+      }
+      # modify original
+      $conf->{$attr} = $val;
+    }
+  };
 }
 
 sub _add_bundled_plugins {
-	my ($self) = @_;
+  my ($self) = @_;
 
-	$self->log_fatal("you must not specify both weaver_config and is_task")
-		if $self->is_task and $self->weaver_config ne $self->_bundle_name;
+  $self->log_fatal("you must not specify both weaver_config and is_task")
+    if $self->is_task and $self->weaver_config ne $self->_bundle_name;
 
-	$self->add_plugins(
-	
-	# provide version
-		#'Git::DescribeVersion',
-		'Git::NextVersion',
+  $self->add_plugins(
+  
+  # provide version
+    #'Git::DescribeVersion',
+    'Git::NextVersion',
 
-	# gather and prune
-		qw(
-			GatherDir
-			PruneCruft
-			ManifestSkip
-		),
-		# not necessary in the released distribution
-		[ PruneFiles => 'PruneBuilderFiles'  => { match => '^(dist.ini)$' } ],
-		# this is just for github
-		[ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
+  # gather and prune
+    $self->_generate_manifest_skip,
+    qw(
+      GatherDir
+      PruneCruft
+      ManifestSkip
+    ),
+    # not necessary in the released distribution
+    [ PruneFiles => 'PruneBuilderFiles'  => { match => '^(dist.ini)$' } ],
+    # this is just for github
+    [ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
 
-	# munge files
-		[ 'Authority' => { do_metadata => 1 }],
-		[
-			NextRelease => {
-				format => '%v %{yyyy-MM-dd}d'
-			}
-		],
-		'PkgVersion',
-		'Prepender',
-		( $self->is_task
-			?  'TaskWeaver'
-			: [ 'PodWeaver' => { config_plugin => $self->weaver_config } ]
-		),
+  # munge files
+    [ 'Authority' => { do_metadata => 1 }],
+    [
+      NextRelease => {
+        format => '%v %{yyyy-MM-dd}d'
+      }
+    ],
+    'PkgVersion',
+    'Prepender',
+    ( $self->is_task
+      ?  'TaskWeaver'
+      : [ 'PodWeaver' => { config_plugin => $self->weaver_config } ]
+    ),
 
-	# generated distribution files
-		qw(
-			License
-			Readme
-		),
-		# @APOCALYPTIC: generate MANIFEST.SKIP ?
+  # generated distribution files
+    qw(
+      License
+      Readme
+    ),
+    # @APOCALYPTIC: generate MANIFEST.SKIP ?
 
-	# metadata
-		'Bugtracker',
-		# won't find git if not in repository root (!-e ".git")
-		'Repository',
-		# overrides [Repository] if repository is on github
-		'GithubMeta',
-	);
+  # metadata
+    'Bugtracker',
+    # won't find git if not in repository root (!-e ".git")
+    'Repository',
+    # overrides [Repository] if repository is on github
+    'GithubMeta',
+  );
 
-	$self->add_plugins(
-		[ AutoPrereqs => $self->config_slice({ skip_prereqs => 'skip' }) ]
-	)
-		if $self->auto_prereqs;
+  $self->add_plugins(
+    [ AutoPrereqs => $self->config_slice({ skip_prereqs => 'skip' }) ]
+  )
+    if $self->auto_prereqs;
 
-	$self->add_plugins(
-#		[ 'MetaData::BuiltWith' => { show_uname => 1 } ], # currently DZ::Util::EmulatePhase causes problems
-		[
-			MetaNoIndex => {
-				# could use grep { -d $_ } but that will miss any generated files
-				directory => [qw(corpus examples inc share t xt)],
-				namespace => [qw(Local t::lib)],
-				'package' => [qw(DB)],
-			}
-		],
-		[ 	# AFTER MetaNoIndex
-			'MetaProvides::Package' => {
-				meta_noindex => 1
-			}
-		],
+  $self->add_plugins(
+#   [ 'MetaData::BuiltWith' => { show_uname => 1 } ], # currently DZ::Util::EmulatePhase causes problems
+    [
+      MetaNoIndex => {
+        # could use grep { -d $_ } but that will miss any generated files
+        directory => [qw(corpus examples inc share t xt)],
+        namespace => [qw(Local t::lib)],
+        'package' => [qw(DB)],
+      }
+    ],
+    [   # AFTER MetaNoIndex
+      'MetaProvides::Package' => {
+        meta_noindex => 1
+      }
+    ],
 
-		qw(
-			MinimumPerl
-			MetaConfig
-			MetaYAML
-			MetaJSON
-		),
+    qw(
+      MinimumPerl
+      MetaConfig
+      MetaYAML
+      MetaJSON
+    ),
 
-		[
-			Prereqs => 'TestMoreWithSubtests' => {
-				-phase => 'test',
-				-type  => 'requires',
-				'Test::More' => '0.96'
-			}
-		],
+    [
+      Prereqs => 'TestMoreWithSubtests' => {
+        -phase => 'test',
+        -type  => 'requires',
+        'Test::More' => '0.96'
+      }
+    ],
 
-	# build system
-		qw(
-			ExtraTests
-			ExecDir
-			ShareDir
-			MakeMaker
-			ModuleBuild
-			DualBuilders
-		),
+  # build system
+    qw(
+      ExtraTests
+      ExecDir
+      ShareDir
+      MakeMaker
+      ModuleBuild
+      DualBuilders
+    ),
 
-	# generated t/ tests
-		qw(
-			ReportVersions::Tiny
-		),
+  # generated t/ tests
+    qw(
+      ReportVersions::Tiny
+    ),
 
-	# generated xt/ tests
-		# Test::Pod::Spelling::CommonMistakes ?
-		qw(
-			PodSpellingTests
-			Test::Pod::LinkCheck
-			Test::Pod::No404s
-		),
-	);
+  # generated xt/ tests
+    # Test::Pod::Spelling::CommonMistakes ?
+    qw(
+      PodSpellingTests
+      Test::Pod::LinkCheck
+      Test::Pod::No404s
+    ),
+  );
 
-	$self->add_bundle(
-		'@TestingMania' => $self->config_slice({ skip_tests => 'skip'})
-	);
+  $self->add_bundle(
+    '@TestingMania' => $self->config_slice({ skip_tests => 'skip'})
+  );
 
-	$self->add_plugins(
-	# manifest: must come after all generated files
-		'Manifest',
+  $self->add_plugins(
+  # manifest: must come after all generated files
+    'Manifest',
 
-	# before release
-			#CheckExtraTests
-		qw(
-			CheckChangesHasContent
-			TestRelease
-			ConfirmRelease
-		),
+  # before release
+      #CheckExtraTests
+    qw(
+      CheckChangesHasContent
+      TestRelease
+      ConfirmRelease
+    ),
 
-	# release
-		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
-	);
+  # release
+    ( $self->fake_release ? 'FakeRelease' : $self->releaser ),
+  );
 
-	# TODO: query zilla for phase... if release, announce which releaser we're using
+  # TODO: query zilla for phase... if release, announce which releaser we're using
 
-	$self->add_bundle( '@Git' )
-		if $self->use_git_bundle;
-	
-	$self->add_plugins([ InstallRelease =>
-		{ install_command => $self->install_command } ])
-			if $self->install_command;
+  $self->add_bundle( '@Git' )
+    if $self->use_git_bundle;
+  
+  $self->add_plugins([ InstallRelease =>
+    { install_command => $self->install_command } ])
+      if $self->install_command;
 }
 
-#	$self->add_bundle('@Git' => {
-#		tag_format => '%v',
-#		push_to    => [ qw(origin github) ],
-#	});
+# $self->add_bundle('@Git' => {
+#   tag_format => '%v',
+#   push_to    => [ qw(origin github) ],
+# });
 
 # As of Dist::Zilla 4.102345 pluginbundles don't have log and log_fatal methods
 foreach my $method ( qw(log log_fatal) ){
-	unless( __PACKAGE__->can($method) ){
-		no strict 'refs';
-		*$method = $method =~ /fatal/
-			? sub { die($_[1]) }
-			: sub { warn("[${\$_[0]->_bundle_name}] $_[1]") };
-	}
+  unless( __PACKAGE__->can($method) ){
+    no strict 'refs';
+    *$method = $method =~ /fatal/
+      ? sub { die($_[1]) }
+      : sub { warn("[${\$_[0]->_bundle_name}] $_[1]") };
+  }
+}
+
+sub _generate_manifest_skip {
+  # include a default MANIFEST.SKIP for the tests and/or historical reasons
+  return [
+    GenerateFile => 'GenerateManifestSkip' => {
+      filename => 'MANIFEST.SKIP',
+      is_template => 1,
+      content => <<'EOF_MANIFEST_SKIP',
+
+\B\.git\b
+\B\.gitignore$
+^[\._]build
+^blib/
+^(Build|Makefile)$
+\bpm_to_blib$
+^MYMETA\.
+
+EOF_MANIFEST_SKIP
+    }
+  ];
 }
 
 __PACKAGE__->meta->make_immutable;
@@ -300,9 +323,9 @@ log log_fatal
 
 =head1 SYNOPSIS
 
-	# dist.ini
+  # dist.ini
 
-	[@Author::RWSTAUNER]
+  [@Author::RWSTAUNER]
 
 =head1 DESCRIPTION
 
@@ -318,15 +341,15 @@ L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
 
 Possible options and their default values:
 
-	auto_prereqs   = 1  ; enable AutoPrereqs
-	fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
-	install_command = cpanm -v -i . -l ~/perl5 (passed to InstallRelease)
-	is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
-	releaser       = UploadToCPAN
-	skip_plugins   =    ; default empty; a regexp of plugin names to exclude
-	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
-	skip_tests     =    ; corresponds to @TestingMania:skip
-	weaver_config  = @Author::RWSTAUNER
+  auto_prereqs   = 1  ; enable AutoPrereqs
+  fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
+  install_command = cpanm -v -i . -l ~/perl5 (passed to InstallRelease)
+  is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
+  releaser       = UploadToCPAN
+  skip_plugins   =    ; default empty; a regexp of plugin names to exclude
+  skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
+  skip_tests     =    ; corresponds to @TestingMania:skip
+  weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
 
@@ -339,14 +362,14 @@ The option should be the plugin name and the attribute separated by a colon
 
 For example:
 
-	[@Author::RWSTAUNER]
-	AutoPrereqs:skip = Bad::Module
+  [@Author::RWSTAUNER]
+  AutoPrereqs:skip = Bad::Module
 
 B<Note> that this is different than
 
-	[@Author::RWSTAUNER]
-	[AutoPrereqs]
-	skip = Bad::Module
+  [@Author::RWSTAUNER]
+  [AutoPrereqs]
+  skip = Bad::Module
 
 which will load the plugin a second time.
 The first example actually alters the plugin configuration
@@ -354,22 +377,22 @@ as it is included by the Bundle.
 
 String (or boolean) attributes will overwrite any in the Bundle:
 
-	[@Author::RWSTAUNER]
-	CompileTests.fake_home = 0
+  [@Author::RWSTAUNER]
+  CompileTests.fake_home = 0
 
 Arrayref attributes will be appended to any in the bundle:
 
-	[@Author::RWSTAUNER]
-	MetaNoIndex:directory = another-dir
+  [@Author::RWSTAUNER]
+  MetaNoIndex:directory = another-dir
 
 Since the Bundle initializes MetaNoIndex:directory to an arrayref
 of directories, C<another-dir> will be appended to that arrayref.
 
 You can overwrite the attribute by adding non-word characters to the end of it:
 
-	[@Author::RWSTAUNER]
-	MetaNoIndex:directory@ = another-dir
-	; or MetaNoIndex:directory[] = another-dir
+  [@Author::RWSTAUNER]
+  MetaNoIndex:directory@ = another-dir
+  ; or MetaNoIndex:directory[] = another-dir
 
 You can use any non-word characters: use what makes the most sense to you.
 B<Note> that you cannot specify an attribute more than once
@@ -380,102 +403,102 @@ If your situation is more complicated you can use the C<skip_plugins>
 attribute to have the Bundle ignore that plugin
 and then you can add it yourself:
 
-	[MetaNoIndex]
-	directory = one-dir
-	directory = another-dir
-	[@Author::RWSTAUNER]
-	skip_plugins = MetaNoIndex
+  [MetaNoIndex]
+  directory = one-dir
+  directory = another-dir
+  [@Author::RWSTAUNER]
+  skip_plugins = MetaNoIndex
 
 =head1 EQUIVALENT F<dist.ini>
 
 This bundle is roughly equivalent to:
 
-	[Git::NextVersion]      ; autoincrement version from last tag
+  [Git::NextVersion]      ; autoincrement version from last tag
 
-	; choose files to include (dzil core [@Basic])
-	[GatherDir]             ; everything under top dir
-	[PruneCruft]            ; default stuff to skip
-	[ManifestSkip]          ; custom stuff to skip
-	; use PruneFiles to specifically remove ^(dist.ini)$
-	; use PruneFiles to specifically remove ^(README.pod)$ (just for github)
+  ; choose files to include (dzil core [@Basic])
+  [GatherDir]             ; everything under top dir
+  [PruneCruft]            ; default stuff to skip
+  [ManifestSkip]          ; custom stuff to skip
+  ; use PruneFiles to specifically remove ^(dist.ini)$
+  ; use PruneFiles to specifically remove ^(README.pod)$ (just for github)
 
-	; munge files
-	[Authority]             ; inject $AUTHORITY into modules
-	do_metadata = 1         ; default
-	[NextRelease]           ; simplify maintenance of Changes file
-	format = %v %{yyyy-MM-dd}d
-	[PkgVersion]            ; inject $VERSION into modules
-	[Prepender]             ; add header to source code files
+  ; munge files
+  [Authority]             ; inject $AUTHORITY into modules
+  do_metadata = 1         ; default
+  [NextRelease]           ; simplify maintenance of Changes file
+  format = %v %{yyyy-MM-dd}d
+  [PkgVersion]            ; inject $VERSION into modules
+  [Prepender]             ; add header to source code files
 
-	[PodWeaver]             ; munge POD in all modules
-	config_plugin = @Author::RWSTAUNER
-	; 'weaver_config' can be set to an alternate Bundle
-	; set 'is_task = 1' to use TaskWeaver instead
+  [PodWeaver]             ; munge POD in all modules
+  config_plugin = @Author::RWSTAUNER
+  ; 'weaver_config' can be set to an alternate Bundle
+  ; set 'is_task = 1' to use TaskWeaver instead
 
-	; generate files
-	[License]               ; generate distribution files (dzil core [@Basic])
-	[Readme]
+  ; generate files
+  [License]               ; generate distribution files (dzil core [@Basic])
+  [Readme]
 
-	; metadata
-	[Bugtracker]            ; include bugtracker URL and email address (uses RT)
-	[Repository]            ; determine git information (if -e ".git")
-	[GithubMeta]            ; overrides [Repository] if repository is on github
+  ; metadata
+  [Bugtracker]            ; include bugtracker URL and email address (uses RT)
+  [Repository]            ; determine git information (if -e ".git")
+  [GithubMeta]            ; overrides [Repository] if repository is on github
 
-	[AutoPrereqs]
-	; disable with 'auto_prereqs = 0'
+  [AutoPrereqs]
+  ; disable with 'auto_prereqs = 0'
 
-	[MetaNoIndex]           ; encourage CPAN not to index:
-	directory = corpus
-	directory = examples
-	directory = inc
-	directory = share
-	directory = t
-	directory = xt
-	namespace = Local
-	namespace = t::lib
-	package   = DB
+  [MetaNoIndex]           ; encourage CPAN not to index:
+  directory = corpus
+  directory = examples
+  directory = inc
+  directory = share
+  directory = t
+  directory = xt
+  namespace = Local
+  namespace = t::lib
+  package   = DB
 
-	[MetaProvides::Package] ; describe packages included in the dist
-	meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
+  [MetaProvides::Package] ; describe packages included in the dist
+  meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
 
-	[MinimumPerl]           ; automatically determine Perl version required
+  [MinimumPerl]           ; automatically determine Perl version required
 
-	[MetaConfig]            ; include Dist::Zilla info in distmeta (dzil core)
-	[MetaYAML]              ; include META.yml (v1.4) (dzil core [@Basic])
-	[MetaJSON]              ; include META.json (v2) (more info than META.yml)
+  [MetaConfig]            ; include Dist::Zilla info in distmeta (dzil core)
+  [MetaYAML]              ; include META.yml (v1.4) (dzil core [@Basic])
+  [MetaJSON]              ; include META.json (v2) (more info than META.yml)
 
-	[Prereqs / TestRequires]
-	Test::More = 0.96       ; require recent Test::More (including subtests)
+  [Prereqs / TestRequires]
+  Test::More = 0.96       ; require recent Test::More (including subtests)
 
-	[ExtraTests]            ; build system (dzil core [@Basic])
-	[ExecDir]               ; include 'bin/*' as executables
-	[ShareDir]              ; include 'share/' for File::ShareDir
+  [ExtraTests]            ; build system (dzil core [@Basic])
+  [ExecDir]               ; include 'bin/*' as executables
+  [ShareDir]              ; include 'share/' for File::ShareDir
 
-	[MakeMaker]             ; create Makefile.PL
-	[ModuleBuild]           ; create Build.PL
-	[DualBuilders]          ; only require one of the above two (prefer 'build')
+  [MakeMaker]             ; create Makefile.PL
+  [ModuleBuild]           ; create Build.PL
+  [DualBuilders]          ; only require one of the above two (prefer 'build')
 
-	; generate t/ and xt/ tests
-	[ReportVersions::Tiny]  ; show module versions used in test reports
-	[@TestingMania]         ; Lots of dist tests
-	skip = CriticTests      ; I'm bad and haven't taught myself PerlCritic yet
-	[Test::Pod::LinkCheck]  ; test Pod links
-	[Test::Pod::No404s]     ; test Pod http links
-	[PodSpellingTests]      ; spell check POD
+  ; generate t/ and xt/ tests
+  [ReportVersions::Tiny]  ; show module versions used in test reports
+  [@TestingMania]         ; Lots of dist tests
+  skip = CriticTests      ; I'm bad and haven't taught myself PerlCritic yet
+  [Test::Pod::LinkCheck]  ; test Pod links
+  [Test::Pod::No404s]     ; test Pod http links
+  [PodSpellingTests]      ; spell check POD
 
-	[Manifest]              ; build MANIFEST file (dzil core [@Basic])
-	
-	; actions for releasing the distribution (dzil core [@Basic])
-	[CheckChangesHasContent]
-	[TestRelease]           ; run tests before releasing
-	[ConfirmRelease]        ; are you sure?
-	[UploadToCPAN]
-	; set 'fake_release = 1' to use [FakeRelease] instead
-	; set 'releaser = AlternatePlugin' to use a different releaser plugin
-	; 'fake_release' will override the 'releaser' (useful for sub-bundles)
+  [Manifest]              ; build MANIFEST file (dzil core [@Basic])
+  
+  ; actions for releasing the distribution (dzil core [@Basic])
+  [CheckChangesHasContent]
+  [TestRelease]           ; run tests before releasing
+  [ConfirmRelease]        ; are you sure?
+  [UploadToCPAN]
+  ; set 'fake_release = 1' to use [FakeRelease] instead
+  ; set 'releaser = AlternatePlugin' to use a different releaser plugin
+  ; 'fake_release' will override the 'releaser' (useful for sub-bundles)
 
-	[@Git]                  ; use Git bundle to commit/tag/push after releasing
-	[InstallRelease]        ; install the new dist (using 'install_command')
+  [@Git]                  ; use Git bundle to commit/tag/push after releasing
+  [InstallRelease]        ; install the new dist (using 'install_command')
 
 =head1 SEE ALSO
 
