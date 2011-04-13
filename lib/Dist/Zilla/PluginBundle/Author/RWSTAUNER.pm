@@ -1,9 +1,10 @@
 # vim: set ts=2 sts=2 sw=2 expandtab smarttab:
+use strict;
+use warnings;
+
 package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
 
-use strict;
-use warnings;
 use Moose;
 use Dist::Zilla 4.102345;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
@@ -91,10 +92,6 @@ sub configure {
   my $dynamic = $self->payload;
   # sneak this config in behind @TestingMania's back
   $dynamic->{'CompileTests:fake_home'} = 1;
-
-  # FIXME: haven't learned perlcritic yet
-  $dynamic->{skip_tests} = 'CriticTests'
-    if !exists($dynamic->{skip_tests});
 
   $self->_add_bundled_plugins;
   my $plugins = $self->plugins;
@@ -285,7 +282,7 @@ sub _add_bundled_plugins {
 # As of Dist::Zilla 4.102345 pluginbundles don't have log and log_fatal methods
 foreach my $method ( qw(log log_fatal) ){
   unless( __PACKAGE__->can($method) ){
-    no strict 'refs';
+    no strict 'refs'; ## no critic (NoStrict)
     *$method = $method =~ /fatal/
       ? sub { die($_[1]) }
       : sub { warn("[${\$_[0]->_bundle_name}] $_[1]") };
@@ -482,7 +479,6 @@ This bundle is roughly equivalent to:
   ; generate t/ and xt/ tests
   [ReportVersions::Tiny]  ; show module versions used in test reports
   [@TestingMania]         ; Lots of dist tests
-  skip = CriticTests      ; I'm bad and haven't taught myself PerlCritic yet
   [Test::Pod::LinkCheck]  ; test Pod links
   [Test::Pod::No404s]     ; test Pod http links
   [PodSpellingTests]      ; spell check POD

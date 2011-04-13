@@ -1,9 +1,9 @@
 # vim: set ts=2 sts=2 sw=2 expandtab smarttab:
-package Pod::Weaver::PluginBundle::Author::RWSTAUNER;
-# ABSTRACT: RWSTAUNER's Pod::Weaver config
-
 use strict;
 use warnings;
+
+package Pod::Weaver::PluginBundle::Author::RWSTAUNER;
+# ABSTRACT: RWSTAUNER's Pod::Weaver config
 
 use Pod::Weaver 3.101632 ();
 use Pod::Weaver::PluginBundle::Default ();
