@@ -20,6 +20,7 @@ use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
 use Dist::Zilla::Plugin::Git::NextVersion ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::KwaliteeTests ();
+use Dist::Zilla::Plugin::InstallRelease 0.006 ();
 #use Dist::Zilla::Plugin::MetaData::BuiltWith (); # FIXME: see comment below
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
@@ -51,6 +52,7 @@ sub _default_attributes {
 	return {
 		auto_prereqs   => [Bool => 1],
 		fake_release   => [Bool => $ENV{DZIL_FAKERELEASE}],
+		install_command => [Str  => 'cpanm -v -i . -l ~/perl5'],
 		is_task        => [Bool => 0],
 		releaser       => [Str  => 'UploadToCPAN'],
 		skip_plugins   => [Str  => ''],
@@ -264,15 +266,16 @@ sub _add_bundled_plugins {
 
 	# release
 		( $self->fake_release ? 'FakeRelease' : $self->releaser ),
-
-		#[ InstallRelease => { install_command = 'cpanm --local-lib .' } ]
-
 	);
 
 	# TODO: query zilla for phase... if release, announce which releaser we're using
 
 	$self->add_bundle( '@Git' )
 		if $self->use_git_bundle;
+	
+	$self->add_plugins([ InstallRelease =>
+		{ install_command => $self->install_command } ])
+			if $self->install_command;
 }
 
 #	$self->add_bundle('@Git' => {
@@ -322,6 +325,7 @@ Possible options and their default values:
 
 	auto_prereqs   = 1  ; enable AutoPrereqs
 	fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
+	install_command = cpanm -v -i . -l ~/perl5 (passed to InstallRelease)
 	is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
 	releaser       = UploadToCPAN
 	skip_plugins   =    ; default empty; a regexp of plugin names to exclude
@@ -479,6 +483,7 @@ This bundle is roughly equivalent to:
 	; 'fake_release' will override the 'releaser' (useful for sub-bundles)
 
 	[@Git]                  ; use Git bundle to commit/tag/push after releasing
+	[InstallRelease]        ; install the new dist (using 'install_command')
 
 =head1 SEE ALSO
 

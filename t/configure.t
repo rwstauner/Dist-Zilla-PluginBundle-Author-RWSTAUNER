@@ -107,8 +107,13 @@ sub init_bundle {
 }
 sub releaser_is {
 	my ($bundle, $exp) = @_;
+	# ignore any after-release plugins at the end
+	my @after = qw(
+		Git::
+		InstallRelease
+	);
+	my $skip = qr/^Dist::Zilla::Plugin::(${\join('|', @after)})/;
 	# NOTE: just looking for the last plugin in the array is fragile
-	# ignore any Git:: plugins at the end
-	my $releaser = (grep { $_->[1] !~ /^Dist::Zilla::Plugin::Git::/ } reverse @{$bundle->plugins})[0];
+	my $releaser = (grep { $_->[1] !~ $skip } reverse @{$bundle->plugins})[0];
 	like($releaser->[1], qr/\b$exp$/, "expected releaser: $exp");
 }
