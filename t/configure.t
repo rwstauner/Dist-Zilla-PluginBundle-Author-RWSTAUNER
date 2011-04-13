@@ -68,18 +68,6 @@ foreach my $test (
 	ok( has_plugin($bundle, 'TaskWeaver'),   $test_name);
 	ok(!has_plugin($bundle, 'PodWeaver'),    $test_name);
 
-	SKIP: {
-		eval 'require Dist::Zilla::Plugin::PodLinkTests';
-		skip 'PodLinkTests required for testing pod_link_tests attribute', 1
-			if $@;
-
-		$bundle = init_bundle({pod_link_tests => 1});
-		ok( has_plugin($bundle, 'PodLinkTests'), $test_name);
-	}
-
-		$bundle = init_bundle({pod_link_tests => 0});
-		ok(!has_plugin($bundle, 'PodLinkTests'), $test_name);
-
 	$bundle = init_bundle({releaser => 'Goober'});
 	ok( has_plugin($bundle, 'Goober'),       $test_name);
 	ok(!has_plugin($bundle, 'UploadToCPAN'), $test_name);
