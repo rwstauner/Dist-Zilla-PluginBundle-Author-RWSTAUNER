@@ -12,7 +12,8 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
-use Dist::Zilla::PluginBundle::TestingMania 0.006 ();
+# NOTE: A newer TestingMania might duplicate plugins if new tests are added
+use Dist::Zilla::PluginBundle::TestingMania 0.007 ();
 use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
