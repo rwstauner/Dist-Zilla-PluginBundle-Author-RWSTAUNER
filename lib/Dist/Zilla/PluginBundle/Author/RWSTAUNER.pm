@@ -10,29 +10,23 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
+use Dist::Zilla::PluginBundle::TestingMania 0.006 ();
 use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
-use Dist::Zilla::Plugin::CompileTests 1.100740 ();
-use Dist::Zilla::Plugin::CPANChangesTests ();
 use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
 use Dist::Zilla::Plugin::Git::NextVersion ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
-use Dist::Zilla::Plugin::KwaliteeTests ();
 use Dist::Zilla::Plugin::InstallRelease 0.006 ();
 #use Dist::Zilla::Plugin::MetaData::BuiltWith (); # FIXME: see comment below
 use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
-use Dist::Zilla::Plugin::MinimumVersionTests ();
 use Dist::Zilla::Plugin::NextRelease ();
 use Dist::Zilla::Plugin::PkgVersion ();
-use Dist::Zilla::Plugin::PodCoverageTests ();
 use Dist::Zilla::Plugin::PodSpellingTests ();
-use Dist::Zilla::Plugin::PodSyntaxTests ();
 use Dist::Zilla::Plugin::PodWeaver ();
-use Dist::Zilla::Plugin::PortabilityTests ();
 use Dist::Zilla::Plugin::Prepender 1.100960 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
@@ -57,6 +51,8 @@ sub _default_attributes {
 		releaser       => [Str  => 'UploadToCPAN'],
 		skip_plugins   => [Str  => ''],
 		skip_prereqs   => [Str  => ''],
+		# FIXME: haven't learned perlcritic yet
+		skip_tests     => [Str  => 'CriticTests'],
 		weaver_config  => [Str  => $_[0]->_bundle_name],
 		use_git_bundle => [Bool => 1],
 	};
@@ -93,6 +89,8 @@ sub configure {
 	$skip &&= qr/$skip/;
 
 	my $dynamic = $self->payload;
+	# sneak this config in behind @TestingMania's back
+	$dynamic->{'CompileTests:fake_home'} = 1;
 
 	$self->_add_bundled_plugins;
 	my $plugins = $self->plugins;
@@ -233,27 +231,21 @@ sub _add_bundled_plugins {
 		),
 
 	# generated t/ tests
-		[ CompileTests => { fake_home => 1 } ],
 		qw(
 			ReportVersions::Tiny
 		),
 
 	# generated xt/ tests
-		qw(
-			CPANChangesTests
-			MetaTests
-			PodSyntaxTests
-			PodCoverageTests
-		),
 		# Test::Pod::Spelling::CommonMistakes ?
 		qw(
 			PodSpellingTests
-			PortabilityTests
-			KwaliteeTests
-			MinimumVersionTests
 			Test::Pod::LinkCheck
 			Test::Pod::No404s
 		),
+	);
+
+	$self->add_bundle(
+		'@TestingMania' => $self->config_slice({ skip_tests => 'skip'})
 	);
 
 	$self->add_plugins(
@@ -334,6 +326,7 @@ Possible options and their default values:
 	releaser       = UploadToCPAN
 	skip_plugins   =    ; default empty; a regexp of plugin names to exclude
 	skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
+	skip_tests     =    ; corresponds to @TestingMania:skip
 	weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
@@ -460,22 +453,13 @@ This bundle is roughly equivalent to:
 	[ModuleBuild]           ; create Build.PL
 	[DualBuilders]          ; only require one of the above two (prefer 'build')
 
-	; generate t/ tests
-	[CompileTests]          ; make sure .pm files all compile
-	fake_home = 1           ; fakes $ENV{HOME} just in case
+	; generate t/ and xt/ tests
 	[ReportVersions::Tiny]  ; show module versions used in test reports
-
-	; generate xt/ tests
-	[CPANChangesTests]      ; Test::CPAN::Changes
-	[MetaTests]             ; test META
-	[PodSyntaxTests]        ; test POD
-	[PodCoverageTests]      ; test documentation coverage
+	[@TestingMania]         ; Lots of dist tests
+	skip = CriticTests      ; I'm bad and haven't taught myself PerlCritic yet
 	[Test::Pod::LinkCheck]  ; test Pod links
 	[Test::Pod::No404s]     ; test Pod http links
 	[PodSpellingTests]      ; spell check POD
-	[PortabilityTests]      ; test portability (why? who doesn't use Linux?)
-	[KwaliteeTests]         ; CPANTS
-	[MinimumVersionTests]   ; test that the automatic plugin worked
 
 	[Manifest]              ; build MANIFEST file (dzil core [@Basic])
 	
