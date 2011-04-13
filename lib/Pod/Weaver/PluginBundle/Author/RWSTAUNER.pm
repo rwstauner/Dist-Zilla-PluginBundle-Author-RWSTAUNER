@@ -29,6 +29,7 @@ sub _bundle_name {
 
 sub mvp_bundle_config {
 	my ($self, $bundle) = @_;
+	# ignore $bundle
 	my @plugins;
 
 	# NOTE: bundle name gets prepended to each plugin name at the end
@@ -44,6 +45,7 @@ sub mvp_bundle_config {
 		_plain('Name'),
 		_plain('Version'),
 
+		# Any pod inside a =begin/end :prelude will go at the top
 		[ 'Prelude',     _exp('Region'),  { region_name => 'prelude' } ],
 	);
 
@@ -67,6 +69,7 @@ sub mvp_bundle_config {
 	# default
 	push @plugins, (
 		_plain('Leftovers'),
+		# see prelude above
 		[ 'Postlude',    _exp('Region'),    { region_name => 'postlude' } ],
 
 		# TODO: consider SeeAlso if it ever allows comments with the links
