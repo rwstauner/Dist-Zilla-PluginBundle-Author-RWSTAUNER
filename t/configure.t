@@ -8,16 +8,17 @@ my $BNAME = "\@$NAME";
 my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;
 
-# get default MetaNoIndex directory arrayref
+# get default MetaNoIndex hashref
 my $noindex = (grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
-  @{ init_bundle({})->plugins })[0]->[-1]->{directory};
+  @{ init_bundle({})->plugins })[0]->[-1];
+my $noindex_dirs = $noindex->{directory};
 
 # test attributes that change plugin configurations
 my %default_exp = (
   CompileTests            => {fake_home => 1},
   PodWeaver               => {config_plugin => $BNAME},
   AutoPrereqs             => {},
-  MetaNoIndex             => {directory => [@$noindex]},
+  MetaNoIndex             => {%$noindex, directory => [@$noindex_dirs]},
   'MetaProvides::Package' => {meta_noindex => 1},
 );
 
@@ -25,13 +26,13 @@ foreach my $test (
   [{}, {%default_exp}],
   [{'skip_prereqs'     => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
   [{'AutoPrereqs:skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
-  [{'MetaNoIndex:directory'  => 'goober'},      { %default_exp, MetaNoIndex => {directory => [@$noindex, 'goober']} }],
-  [{'MetaNoIndex:directory@' => 'goober'},      { %default_exp, MetaNoIndex => {directory => ['goober']} }],
+  [{'MetaNoIndex:directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
+  [{'MetaNoIndex:directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
   [{'CompileTests->fake_home' => 0},            { %default_exp, CompileTests => {fake_home => 0} }],
   [{'MetaProvides::Package:meta_noindex' => 0}, { %default_exp, 'MetaProvides::Package' => {meta_noindex => 0} }],
   [{weaver_config => '@Default', 'MetaNoIndex:directory[]' => 'arr'}, {
     PodWeaver => {config_plugin => '@Default'},
-    MetaNoIndex => {directory => ['arr']} }],
+    MetaNoIndex => {%$noindex, directory => ['arr']} }],
 ){
   my ($config, $exp) = @$test;
 
