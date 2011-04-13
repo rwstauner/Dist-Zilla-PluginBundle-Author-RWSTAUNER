@@ -52,8 +52,7 @@ sub _default_attributes {
     releaser        => [Str  => 'UploadToCPAN'],
     skip_plugins    => [Str  => ''],
     skip_prereqs    => [Str  => ''],
-    # FIXME: haven't learned perlcritic yet
-    skip_tests      => [Str  => 'CriticTests'],
+    skip_tests      => [Str  => ''],
     weaver_config   => [Str  => $_[0]->_bundle_name],
     use_git_bundle  => [Bool => 1],
   };
@@ -92,6 +91,10 @@ sub configure {
   my $dynamic = $self->payload;
   # sneak this config in behind @TestingMania's back
   $dynamic->{'CompileTests:fake_home'} = 1;
+
+  # FIXME: haven't learned perlcritic yet
+  $dynamic->{skip_tests} = 'CriticTests'
+    if !exists($dynamic->{skip_tests});
 
   $self->_add_bundled_plugins;
   my $plugins = $self->plugins;
@@ -247,7 +250,7 @@ sub _add_bundled_plugins {
   );
 
   $self->add_bundle(
-    '@TestingMania' => $self->config_slice({ skip_tests => 'skip'})
+    '@TestingMania' => $self->config_slice({ skip_tests => 'skip' })
   );
 
   $self->add_plugins(
