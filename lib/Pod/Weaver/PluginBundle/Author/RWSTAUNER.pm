@@ -28,8 +28,8 @@ sub _bundle_name {
 }
 
 sub mvp_bundle_config {
-	my ($self, $bundle) = @_;
-	# ignore $bundle
+	## ($self, $bundle) = @_; $bundle => {payload => {}, name => '@...'}
+	my ($self) = @_;
 	my @plugins;
 
 	# NOTE: bundle name gets prepended to each plugin name at the end
