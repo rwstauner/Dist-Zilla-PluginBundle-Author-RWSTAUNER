@@ -268,6 +268,7 @@ sub _add_bundled_plugins {
 
   # TODO: query zilla for phase... if release, announce which releaser we're using
 
+  # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle( '@Git' )
     if $self->use_git_bundle;
 
@@ -277,11 +278,6 @@ sub _add_bundled_plugins {
     if $self->install_command;
 
 }
-
-# $self->add_bundle('@Git' => {
-#   tag_format => '%v',
-#   push_to    => [ qw(origin github) ],
-# });
 
 # As of Dist::Zilla 4.102345 pluginbundles don't have log and log_fatal methods
 foreach my $method ( qw(log log_fatal) ){
