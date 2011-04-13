@@ -140,7 +140,7 @@ sub _add_bundled_plugins {
     if $self->is_task and $self->weaver_config ne $self->_bundle_name;
 
   $self->add_plugins(
-  
+
   # provide version
     #'Git::DescribeVersion',
     'Git::NextVersion',
@@ -487,7 +487,7 @@ This bundle is roughly equivalent to:
   [PodSpellingTests]      ; spell check POD
 
   [Manifest]              ; build MANIFEST file (dzil core [@Basic])
-  
+
   ; actions for releasing the distribution (dzil core [@Basic])
   [CheckChangesHasContent]
   [TestRelease]           ; run tests before releasing
