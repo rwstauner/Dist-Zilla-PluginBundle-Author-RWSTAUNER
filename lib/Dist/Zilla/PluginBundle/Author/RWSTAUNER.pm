@@ -195,8 +195,8 @@ sub _add_bundled_plugins {
 			MetaNoIndex => {
 				# could use grep { -d $_ } but that will miss any generated files
 				directory => [qw(corpus examples inc share t xt)],
-#				'namespace' => [qw(Local t::lib)],
-#				'package' => [qw(DB)]
+				namespace => [qw(Local t::lib)],
+				'package' => [qw(DB)],
 			}
 		],
 		[ 	# AFTER MetaNoIndex
@@ -280,7 +280,6 @@ sub _add_bundled_plugins {
 #	});
 
 # As of Dist::Zilla 4.102345 pluginbundles don't have log and log_fatal methods
-# but hopefully someday they will... so define our own unless they exist.
 foreach my $method ( qw(log log_fatal) ){
 	unless( __PACKAGE__->can($method) ){
 		no strict 'refs';
@@ -432,6 +431,9 @@ This bundle is roughly equivalent to:
 	directory = share
 	directory = t
 	directory = xt
+	namespace = Local
+	namespace = t::lib
+	package   = DB
 
 	[MetaProvides::Package] ; describe packages included in the dist
 	meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
