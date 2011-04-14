@@ -2,6 +2,19 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.000 2011-04-13
+
+  - Rework configure() to modify actual 'plugins' attribute
+    so that add_plugins() and add_bundle() can be used
+
+  [Add Dist::Zilla Plugins]
+  - use InstallRelease with 'install_command' attribute
+  - use @TestingMania bundle
+  - use @Git bundle (instead of individual plugins)
+
+  - Explicitly prune some non-release files
+  - Generate a MANIFEST.SKIP file to satisfy tests/historical expectations
+
 2.001 2011-04-12
 
   - "use" recently required modules (*::Test::Pod::*)
