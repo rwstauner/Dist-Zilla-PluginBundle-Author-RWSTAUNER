@@ -13,7 +13,7 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
 # NOTE: A newer TestingMania might duplicate plugins if new tests are added
-use Dist::Zilla::PluginBundle::TestingMania 0.007 ();
+use Dist::Zilla::PluginBundle::TestingMania 0.008 ();
 use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
@@ -34,7 +34,6 @@ use Dist::Zilla::Plugin::Prepender 1.100960 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
-use Dist::Zilla::Plugin::Test::Pod::LinkCheck ();
 use Dist::Zilla::Plugin::Test::Pod::No404s ();
 use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 
@@ -242,7 +241,6 @@ sub _add_bundled_plugins {
     # Test::Pod::Spelling::CommonMistakes ?
     qw(
       PodSpellingTests
-      Test::Pod::LinkCheck
       Test::Pod::No404s
     ),
   );
@@ -480,7 +478,6 @@ This bundle is roughly equivalent to:
   ; generate t/ and xt/ tests
   [ReportVersions::Tiny]  ; show module versions used in test reports
   [@TestingMania]         ; Lots of dist tests
-  [Test::Pod::LinkCheck]  ; test Pod links
   [Test::Pod::No404s]     ; test Pod http links
   [PodSpellingTests]      ; spell check POD
 
