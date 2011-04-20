@@ -13,7 +13,7 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
 # NOTE: A newer TestingMania might duplicate plugins if new tests are added
-use Dist::Zilla::PluginBundle::TestingMania 0.008 ();
+use Dist::Zilla::PluginBundle::TestingMania 0.010 ();
 use Dist::Zilla::Plugin::Authority 1.001 ();
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
@@ -47,13 +47,13 @@ sub _bundle_name {
 sub _default_attributes {
   return {
     auto_prereqs    => [Bool => 1],
+    disable_tests   => [Str  => ''],
     fake_release    => [Bool => $ENV{DZIL_FAKERELEASE}],
     install_command => [Str  => 'cpanm -v -i . -l ~/perl5'],
     is_task         => [Bool => 0],
     releaser        => [Str  => 'UploadToCPAN'],
     skip_plugins    => [Str  => ''],
     skip_prereqs    => [Str  => ''],
-    skip_tests      => [Str  => ''],
     weaver_config   => [Str  => $_[0]->_bundle_name],
     use_git_bundle  => [Bool => 1],
   };
@@ -246,7 +246,7 @@ sub _add_bundled_plugins {
   );
 
   $self->add_bundle(
-    '@TestingMania' => $self->config_slice({ skip_tests => 'skip' })
+    '@TestingMania' => $self->config_slice({ disable_tests => 'disable' })
   );
 
   $self->add_plugins(
@@ -339,13 +339,13 @@ L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
 Possible options and their default values:
 
   auto_prereqs   = 1  ; enable AutoPrereqs
+  disable_tests  =    ; corresponds to @TestingMania:disable
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . -l ~/perl5 (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
   skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
-  skip_tests     =    ; corresponds to @TestingMania:skip
   weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
