@@ -14,7 +14,7 @@ use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
 # NOTE: A newer TestingMania might duplicate plugins if new tests are added
 use Dist::Zilla::PluginBundle::TestingMania 0.010 ();
-use Dist::Zilla::Plugin::Authority 1.001 ();
+use Dist::Zilla::Plugin::Authority 1.004 (); # accepts any non-whitespace
 use Dist::Zilla::Plugin::Bugtracker ();
 #use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
