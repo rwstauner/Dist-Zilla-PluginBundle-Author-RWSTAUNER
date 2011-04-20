@@ -75,9 +75,10 @@ foreach my $test (
   ok( has_plugin($bundle, 'Goober'),       $test_name);
   ok(!has_plugin($bundle, 'UploadToCPAN'), $test_name);
 
-  $bundle = init_bundle({skip_plugins => 'CompileTests|ExtraTests'});
+  $bundle = init_bundle({skip_plugins => '\b(CompileTests|ExtraTests|GenerateManifestSkip)$'});
   ok(!has_plugin($bundle, 'CompileTests'), $test_name);
   ok(!has_plugin($bundle, 'ExtraTests'),   $test_name);
+  ok(!has_plugin($bundle, 'GenerateManifestSkip', 1),   $test_name);
 
   $bundle = init_bundle({disable_tests => 'EOLTests,CompileTests'});
   ok(!has_plugin($bundle, 'EOLTests'),     $test_name);
@@ -104,8 +105,11 @@ done_testing;
 
 # helper subs
 sub has_plugin {
-  my ($bundle, $plug) = @_;
-  scalar grep { $_->[1] =~ /::($plug)$/ } @{$bundle->plugins};
+  my ($bundle, $plug, $by_name) = @_;
+  # default to plugin module, but allow searching by name
+  my $index = $by_name ? 0 : 1;
+  # should use List::Util::any
+  scalar grep { $_->[$index] =~ /\b($plug)$/ } @{$bundle->plugins};
 }
 sub init_bundle {
   my $bundle = $mod->new(name => $BNAME, payload => $_[0]);
