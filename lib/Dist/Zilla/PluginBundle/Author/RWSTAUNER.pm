@@ -108,8 +108,8 @@ sub configure {
 
     # exclude any plugins that match 'skip_plugins'
     if( $skip ){
-      # match on name (alias) or plugin class
-      if( $alias =~ $skip || $class =~ $skip ){
+      # match on full name or plugin class (regexp should use \b not \A)
+      if( $name =~ $skip || $class =~ $skip ){
         splice(@$plugins, $i, 1);
         redo;
       }
