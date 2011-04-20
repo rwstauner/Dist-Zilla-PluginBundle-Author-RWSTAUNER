@@ -161,7 +161,9 @@ sub _add_bundled_plugins {
     [ 'Authority' => { do_metadata => 1 }],
     [
       NextRelease => {
-        format => '%v %{yyyy-MM-dd}d'
+        # w3cdtf
+        time_zone => 'UTC',
+        format => q[%-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d],
       }
     ],
     'PkgVersion',
@@ -423,7 +425,9 @@ This bundle is roughly equivalent to:
   [Authority]             ; inject $AUTHORITY into modules
   do_metadata = 1         ; default
   [NextRelease]           ; simplify maintenance of Changes file
-  format = %v %{yyyy-MM-dd}d
+  ; use W3CDTF format for release timestamps (for unambiguous dates)
+  time_zone = UTC
+  format    = %-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
   [PkgVersion]            ; inject $VERSION into modules
   [Prepender]             ; add header to source code files
 
