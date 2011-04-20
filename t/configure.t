@@ -58,6 +58,7 @@ foreach my $test (
   ok( has_plugin($bundle, 'ExtraTests'),   $test_name);
   ok(!has_plugin($bundle, 'FakeRelease'),  $test_name);
   ok( has_plugin($bundle, 'UploadToCPAN'), $test_name);
+  ok( has_plugin($bundle, 'CompileTests'), $test_name);
 
   $bundle = init_bundle({auto_prereqs => 0});
   ok(!has_plugin($bundle, 'AutoPrereqs'),  $test_name);
@@ -77,6 +78,11 @@ foreach my $test (
   $bundle = init_bundle({skip_plugins => 'CompileTests|ExtraTests'});
   ok(!has_plugin($bundle, 'CompileTests'), $test_name);
   ok(!has_plugin($bundle, 'ExtraTests'),   $test_name);
+
+  $bundle = init_bundle({disable_tests => 'EOLTests,CompileTests'});
+  ok(!has_plugin($bundle, 'EOLTests'),     $test_name);
+  ok(!has_plugin($bundle, 'CompileTests'), $test_name);
+  ok( has_plugin($bundle, 'NoTabsTests'),  $test_name);
 }
 
 # test releaser
