@@ -52,38 +52,46 @@ foreach my $test (
 {
   my $bundle = init_bundle({});
   my $test_name = 'expected plugins included';
-  ok( has_plugin($bundle, 'PodWeaver'),    $test_name);
-  ok( has_plugin($bundle, 'AutoPrereqs'),  $test_name);
-  ok( has_plugin($bundle, 'CompileTests'), $test_name);
-  ok( has_plugin($bundle, 'ExtraTests'),   $test_name);
-  ok(!has_plugin($bundle, 'FakeRelease'),  $test_name);
-  ok( has_plugin($bundle, 'UploadToCPAN'), $test_name);
-  ok( has_plugin($bundle, 'CompileTests'), $test_name);
+
+  my $has_ok = sub {
+    ok( has_plugin($bundle, @_), "expected plugin included: $_[0]");
+  };
+  my $has_not = sub {
+    ok(!has_plugin($bundle, @_), "plugin expectedly not found: $_[0]");
+  };
+  &$has_ok('PodWeaver');
+  &$has_ok('PodWeaver');
+  &$has_ok('AutoPrereqs');
+  &$has_ok('CompileTests');
+  &$has_ok('ExtraTests');
+  &$has_not('FakeRelease');
+  &$has_ok('UploadToCPAN');
+  &$has_ok('CompileTests');
 
   $bundle = init_bundle({auto_prereqs => 0});
-  ok(!has_plugin($bundle, 'AutoPrereqs'),  $test_name);
+  &$has_not('AutoPrereqs');
 
   $bundle = init_bundle({fake_release => 1});
-  ok( has_plugin($bundle, 'FakeRelease'),  $test_name);
-  ok(!has_plugin($bundle, 'UploadToCPAN'), $test_name);
+  &$has_ok('FakeRelease');
+  &$has_not('UploadToCPAN');
 
   $bundle = init_bundle({is_task => 1});
-  ok( has_plugin($bundle, 'TaskWeaver'),   $test_name);
-  ok(!has_plugin($bundle, 'PodWeaver'),    $test_name);
+  &$has_ok('TaskWeaver');
+  &$has_not('PodWeaver');
 
   $bundle = init_bundle({releaser => 'Goober'});
-  ok( has_plugin($bundle, 'Goober'),       $test_name);
-  ok(!has_plugin($bundle, 'UploadToCPAN'), $test_name);
+  &$has_ok('Goober');
+  &$has_not('UploadToCPAN');
 
   $bundle = init_bundle({skip_plugins => '\b(CompileTests|ExtraTests|GenerateManifestSkip)$'});
-  ok(!has_plugin($bundle, 'CompileTests'), $test_name);
-  ok(!has_plugin($bundle, 'ExtraTests'),   $test_name);
-  ok(!has_plugin($bundle, 'GenerateManifestSkip', 1),   $test_name);
+  &$has_not('CompileTests');
+  &$has_not('ExtraTests');
+  &$has_not('GenerateManifestSkip', 1);
 
   $bundle = init_bundle({disable_tests => 'EOLTests,CompileTests'});
-  ok(!has_plugin($bundle, 'EOLTests'),     $test_name);
-  ok(!has_plugin($bundle, 'CompileTests'), $test_name);
-  ok( has_plugin($bundle, 'NoTabsTests'),  $test_name);
+  &$has_not('EOLTests');
+  &$has_not('CompileTests');
+  &$has_ok('NoTabsTests');
 }
 
 # test releaser
