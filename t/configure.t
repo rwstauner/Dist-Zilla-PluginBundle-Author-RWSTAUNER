@@ -63,7 +63,7 @@ foreach my $test (
   &$has_ok('PodWeaver');
   &$has_ok('AutoPrereqs');
   &$has_ok('CompileTests');
-  &$has_ok('ExtraTests');
+  &$has_ok('CheckExtraTests');
   &$has_not('FakeRelease');
   &$has_ok('UploadToCPAN');
   &$has_ok('CompileTests');

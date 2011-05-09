@@ -16,7 +16,7 @@ use Dist::Zilla::PluginBundle::Git 1.110500 ();
 use Dist::Zilla::PluginBundle::TestingMania 0.010 ();
 use Dist::Zilla::Plugin::Authority 1.004 (); # accepts any non-whitespace
 use Dist::Zilla::Plugin::Bugtracker ();
-#use Dist::Zilla::Plugin::CheckExtraTests ();
+use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
 use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
 use Dist::Zilla::Plugin::Git::NextVersion ();
@@ -226,7 +226,6 @@ sub _add_bundled_plugins {
 
   # build system
     qw(
-      ExtraTests
       ExecDir
       ShareDir
       MakeMaker
@@ -256,8 +255,8 @@ sub _add_bundled_plugins {
     'Manifest',
 
   # before release
-      #CheckExtraTests
     qw(
+      CheckExtraTests
       CheckChangesHasContent
       TestRelease
       ConfirmRelease
