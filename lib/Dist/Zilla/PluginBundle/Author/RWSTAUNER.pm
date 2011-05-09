@@ -6,7 +6,7 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
 
 use Moose;
-use Dist::Zilla 4.102345;
+use Dist::Zilla 4.200005;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
@@ -266,7 +266,6 @@ sub _add_bundled_plugins {
     ( $self->fake_release ? 'FakeRelease' : $self->releaser ),
   );
 
-  # TODO: query zilla for phase... if release, announce which releaser we're using
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle( '@Git' )
