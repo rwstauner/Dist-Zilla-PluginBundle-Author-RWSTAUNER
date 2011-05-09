@@ -2,6 +2,8 @@
 use strict;
 use warnings;
 use Test::More 0.96;
+use lib 't/lib';
+use Test::DZil;
 
 my $NAME = 'Author::RWSTAUNER';
 my $BNAME = "\@$NAME";
@@ -98,15 +100,15 @@ foreach my $test (
 foreach my $releaser (
   [{},                                        'UploadToCPAN'],
   [{fake_release => 1},                       'FakeRelease'],
-  [{releaser => 'Goober'},                    'Goober'],
+  [{releaser => 'No_Op_Releaser'},            'No_Op_Releaser'],
   # fake_release wins
-  [{releaser => 'Goober', fake_release => 1}, 'FakeRelease'],
+  [{releaser => 'No_Op_Releaser', fake_release => 1}, 'FakeRelease'],
 ){
   my ($config, $exp) = @$releaser;
-  releaser_is(init_bundle($config), $exp);
+  releaser_is(new_dzil($config), $exp);
   # env always overrides
   local $ENV{DZIL_FAKERELEASE} = 1;
-  releaser_is(init_bundle($config), 'FakeRelease');
+  releaser_is(new_dzil($config), 'FakeRelease');
 }
 
 done_testing;
@@ -119,6 +121,15 @@ sub has_plugin {
   # should use List::Util::any
   scalar grep { $_->[$index] =~ /\b($plug)$/ } @{$bundle->plugins};
 }
+sub new_dzil {
+  return Builder->from_config(
+    { dist_root => 'corpus' },
+    { add_files => {
+        'source/dist.ini' => simple_ini([$BNAME => @_]),
+      }
+    },
+  );
+}
 sub init_bundle {
   my $bundle = $mod->new(name => $BNAME, payload => $_[0]);
   isa_ok($bundle, $mod);
@@ -126,14 +137,14 @@ sub init_bundle {
   return $bundle;
 }
 sub releaser_is {
-  my ($bundle, $exp) = @_;
-  # ignore any after-release plugins at the end
-  my @after = qw(
-    Git::
-    InstallRelease
-  );
-  my $skip = qr/^Dist::Zilla::Plugin::(${\join('|', @after)})/;
-  # NOTE: just looking for the last plugin in the array is fragile
-  my $releaser = (grep { $_->[1] !~ $skip } reverse @{$bundle->plugins})[0];
-  like($releaser->[1], qr/\b$exp$/, "expected releaser: $exp");
+  my ($dzil, $exp) = @_;
+  my @releasers = @{ $dzil->plugins_with(-Releaser) };
+
+  if( !defined($exp) ){
+    is(scalar @releasers, 0, 'no releaser');
+  }
+  else {
+    is(scalar @releasers, 1, 'single releaser');
+    like($releasers[0]->plugin_name, qr/\b$exp$/, "expected releaser: $exp");
+  }
 }
