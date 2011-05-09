@@ -100,6 +100,7 @@ foreach my $test (
 foreach my $releaser (
   [{},                                        'UploadToCPAN'],
   [{fake_release => 1},                       'FakeRelease'],
+  [{releaser => ''},                           undef],
   [{releaser => 'No_Op_Releaser'},            'No_Op_Releaser'],
   # fake_release wins
   [{releaser => 'No_Op_Releaser', fake_release => 1}, 'FakeRelease'],

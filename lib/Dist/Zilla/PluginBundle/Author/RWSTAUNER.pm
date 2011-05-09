@@ -262,10 +262,13 @@ sub _add_bundled_plugins {
       ConfirmRelease
     ),
 
-  # release
-    ( $self->fake_release ? 'FakeRelease' : $self->releaser ),
   );
 
+  # release
+  my $releaser = $self->fake_release ? 'FakeRelease' : $self->releaser;
+  # ignore releaser if it's set to empty string
+  $self->add_plugins($releaser)
+    if $releaser;
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle( '@Git' )
@@ -349,6 +352,11 @@ Possible options and their default values:
   weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
+
+The C<release> option can be set to an alternate releaser plugin
+or to an empty string to disable adding a releaser.
+This can make it easier to include a plugin that requires configuration
+by just ignoring the default releaser and including your own normally.
 
 B<Note> that you can also specify attributes for any of the bundled plugins.
 This works like L<Dist::Zilla::Role::Stash::Plugins> except that the role is
@@ -490,9 +498,7 @@ This bundle is roughly equivalent to:
   [TestRelease]           ; run tests before releasing
   [ConfirmRelease]        ; are you sure?
   [UploadToCPAN]
-  ; set 'fake_release = 1' to use [FakeRelease] instead
-  ; set 'releaser = AlternatePlugin' to use a different releaser plugin
-  ; 'fake_release' will override the 'releaser' (useful for sub-bundles)
+  ; see CONFIGURATION for alternate Release plugin configuration options
 
   [@Git]                  ; use Git bundle to commit/tag/push after releasing
   [InstallRelease]        ; install the new dist (using 'install_command')
