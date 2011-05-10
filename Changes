@@ -2,6 +2,15 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Use CheckExtraTests instead of ExtraTests to keep xt/ directory
+  - Change date format (in Changes file) to W3CDTF for unambiguous dates
+  - Match skip_plugins against full name or package (rather than suffix)
+  - Allow blank 'releaser' attribute to skip default releaser plugin
+
+  [Prereqs]
+  - Bump required Dist::Zilla to 4.200005
+  - Bump required @TestingMania to 0.010 (bug fix)
+
 3.000     2011-04-14T05:24:45Z
 
   - Rework configure() to modify actual 'plugins' attribute
