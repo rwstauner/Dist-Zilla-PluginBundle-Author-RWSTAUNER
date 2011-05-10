@@ -317,6 +317,7 @@ no Moose;
 1;
 
 =for stopwords PluginBundle PluginBundles DAGOLDEN RJBS dists ini arrayrefs
+releaser
 
 =for Pod::Coverage configure
 log log_fatal
