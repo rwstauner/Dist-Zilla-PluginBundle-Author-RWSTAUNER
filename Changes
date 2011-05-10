@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.100     2011-05-10T03:16:24Z
+
   - Use CheckExtraTests instead of ExtraTests to keep xt/ directory
   - Change date format (in Changes file) to W3CDTF for unambiguous dates
   - Match skip_plugins against full name or package (rather than suffix)
