@@ -49,7 +49,8 @@ sub _default_attributes {
     auto_prereqs    => [Bool => 1],
     disable_tests   => [Str  => ''],
     fake_release    => [Bool => $ENV{DZIL_FAKERELEASE}],
-    install_command => [Str  => 'cpanm -v -i . -l ~/perl5'],
+    # cpanm will choose the best place to install
+    install_command => [Str  => 'cpanm -v -i .'],
     is_task         => [Bool => 0],
     releaser        => [Str  => 'UploadToCPAN'],
     skip_plugins    => [Str  => ''],
@@ -345,7 +346,7 @@ Possible options and their default values:
   auto_prereqs   = 1  ; enable AutoPrereqs
   disable_tests  =    ; corresponds to @TestingMania:disable
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
-  install_command = cpanm -v -i . -l ~/perl5 (passed to InstallRelease)
+  install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude

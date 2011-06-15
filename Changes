@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
 
   - Require Bootstrap::lib plugin so that it's available
+  - Allow cpanm to choose best place to install (install_command)
 
 3.100     2011-05-10T03:16:24Z
 
