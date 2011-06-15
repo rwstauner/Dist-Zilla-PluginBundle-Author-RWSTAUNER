@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Require Bootstrap::lib plugin so that it's available
+
 3.100     2011-05-10T03:16:24Z
 
   - Use CheckExtraTests instead of ExtraTests to keep xt/ directory
