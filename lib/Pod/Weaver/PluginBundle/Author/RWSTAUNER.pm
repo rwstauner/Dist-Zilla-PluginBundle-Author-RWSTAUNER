@@ -78,7 +78,10 @@ sub mvp_bundle_config {
     # extra
     # include Support section with various cpan links and github repo
     [ 'Support',     _exp('Support'),
-      { repository_content => '', repository_link => 'both' }
+      {
+        repository_content => '',
+        repository_link => 'both',
+      }
     ],
 
     # default
