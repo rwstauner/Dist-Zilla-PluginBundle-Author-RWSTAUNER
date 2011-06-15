@@ -81,6 +81,11 @@ sub mvp_bundle_config {
       {
         repository_content => '',
         repository_link => 'both',
+        # NOTE: it may be worth watching the module to see if more are added
+        # removed: 'anno' - anyone use this? ratings or bugs are probably better
+        # removed: 'forum' - does anyone use this?
+        # removed: 'kwalitee' - site has been broken for a while
+        websites => [ qw(search rt ratings testers testmatrix deps) ],
       }
     ],
 
@@ -163,6 +168,7 @@ It is roughly equivalent to:
   [Support]                 ; =head1 SUPPORT (bugs, cpants, git...)
   repository_content =
   repository_link = both
+  websites = search, rt, ratings, testers, testmatrix, deps
 
   [Authors]                 ; [@Default]
   [Legal]                   ; [@Default]
