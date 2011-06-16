@@ -34,7 +34,7 @@ use Dist::Zilla::Plugin::Prepender 1.100960 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
-use Dist::Zilla::Plugin::Test::Pod::No404s ();
+#use Dist::Zilla::Plugin::Test::Pod::No404s ();
 use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 
 # cannot use $self->name for class methods
@@ -243,8 +243,8 @@ sub _add_bundled_plugins {
     # Test::Pod::Spelling::CommonMistakes ?
     qw(
       PodSpellingTests
-      Test::Pod::No404s
     ),
+      #Test::Pod::No404s # removed since it's rarely useful
   );
 
   $self->add_bundle(
@@ -490,7 +490,6 @@ This bundle is roughly equivalent to:
   ; generate t/ and xt/ tests
   [ReportVersions::Tiny]  ; show module versions used in test reports
   [@TestingMania]         ; Lots of dist tests
-  [Test::Pod::No404s]     ; test Pod http links
   [PodSpellingTests]      ; spell check POD
 
   [Manifest]              ; build MANIFEST file (dzil core [@Basic])
