@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Ignore any number of Bundle prefixes from plugin names
+    (to allow dynamic configuration of plugins added by bundles)
+  - Improvements to tests
+
 3.101     2011-06-16T02:52:05Z
 
   - Require Bootstrap::lib plugin so that it's available

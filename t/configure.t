@@ -31,6 +31,7 @@ foreach my $test (
   [{'MetaNoIndex:directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
   [{'MetaNoIndex:directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
   [{'CompileTests->fake_home' => 0},            { %default_exp, CompileTests => {fake_home => 0} }],
+  [{'PortabilityTests.options' => 'test_one_dot=0'}, { %default_exp, PortabilityTests => {options => 'test_one_dot=0'} }],
   [{'MetaProvides::Package:meta_noindex' => 0}, { %default_exp, 'MetaProvides::Package' => {meta_noindex => 0} }],
   [{weaver_config => '@Default', 'MetaNoIndex:directory[]' => 'arr'}, {
     PodWeaver => {config_plugin => '@Default'},
@@ -42,10 +43,11 @@ foreach my $test (
 
   foreach my $plugin ( @plugins ){
     my ($moniker, $name, $payload) = @$plugin;
-    my ($plugname) = ($moniker =~ /^$BNAME\/(.+)$/);
+    my ($plugname) = ($moniker =~ m#([^/]+)$#);
 
     if( exists $exp->{$plugname} ){
       is_deeply($payload, $exp->{$plugname}, 'expected configuration')
+        or diag explain [$payload, $plugname, $exp->{$plugname}];
     }
   }
 }
