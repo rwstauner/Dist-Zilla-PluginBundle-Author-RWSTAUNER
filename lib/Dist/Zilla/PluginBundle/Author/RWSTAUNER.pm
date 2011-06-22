@@ -6,6 +6,7 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
 
 use Moose;
+use List::Util qw(first); # core
 use Dist::Zilla 4.200005;
 with 'Dist::Zilla::Role::PluginBundle::Easy';
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
@@ -92,7 +93,8 @@ sub configure {
 
   my $dynamic = $self->payload;
   # sneak this config in behind @TestingMania's back
-  $dynamic->{'CompileTests:fake_home'} = 1;
+  $dynamic->{'CompileTests:fake_home'} = 1
+    unless first { /CompileTests\W+fake_home/ } keys %$dynamic;
 
   $self->_add_bundled_plugins;
   my $plugins = $self->plugins;
