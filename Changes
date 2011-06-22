@@ -2,10 +2,12 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Fix name of recommended plugin (PodSpellingTests not SpellingTests)
+
 3.102     2011-06-22T03:01:05Z
 
   [Prereqs]
-  - Dist::Zilla::Plugin::SpellingTests no longer a hard requirement
+  - Dist::Zilla::Plugin::PodSpellingTests no longer a hard requirement
 
   [Fixes]
   - Don't overwrite CompileTests.fake_home with default if it's set in config
