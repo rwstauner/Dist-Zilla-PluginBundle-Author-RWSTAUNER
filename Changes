@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.102     2011-06-22T03:01:05Z
+
   [Prereqs]
   - Dist::Zilla::Plugin::SpellingTests no longer a hard requirement
 
