@@ -109,7 +109,7 @@ sub configure {
 
     # ignore the prefix (@Bundle/Name => Name) (DZP::Name => Name)
     my ($alias)   = ($name  =~ m#([^/]+)$#);
-    my ($moniker) = ($class =~ m#^(?:Dist::Zilla::Plugin(?:Bundle)::)?(.+)$#);
+    my ($moniker) = ($class =~ m#^(?:Dist::Zilla::Plugin(?:Bundle)?::)?(.+)$#);
 
     # exclude any plugins that match 'skip_plugins'
     if( $skip ){
