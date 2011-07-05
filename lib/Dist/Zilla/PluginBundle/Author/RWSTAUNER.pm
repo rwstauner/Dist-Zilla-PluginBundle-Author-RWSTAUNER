@@ -230,13 +230,14 @@ sub _add_bundled_plugins {
       MetaJSON
     ),
 
-    [
-      Prereqs => 'TestMoreWithSubtests' => {
-        -phase => 'test',
-        -type  => 'requires',
-        'Test::More' => '0.96'
-      }
-    ],
+# I prefer to be explicit about required versions when loading, but this is a handy example:
+#    [
+#      Prereqs => 'TestMoreWithSubtests' => {
+#        -phase => 'test',
+#        -type  => 'requires',
+#        'Test::More' => '0.96'
+#      }
+#    ],
 
   # build system
     qw(
