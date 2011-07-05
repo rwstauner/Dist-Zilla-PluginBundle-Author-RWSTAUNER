@@ -136,6 +136,13 @@ sub configure {
       $conf->{$attr} = $val;
     }
   };
+  if ( $ENV{DZIL_BUNDLE_DEBUG} ) {
+    eval {
+      require YAML::Tiny; # dzil requires this
+      $self->log( YAML::Tiny::Dump( $self->plugins ) );
+    };
+    warn $@ if $@;
+  }
 }
 
 sub _add_bundled_plugins {

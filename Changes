@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Dump plugins to log if $ENV{DZIL_BUNDLE_DEBUG}
   - Fix regexp to match class by "Plugin" or "PluginBundle"
 
 3.103     2011-06-22T03:07:14Z
