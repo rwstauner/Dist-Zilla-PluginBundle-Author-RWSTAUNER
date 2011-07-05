@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Don't include Devel::Cover's cover_db/ in dist
   - Dump plugins to log if $ENV{DZIL_BUNDLE_DEBUG}
   - Fix regexp to match class by "Plugin" or "PluginBundle"
 
