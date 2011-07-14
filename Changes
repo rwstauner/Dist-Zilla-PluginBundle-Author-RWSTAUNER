@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.105     2011-07-14T23:41:38Z
+
+  - Update metadata
+
 3.104     2011-07-05T23:36:30Z
 
   - Don't automatically require Test::More 0.96
