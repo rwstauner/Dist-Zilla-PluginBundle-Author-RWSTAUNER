@@ -4,6 +4,8 @@ use warnings;
 
 package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
+# VERSION
+# AUTHORITY
 
 use Moose;
 use List::Util qw(first); # core
@@ -15,7 +17,7 @@ use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
 # NOTE: A newer TestingMania might duplicate plugins if new tests are added
 use Dist::Zilla::PluginBundle::TestingMania 0.010 ();
-use Dist::Zilla::Plugin::Authority 1.004 (); # accepts any non-whitespace
+use Dist::Zilla::Plugin::Authority 1.005 (); # accepts any non-whitespace + locate_comment
 use Dist::Zilla::Plugin::Bugtracker ();
 use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
@@ -28,7 +30,7 @@ use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::NextRelease ();
-use Dist::Zilla::Plugin::PkgVersion ();
+use Dist::Zilla::Plugin::OurPkgVersion 0.002 ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::Prepender 1.100960 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
@@ -172,7 +174,13 @@ sub _add_bundled_plugins {
     [ PruneFiles => 'PruneDevelCoverDatabase' => { match => '^(cover_db)$' } ],
 
   # munge files
-    [ 'Authority' => { do_metadata => 1 }],
+    [
+      Authority => {
+        do_munging     => 1,
+        do_metadata    => 1,
+        locate_comment => 1,
+      }
+    ],
     [
       NextRelease => {
         # w3cdtf
@@ -180,7 +188,7 @@ sub _add_bundled_plugins {
         format => q[%-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d],
       }
     ],
-    'PkgVersion',
+    'OurPkgVersion',
     'Prepender',
     ( $self->is_task
       ?  'TaskWeaver'
@@ -453,7 +461,7 @@ This bundle is roughly equivalent to:
   ; use W3CDTF format for release timestamps (for unambiguous dates)
   time_zone = UTC
   format    = %-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
-  [PkgVersion]            ; inject $VERSION into modules
+  [OurPkgVersion]         ; inject $VERSION at '# VERSION' comments
   [Prepender]             ; add header to source code files
 
   [PodWeaver]             ; munge POD in all modules

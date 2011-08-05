@@ -4,6 +4,8 @@ use warnings;
 
 package Pod::Weaver::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Pod::Weaver config
+# VERSION
+# AUTHORITY
 
 use Pod::Weaver 3.101632 ();
 use Pod::Weaver::PluginBundle::Default ();
