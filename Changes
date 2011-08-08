@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
 
   [Prereqs]
+  - Use DZP Test::PodSpelling instead of DZP PodSpellingTests
   - Recommend Dist::Zilla::Plugin::Run (used by some projects)
 
 3.105     2011-07-14T23:41:38Z

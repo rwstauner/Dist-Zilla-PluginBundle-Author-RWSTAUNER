@@ -40,7 +40,7 @@ use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
 use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 
 # don't require it in case it won't install somewhere
-my $spelling_tests = eval 'require Dist::Zilla::Plugin::PodSpellingTests';
+my $spelling_tests = eval 'require Dist::Zilla::Plugin::Test::PodSpelling';
 
 # cannot use $self->name for class methods
 sub _bundle_name {
@@ -266,10 +266,10 @@ sub _add_bundled_plugins {
       #Test::Pod::No404s # removed since it's rarely useful
   );
   if ( $spelling_tests ) {
-    $self->add_plugins('PodSpellingTests');
+    $self->add_plugins('Test::PodSpelling');
   }
   else {
-    $self->log("PodSpellingTests failed to load.  Pleese dunt mayke ani misteaks.\n");
+    $self->log("Test::PodSpelling Plugin failed to load.  Pleese dunt mayke ani misteaks.\n");
   }
 
   $self->add_bundle(
@@ -515,7 +515,7 @@ This bundle is roughly equivalent to:
   ; generate t/ and xt/ tests
   [ReportVersions::Tiny]  ; show module versions used in test reports
   [@TestingMania]         ; Lots of dist tests
-  [PodSpellingTests]      ; spell check POD (if installed)
+  [Test::PodSpelling]     ; spell check POD (if installed)
 
   [Manifest]              ; build MANIFEST file (dzil core [@Basic])
 
