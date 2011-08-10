@@ -167,7 +167,7 @@ sub _add_bundled_plugins {
       ManifestSkip
     ),
     # not necessary in the released distribution
-    [ PruneFiles => 'PruneBuilderFiles'  => { match => '^(dist.ini)$' } ],
+    [ PruneFiles => 'PruneBuilderFiles'  => { match => '^(dist|weaver).ini$' } ],
     # this is just for github
     [ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
     # Devel::Cover db does not need to be packaged with distribution
@@ -192,6 +192,7 @@ sub _add_bundled_plugins {
     'Prepender',
     ( $self->is_task
       ?  'TaskWeaver'
+      # TODO: detect weaver.ini and skip 'config_plugin'?
       : [ 'PodWeaver' => { config_plugin => $self->weaver_config } ]
     ),
 
