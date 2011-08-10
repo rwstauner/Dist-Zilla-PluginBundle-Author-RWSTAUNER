@@ -20,9 +20,9 @@ use Pod::Weaver::Config::Assembler;
 sub _exp { Pod::Weaver::Config::Assembler->expand_package($_[0]) }
 
 sub _plain {
-  my ($plug) = @_;
+  my ($plug, $arg) = (@_, {});
   (my $name = $plug) =~ s/^\W//;
-  return [ $name, _exp($plug), {} ];
+  return [ $name, _exp($plug), { %$arg } ];
 }
 
 sub _bundle_name {
