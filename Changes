@@ -2,7 +2,15 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.106     2011-08-10T02:55:03Z
+
+  [Changes]
+  - use place holder comments for VERSION and AUTHORITY
+  - Place Acknowledgements above Authors pod (and add stop word)
+
   [Prereqs]
+  - Trade PkgVersion for OurPkgVersion
+  - Require latest version of Authority
   - Use DZP Test::PodSpelling instead of DZP PodSpellingTests
   - Recommend Dist::Zilla::Plugin::Run (used by some projects)
 
