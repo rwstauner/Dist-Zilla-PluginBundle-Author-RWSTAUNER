@@ -91,13 +91,19 @@ sub mvp_bundle_config {
       }
     ],
 
+    [ 'Acknowledgements', _exp('Generic'), {header => 'ACKNOWLEDGEMENTS'} ],
+
     # default
     _plain('Authors'),
     _plain('Legal'),
 
     # plugins
     [ 'List',        _exp('-Transformer'), { 'transformer' => 'List' } ],
-    _plain('-StopWords'),
+
+    # my dictionary doesn't like that extra 'E' but it looks funny without it
+    _plain('-StopWords', {
+      include => 'ACKNOWLEDGEMENTS'
+    }),
   );
 
   # prepend bundle name to each plugin name
