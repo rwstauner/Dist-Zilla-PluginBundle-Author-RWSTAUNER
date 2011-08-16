@@ -4,8 +4,6 @@ use warnings;
 
 package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
-# VERSION
-# AUTHORITY
 
 use Moose;
 use List::Util qw(first); # core
@@ -57,6 +55,7 @@ sub _default_attributes {
     # cpanm will choose the best place to install
     install_command => [Str  => 'cpanm -v -i .'],
     is_task         => [Bool => 0],
+    placeholder_comments => [Bool => 0],
     releaser        => [Str  => 'UploadToCPAN'],
     skip_plugins    => [Str  => ''],
     skip_prereqs    => [Str  => ''],
@@ -178,7 +177,7 @@ sub _add_bundled_plugins {
       Authority => {
         do_munging     => 1,
         do_metadata    => 1,
-        locate_comment => 1,
+        locate_comment => $self->placeholder_comments,
       }
     ],
     [
@@ -188,7 +187,7 @@ sub _add_bundled_plugins {
         format => q[%-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d],
       }
     ],
-    'OurPkgVersion',
+    ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
     'Prepender',
     ( $self->is_task
       ?  'TaskWeaver'
@@ -374,6 +373,7 @@ Possible options and their default values:
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
+  placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
   skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
@@ -462,7 +462,7 @@ This bundle is roughly equivalent to:
   ; use W3CDTF format for release timestamps (for unambiguous dates)
   time_zone = UTC
   format    = %-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
-  [OurPkgVersion]         ; inject $VERSION at '# VERSION' comments
+  [PkgVersion]            ; inject $VERSION (use OurPkgVersion if 'placeholder_comments')
   [Prepender]             ; add header to source code files
 
   [PodWeaver]             ; munge POD in all modules

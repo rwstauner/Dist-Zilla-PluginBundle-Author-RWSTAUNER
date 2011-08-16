@@ -25,11 +25,13 @@ my %default_exp = (
   AutoPrereqs             => {},
   MetaNoIndex             => {%$noindex, directory => [@$noindex_dirs]},
   'MetaProvides::Package' => {meta_noindex => 1},
+  Authority               => {do_metadata => 1, do_munging => 1, locate_comment => 0},
 );
 
 foreach my $test (
   [{}, {%default_exp}],
   [{'skip_prereqs'     => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
+  [{'placeholder_comments' => 1   },            { %default_exp, Authority => {do_metadata => 1, do_munging => 1, locate_comment => 1} }],
   [{'AutoPrereqs:skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
   [{'MetaNoIndex:directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
   [{'MetaNoIndex:directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
@@ -74,6 +76,11 @@ foreach my $test (
   &$has_not('FakeRelease');
   &$has_ok('UploadToCPAN');
   &$has_ok('CompileTests');
+  &$has_ok('PkgVersion');
+
+  $bundle = init_bundle({placeholder_comments => 1});
+  &$has_ok('OurPkgVersion');
+  &$has_not('PkgVersion');
 
   $bundle = init_bundle({auto_prereqs => 0});
   &$has_not('AutoPrereqs');
