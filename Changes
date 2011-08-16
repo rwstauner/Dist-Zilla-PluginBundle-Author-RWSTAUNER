@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.107     2011-08-16T23:01:28Z
+
   [Changes]
   - Use 'placeholder_comments' config attribute to decide how
     $VERSION and $AUTHORITY should work (default to false).
