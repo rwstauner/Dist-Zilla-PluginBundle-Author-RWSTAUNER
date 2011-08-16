@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Require Prepender 1.112280 to skip prepending to tests
   - Use 'placeholder_comments' config attribute to decide how
     $VERSION and $AUTHORITY should work (default to false).
 

@@ -30,7 +30,7 @@ use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::NextRelease ();
 use Dist::Zilla::Plugin::OurPkgVersion 0.002 ();
 use Dist::Zilla::Plugin::PodWeaver ();
-use Dist::Zilla::Plugin::Prepender 1.100960 ();
+use Dist::Zilla::Plugin::Prepender 1.112280 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
@@ -188,7 +188,12 @@ sub _add_bundled_plugins {
       }
     ],
     ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
-    'Prepender',
+    [
+      Prepender => {
+        # don't prepend to tests
+        skip => '^x?t/.+',
+      }
+    ],
     ( $self->is_task
       ?  'TaskWeaver'
       # TODO: detect weaver.ini and skip 'config_plugin'?
