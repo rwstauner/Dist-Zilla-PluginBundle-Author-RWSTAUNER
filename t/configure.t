@@ -11,8 +11,11 @@ my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;
 
 # get default MetaNoIndex hashref
-my $noindex = (grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
-  @{ init_bundle({})->plugins })[0]->[-1];
+my $noindex = (
+  grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
+      @{ init_bundle()->plugins }
+)[0]->[-1];
+
 my $noindex_dirs = $noindex->{directory};
 
 # test attributes that change plugin configurations
@@ -134,7 +137,7 @@ sub new_dzil {
   );
 }
 sub init_bundle {
-  my $bundle = $mod->new(name => $BNAME, payload => $_[0]);
+  my $bundle = $mod->new(name => $BNAME, payload => $_[0] || {});
   isa_ok($bundle, $mod);
   $bundle->configure;
   return $bundle;
