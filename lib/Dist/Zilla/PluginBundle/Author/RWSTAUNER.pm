@@ -170,7 +170,7 @@ sub _add_bundled_plugins {
     # this is just for github
     [ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
     # Devel::Cover db does not need to be packaged with distribution
-    [ PruneFiles => 'PruneDevelCoverDatabase' => { match => '^(cover_db)$' } ],
+    [ PruneFiles => 'PruneDevelCoverDatabase' => { match => '^(cover_db/.+)' } ],
 
   # munge files
     [
