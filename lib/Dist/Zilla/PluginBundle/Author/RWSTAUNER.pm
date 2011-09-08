@@ -165,8 +165,6 @@ sub _add_bundled_plugins {
       PruneCruft
       ManifestSkip
     ),
-    # not necessary in the released distribution
-    [ PruneFiles => 'PruneBuilderFiles'  => { match => '^(dist|weaver).ini$' } ],
     # this is just for github
     [ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
     # Devel::Cover db does not need to be packaged with distribution

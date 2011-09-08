@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Stop pruning dist.ini; it should be a familiar file for people
   - Fix regexp to actually prune cover_db/
 
 3.107     2011-08-16T23:01:28Z
