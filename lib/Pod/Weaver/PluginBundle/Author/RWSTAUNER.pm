@@ -37,6 +37,7 @@ sub mvp_bundle_config {
 
   push @plugins, (
     # plugin
+    _plain('-Encoding'),
     _plain('-WikiDoc'),
     # default
     _plain('@CorePrep'),
@@ -144,6 +145,7 @@ with the following additions:
 
 It is roughly equivalent to:
 
+  [Encoding]                ; prepend '=encoding utf-8' automatically
   [WikiDoc]                 ; transform wikidoc sections to POD
   [@CorePrep]               ; [@Default]
 

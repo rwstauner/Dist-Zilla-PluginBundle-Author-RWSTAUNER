@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Pod::Weaver::Plugin::Encoding
   - By default just use MakeMaker; set 'builder' to 'mb' or 'both'
     for ModuleBuild and/or DualBuilders
   - Bump @TestingMania required version to 0.14
