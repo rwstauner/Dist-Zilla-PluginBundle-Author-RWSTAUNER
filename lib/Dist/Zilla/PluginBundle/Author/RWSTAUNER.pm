@@ -14,7 +14,7 @@ with 'Dist::Zilla::Role::PluginBundle::Easy';
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
 use Dist::Zilla::PluginBundle::Git 1.110500 ();
 # NOTE: A newer TestingMania might duplicate plugins if new tests are added
-use Dist::Zilla::PluginBundle::TestingMania 0.010 ();
+use Dist::Zilla::PluginBundle::TestingMania 0.014 ();
 use Dist::Zilla::Plugin::Authority 1.005 (); # accepts any non-whitespace + locate_comment
 use Dist::Zilla::Plugin::Bugtracker ();
 use Dist::Zilla::Plugin::CheckExtraTests ();
@@ -96,8 +96,8 @@ sub configure {
 
   my $dynamic = $self->payload;
   # sneak this config in behind @TestingMania's back
-  $dynamic->{'CompileTests:fake_home'} = 1
-    unless first { /CompileTests\W+fake_home/ } keys %$dynamic;
+  $dynamic->{'Test::Compile:fake_home'} = 1
+    unless first { /Test::Compile\W+fake_home/ } keys %$dynamic;
 
   $self->_add_bundled_plugins;
   my $plugins = $self->plugins;
@@ -414,7 +414,7 @@ as it is included by the Bundle.
 String (or boolean) attributes will overwrite any in the Bundle:
 
   [@Author::RWSTAUNER]
-  CompileTests.fake_home = 0
+  Test::Compile.fake_home = 0
 
 Arrayref attributes will be appended to any in the bundle:
 

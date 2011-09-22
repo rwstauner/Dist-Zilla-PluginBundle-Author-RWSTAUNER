@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Bump @TestingMania required version to 0.14
+  - s/CompileTests/Test::Compile/g
   - Stop pruning dist.ini; it should be a familiar file for people
   - Fix regexp to actually prune cover_db/
 

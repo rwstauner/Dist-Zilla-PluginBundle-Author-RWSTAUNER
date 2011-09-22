@@ -20,7 +20,7 @@ my $noindex_dirs = $noindex->{directory};
 
 # test attributes that change plugin configurations
 my %default_exp = (
-  CompileTests            => {fake_home => 1},
+  'Test::Compile'         => {fake_home => 1},
   PodWeaver               => {config_plugin => $BNAME},
   AutoPrereqs             => {},
   MetaNoIndex             => {%$noindex, directory => [@$noindex_dirs]},
@@ -35,7 +35,7 @@ foreach my $test (
   [{'AutoPrereqs:skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
   [{'MetaNoIndex:directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
   [{'MetaNoIndex:directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
-  [{'CompileTests->fake_home' => 0},            { %default_exp, CompileTests => {fake_home => 0} }],
+  [{'Test::Compile->fake_home' => 0},            { %default_exp, 'Test::Compile' => {fake_home => 0} }],
   [{'PortabilityTests.options' => 'test_one_dot=0'}, { %default_exp, PortabilityTests => {options => 'test_one_dot=0'} }],
   [{'MetaProvides::Package:meta_noindex' => 0}, { %default_exp, 'MetaProvides::Package' => {meta_noindex => 0} }],
   [{weaver_config => '@Default', 'MetaNoIndex:directory[]' => 'arr'}, {
@@ -71,11 +71,11 @@ foreach my $test (
   &$has_ok('PodWeaver');
   &$has_ok('PodWeaver');
   &$has_ok('AutoPrereqs');
-  &$has_ok('CompileTests');
+  &$has_ok('Test::Compile');
   &$has_ok('CheckExtraTests');
   &$has_not('FakeRelease');
   &$has_ok('UploadToCPAN');
-  &$has_ok('CompileTests');
+  &$has_ok('Test::Compile');
   &$has_ok('PkgVersion');
 
   $bundle = init_bundle({placeholder_comments => 1});
@@ -97,14 +97,14 @@ foreach my $test (
   &$has_ok('Goober');
   &$has_not('UploadToCPAN');
 
-  $bundle = init_bundle({skip_plugins => '\b(CompileTests|ExtraTests|GenerateManifestSkip)$'});
-  &$has_not('CompileTests');
+  $bundle = init_bundle({skip_plugins => '\b(Test::Compile|ExtraTests|GenerateManifestSkip)$'});
+  &$has_not('Test::Compile');
   &$has_not('ExtraTests');
   &$has_not('GenerateManifestSkip', 1);
 
-  $bundle = init_bundle({disable_tests => 'EOLTests,CompileTests'});
+  $bundle = init_bundle({disable_tests => 'EOLTests,Test::Compile'});
   &$has_not('EOLTests');
-  &$has_not('CompileTests');
+  &$has_not('Test::Compile');
   &$has_ok('NoTabsTests');
 }
 
