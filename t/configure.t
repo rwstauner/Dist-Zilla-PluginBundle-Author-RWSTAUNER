@@ -10,6 +10,9 @@ my $BNAME = "\@$NAME";
 my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;
 
+# shh...
+local $SIG{__WARN__} = sub { warn(@_) unless $_[0] =~ /^\[$BNAME\].+Including builders:/ };
+
 # get default MetaNoIndex hashref
 my $noindex = (
   grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
@@ -106,6 +109,19 @@ foreach my $test (
   &$has_not('EOLTests');
   &$has_not('Test::Compile');
   &$has_ok('NoTabsTests');
+
+  $bundle = init_bundle({});
+  &$has_ok('MakeMaker');
+  &$has_not('ModuleBuild');
+  &$has_not('DualBuilders');
+  $bundle = init_bundle({builder => 'mb'});
+  &$has_ok('ModuleBuild');
+  &$has_not('MakeMaker');
+  &$has_not('DualBuilders');
+  $bundle = init_bundle({builder => 'both'});
+  &$has_ok('MakeMaker');
+  &$has_ok('ModuleBuild');
+  &$has_ok('DualBuilders');
 }
 
 # test releaser

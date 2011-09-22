@@ -41,6 +41,12 @@ use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 # don't require it in case it won't install somewhere
 my $spelling_tests = eval 'require Dist::Zilla::Plugin::Test::PodSpelling';
 
+# available builders
+my %builders = (
+  eumm => 'MakeMaker',
+  mb   => 'ModuleBuild',
+);
+
 # cannot use $self->name for class methods
 sub _bundle_name {
   my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
@@ -49,6 +55,7 @@ sub _bundle_name {
 
 # TODO: consider an option for using ReportPhase
 sub _default_attributes {
+  use Moose::Util::TypeConstraints 1.01;
   return {
     auto_prereqs    => [Bool => 1],
     disable_tests   => [Str  => ''],
@@ -62,6 +69,7 @@ sub _default_attributes {
     skip_prereqs    => [Str  => ''],
     weaver_config   => [Str  => $_[0]->_bundle_name],
     use_git_bundle  => [Bool => 1],
+    builder         => [enum( [ both => keys %builders ] ) => 'eumm'],
   };
 }
 
@@ -255,11 +263,18 @@ sub _add_bundled_plugins {
     qw(
       ExecDir
       ShareDir
-      MakeMaker
-      ModuleBuild
-      DualBuilders
     ),
+  );
 
+  {
+    my @builders = $self->builder eq 'both'
+      ? (values %builders, 'DualBuilders')
+      : ($builders{ $self->builder });
+    $self->log("Including builders: @builders\n");
+    $self->add_plugins(@builders);
+  }
+
+  $self->add_plugins(
   # generated t/ tests
     qw(
       ReportVersions::Tiny
@@ -373,6 +388,7 @@ L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
 Possible options and their default values:
 
   auto_prereqs   = 1  ; enable AutoPrereqs
+  builder        = eumm ; or 'mb' or 'both'
   disable_tests  =    ; corresponds to @TestingMania:disable
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
@@ -513,9 +529,9 @@ This bundle is roughly equivalent to:
   [ExecDir]               ; include 'bin/*' as executables
   [ShareDir]              ; include 'share/' for File::ShareDir
 
-  [MakeMaker]             ; create Makefile.PL
-  [ModuleBuild]           ; create Build.PL
-  [DualBuilders]          ; only require one of the above two (prefer 'build')
+  [MakeMaker]             ; create Makefile.PL (if builder == 'eumm' (default))
+  ; [ModuleBuild]         ; create Build.PL (if builder == 'mb')
+  ; [DualBuilders]        ; only require one of the above two (prefer 'build') (if both)
 
   ; generate t/ and xt/ tests
   [ReportVersions::Tiny]  ; show module versions used in test reports
