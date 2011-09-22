@@ -28,7 +28,8 @@ use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
 use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
 use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
 use Dist::Zilla::Plugin::NextRelease ();
-use Dist::Zilla::Plugin::OurPkgVersion 0.002 ();
+use Dist::Zilla::Plugin::PkgVersion ();
+#use Dist::Zilla::Plugin::OurPkgVersion 0.002 ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::Prepender 1.112280 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
