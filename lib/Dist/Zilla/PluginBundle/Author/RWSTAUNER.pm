@@ -108,7 +108,7 @@ after configure => sub {
 
   my $dynamic = $self->payload;
   # sneak this config in behind @TestingMania's back
-  $dynamic->{'Test::Compile:fake_home'} = 1
+  $dynamic->{'Test::Compile.fake_home'} = 1
     unless first { /Test::Compile\W+fake_home/ } keys %$dynamic;
 
   my $plugins = $self->plugins;

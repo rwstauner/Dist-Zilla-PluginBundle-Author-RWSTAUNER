@@ -29,21 +29,24 @@ my %default_exp = (
   MetaNoIndex             => {%$noindex, directory => [@$noindex_dirs]},
   'MetaProvides::Package' => {meta_noindex => 1},
   Authority               => {do_metadata => 1, do_munging => 1, locate_comment => 0},
+  PruneDevelCoverDatabase => { match => '^(cover_db/.+)' },
 );
 
 foreach my $test (
   [{}, {%default_exp}],
   [{'skip_prereqs'     => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
   [{'placeholder_comments' => 1   },            { %default_exp, Authority => {do_metadata => 1, do_munging => 1, locate_comment => 1} }],
-  [{'AutoPrereqs:skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
-  [{'MetaNoIndex:directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
-  [{'MetaNoIndex:directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
-  [{'Test::Compile->fake_home' => 0},            { %default_exp, 'Test::Compile' => {fake_home => 0} }],
-  [{'PortabilityTests.options' => 'test_one_dot=0'}, { %default_exp, PortabilityTests => {options => 'test_one_dot=0'} }],
-  [{'MetaProvides::Package:meta_noindex' => 0}, { %default_exp, 'MetaProvides::Package' => {meta_noindex => 0} }],
-  [{weaver_config => '@Default', 'MetaNoIndex:directory[]' => 'arr'}, {
+  [{'PruneFiles.match' => 'fudge'},             { %default_exp, map { ("Prune$_" => {match => 'fudge'}) } qw(RepoMetaFiles DevelCoverDatabase) }],
+  [{'PruneDevelCoverDatabase.match' => 'fudge'}, { %default_exp, PruneDevelCoverDatabase => {match => 'fudge'} }],
+  [{'AutoPrereqs.skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
+  [{'MetaNoIndex.directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
+  #[{'MetaNoIndex.directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
+  [{'Test::Compile.fake_home' => 0},            { %default_exp, 'Test::Compile' => {fake_home => 0} }],
+  [{'Test::Portability.options' => 'test_one_dot=0'}, { %default_exp, 'Test::Portability' => {options => 'test_one_dot=0'} }],
+  [{'MetaProvides::Package.meta_noindex' => 0}, { %default_exp, 'MetaProvides::Package' => {meta_noindex => 0} }],
+  [{weaver_config => '@Default', 'MetaNoIndex.directory[]' => 'arr'}, {
     PodWeaver => {config_plugin => '@Default'},
-    MetaNoIndex => {%$noindex, directory => ['arr']} }],
+    MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'arr']} }],
 ){
   my ($config, $exp) = @$test;
   my $checked = {};
@@ -54,9 +57,10 @@ foreach my $test (
     my ($moniker, $name, $payload) = @$plugin;
     my ($plugname) = ($moniker =~ m#([^/]+)$#);
 
-    if( exists $exp->{$plugname} ){
-      is_deeply($payload, $exp->{$plugname}, 'expected configuration')
-        or diag explain [$payload, $plugname, $exp->{$plugname}];
+    my $matched = exists $exp->{$plugname} ? $plugname : exists $exp->{$name} ? $name : next;
+    if( exists $exp->{$matched} ){
+      is_deeply($payload, $exp->{$matched}, "expected configuration for $matched")
+        or diag explain [$payload, $matched, $exp->{$matched}];
       ++$checked->{$matched};
     }
   }
@@ -163,9 +167,11 @@ sub new_dzil {
   );
 }
 sub init_bundle {
-  my $bundle = $mod->new(name => $BNAME, payload => $_[0] || {});
+  # compatible with non-easy bundles
+  my @plugins = $mod->bundle_config({name => $BNAME, payload => $_[0] || {}});
+  # return object with ->plugins method for convenience/sanity
+  my $bundle = $mod->new(name => $BNAME, payload => $_[0] || {}, plugins => \@plugins);
   isa_ok($bundle, $mod);
-  $bundle->configure;
   return $bundle;
 }
 sub releaser_is {
