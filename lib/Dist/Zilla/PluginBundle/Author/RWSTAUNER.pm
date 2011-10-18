@@ -375,14 +375,14 @@ Possible options and their default values:
 
   auto_prereqs   = 1  ; enable AutoPrereqs
   builder        = eumm ; or 'mb' or 'both'
-  disable_tests  =    ; corresponds to @TestingMania:disable
+  disable_tests  =    ; corresponds to @TestingMania.disable
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
   placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
-  skip_prereqs   =    ; default empty; corresponds to AutoPrereqs:skip
+  skip_prereqs   =    ; default empty; corresponds to AutoPrereqs.skip
   weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
@@ -392,17 +392,13 @@ or to an empty string to disable adding a releaser.
 This can make it easier to include a plugin that requires configuration
 by just ignoring the default releaser and including your own normally.
 
-B<Note> that you can also specify attributes for any of the bundled plugins.
-This works like L<Dist::Zilla::Role::Stash::Plugins> except that the role is
-not actually used (and there is no stash) because PluginBundles already have
-a dynamic configuration.
-The option should be the plugin name and the attribute separated by a colon
-(or a dot, or any other non-word character(s)).
-
-For example:
+B<NOTE>:
+This bundle consumes L<Dist::Zilla::Role::PluginBundle::Config::Slicer>
+so you can also specify attributes for any of the bundled plugins.
+The option should be the plugin name and the attribute separated by a dot:
 
   [@Author::RWSTAUNER]
-  AutoPrereqs:skip = Bad::Module
+  AutoPrereqs.skip = Bad::Module
 
 B<Note> that this is different than
 
@@ -414,29 +410,7 @@ which will load the plugin a second time.
 The first example actually alters the plugin configuration
 as it is included by the Bundle.
 
-String (or boolean) attributes will overwrite any in the Bundle:
-
-  [@Author::RWSTAUNER]
-  Test::Compile.fake_home = 0
-
-Arrayref attributes will be appended to any in the bundle:
-
-  [@Author::RWSTAUNER]
-  MetaNoIndex:directory = another-dir
-
-Since the Bundle initializes MetaNoIndex:directory to an arrayref
-of directories, C<another-dir> will be appended to that arrayref.
-
-You can overwrite the attribute by adding non-word characters to the end of it:
-
-  [@Author::RWSTAUNER]
-  MetaNoIndex:directory@ = another-dir
-  ; or MetaNoIndex:directory[] = another-dir
-
-You can use any non-word characters: use what makes the most sense to you.
-B<Note> that you cannot specify an attribute more than once
-(since the configuration is dynamic
-and the Bundle cannot predeclare unknown attributes as arrayrefs).
+See L<Config::MVP::Slicer/CONFIGURATION SYNTAX> for more information.
 
 If your situation is more complicated you can use the C<skip_plugins>
 attribute to have the Bundle ignore that plugin
@@ -541,6 +515,7 @@ This bundle is roughly equivalent to:
 =for :list
 * L<Dist::Zilla>
 * L<Dist::Zilla::Role::PluginBundle::Easy>
+* L<Dist::Zilla::Role::PluginBundle::Config::Slicer>
 * L<Pod::Weaver>
 
 =cut
