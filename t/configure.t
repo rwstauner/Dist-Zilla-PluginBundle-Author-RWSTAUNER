@@ -46,6 +46,7 @@ foreach my $test (
     MetaNoIndex => {%$noindex, directory => ['arr']} }],
 ){
   my ($config, $exp) = @$test;
+  my $checked = {};
 
   my @plugins = @{init_bundle($config)->plugins};
 
@@ -56,8 +57,10 @@ foreach my $test (
     if( exists $exp->{$plugname} ){
       is_deeply($payload, $exp->{$plugname}, 'expected configuration')
         or diag explain [$payload, $plugname, $exp->{$plugname}];
+      ++$checked->{$matched};
     }
   }
+  is_deeply { map { $_ => 1 } keys %$exp }, $checked, 'not all tests ran';
 }
 
 # test attributes that alter which plugins are included
