@@ -100,7 +100,7 @@ sub _generate_attribute {
 }
 
 # main
-sub configure {
+after configure => sub {
   my ($self) = @_;
 
   my $skip = $self->skip_plugins;
@@ -111,7 +111,6 @@ sub configure {
   $dynamic->{'Test::Compile:fake_home'} = 1
     unless first { /Test::Compile\W+fake_home/ } keys %$dynamic;
 
-  $self->_add_bundled_plugins;
   my $plugins = $self->plugins;
 
   my $i = -1;
@@ -140,9 +139,9 @@ sub configure {
     };
     warn $@ if $@;
   }
-}
+};
 
-sub _add_bundled_plugins {
+sub configure {
   my ($self) = @_;
 
   $self->log_fatal("you must not specify both weaver_config and is_task")
