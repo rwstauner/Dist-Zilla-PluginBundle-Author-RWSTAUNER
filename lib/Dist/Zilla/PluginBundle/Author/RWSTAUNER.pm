@@ -8,7 +8,10 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 use Moose;
 use List::Util qw(first); # core
 use Dist::Zilla 4.200005;
-with 'Dist::Zilla::Role::PluginBundle::Easy';
+with qw(
+  Dist::Zilla::Role::PluginBundle::Easy
+  Dist::Zilla::Role::PluginBundle::Config::Slicer
+);
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
 use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
@@ -129,23 +132,7 @@ sub configure {
         redo;
       }
     }
-
-    # search the dynamic config for anything matching the current plugin
-    my $plugin_attr = qr/^(?:$alias|.?$moniker)\W+(\w+)(\W*)$/;
-    while( my ($key, $val) = each %$dynamic ){
-      # match keys like Plugin::Name:attr and PlugName/attr@
-      next unless
-        my ($attr, $over) = ($key =~ $plugin_attr);
-
-      # if its already an arrayref
-      if( ref(my $current = $conf->{$attr}) eq 'ARRAY' ){
-        # overwrite if specified, otherwise append
-        $val = $over ? [$val] : [@$current, $val];
-      }
-      # modify original
-      $conf->{$attr} = $val;
-    }
-  };
+  }
   if ( $ENV{DZIL_BUNDLE_DEBUG} ) {
     eval {
       require YAML::Tiny; # dzil requires this
