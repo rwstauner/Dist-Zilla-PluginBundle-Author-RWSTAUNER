@@ -2,6 +2,12 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.200     2011-10-19T23:49:56Z
+
+  - Move some logic out into Config::MVP::Slicer
+    and consume Dist::Zilla::Role::PluginBundle::Config::Slicer
+  - Update tests
+
 3.108     2011-10-03T13:59:32Z
 
   [Prereqs]
