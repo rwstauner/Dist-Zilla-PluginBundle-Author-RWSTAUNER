@@ -343,8 +343,8 @@ EOF_MANIFEST_SKIP
   ];
 }
 
-__PACKAGE__->meta->make_immutable;
 no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
 
 =for stopwords PluginBundle PluginBundles DAGOLDEN RJBS dists ini arrayrefs
