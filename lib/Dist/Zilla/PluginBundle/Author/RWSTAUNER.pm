@@ -164,6 +164,8 @@ sub configure {
     [ PruneFiles => 'PruneRepoMetaFiles' => { match => '^(README.pod)$' } ],
     # Devel::Cover db does not need to be packaged with distribution
     [ PruneFiles => 'PruneDevelCoverDatabase' => { match => '^(cover_db/.+)' } ],
+    # Code::Stat report
+    [ PruneFiles => 'PruneCodeStatCollection' => { match => '^codestat\.out' } ],
 
   # munge files
     [
