@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Use ReadmeMarkdownFromPod and CopyReadmeFromBuild to automate
+    a more useful github readme
+
 3.200     2011-10-19T23:49:56Z
 
   - Move some logic out into Config::MVP::Slicer

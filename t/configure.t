@@ -36,7 +36,7 @@ foreach my $test (
   [{}, {%default_exp}],
   [{'skip_prereqs'     => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
   [{'placeholder_comments' => 1   },            { %default_exp, Authority => {do_metadata => 1, do_munging => 1, locate_comment => 1} }],
-  [{'PruneFiles.match' => 'fudge'},             { %default_exp, map { ("Prune$_" => {match => 'fudge'}) } qw(RepoMetaFiles DevelCoverDatabase) }],
+  [{'PruneFiles.match' => 'fudge'},             { %default_exp, map { ("Prune$_" => {match => 'fudge'}) } qw(CodeStatCollection DevelCoverDatabase) }],
   [{'PruneDevelCoverDatabase.match' => 'fudge'}, { %default_exp, PruneDevelCoverDatabase => {match => 'fudge'} }],
   [{'AutoPrereqs.skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
   [{'MetaNoIndex.directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
