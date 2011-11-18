@@ -1,6 +1,9 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+  - Put 'Changes' back into @Git's allow_dirty
+
+3.201     2011-11-18T04:20:13Z
 
   - Use ReadmeMarkdownFromPod and CopyReadmeFromBuild to automate
     a more useful github readme

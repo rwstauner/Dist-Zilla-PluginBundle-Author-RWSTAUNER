@@ -300,7 +300,7 @@ sub configure {
   );
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
-  $self->add_bundle( '@Git' => {allow_dirty => 'README.mkdn'} )
+  $self->add_bundle( '@Git' => {allow_dirty => [qw(Changes README.mkdn)]} )
     if $self->use_git_bundle;
 
   # release
