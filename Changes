@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
 
   - Use ReadmeMarkdownFromPod and CopyReadmeFromBuild to automate
     a more useful github readme
+  - Load @Git bundle earlier (before releaser)
 
 3.200     2011-10-19T23:49:56Z
 

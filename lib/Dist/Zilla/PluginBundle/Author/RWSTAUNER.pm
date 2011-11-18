@@ -299,15 +299,15 @@ sub configure {
 
   );
 
+  # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
+  $self->add_bundle( '@Git' => {allow_dirty => 'README.mkdn'} )
+    if $self->use_git_bundle;
+
   # release
   my $releaser = $self->fake_release ? 'FakeRelease' : $self->releaser;
   # ignore releaser if it's set to empty string
   $self->add_plugins($releaser)
     if $releaser;
-
-  # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
-  $self->add_bundle( '@Git' )
-    if $self->use_git_bundle;
 
   $self->add_plugins(
     [ InstallRelease => { install_command => $self->install_command } ]
