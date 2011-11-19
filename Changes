@@ -1,7 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+3.202     2011-11-19T18:25:57Z
   - Put 'Changes' back into @Git's allow_dirty
+  - Reorder plugins so ConfirmRelease is last BeforeRelease
 
 3.201     2011-11-18T04:20:13Z
 
