@@ -441,8 +441,6 @@ This bundle is roughly equivalent to:
   [GatherDir]             ; everything under top dir
   [PruneCruft]            ; default stuff to skip
   [ManifestSkip]          ; custom stuff to skip
-  ; use PruneFiles to specifically remove ^(dist.ini)$
-  ; use PruneFiles to specifically remove ^(README.pod)$ (just for github)
 
   ; munge files
   [Authority]             ; inject $AUTHORITY into modules
@@ -461,7 +459,8 @@ This bundle is roughly equivalent to:
 
   ; generate files
   [License]               ; generate distribution files (dzil core [@Basic])
-  [Readme]
+  [ReadmeMarkdownFromPod] ; generate markdown from main_module pod
+  [CopyReadmeFromBuild]   ; copy it to root dir for github repo
 
   ; metadata
   [Bugtracker]            ; include bugtracker URL and email address (uses RT)
@@ -510,13 +509,17 @@ This bundle is roughly equivalent to:
   [Manifest]              ; build MANIFEST file (dzil core [@Basic])
 
   ; actions for releasing the distribution (dzil core [@Basic])
+  [CheckExtraTests]       ; xt/
   [CheckChangesHasContent]
   [TestRelease]           ; run tests before releasing
+
+  [@Git]                  ; use Git bundle to commit/tag/push after releasing
+  allow_dirty = Changes README.mkdn
+
   [ConfirmRelease]        ; are you sure?
   [UploadToCPAN]
   ; see CONFIGURATION for alternate Release plugin configuration options
 
-  [@Git]                  ; use Git bundle to commit/tag/push after releasing
   [InstallRelease]        ; install the new dist (using 'install_command')
 
 =head1 SEE ALSO
