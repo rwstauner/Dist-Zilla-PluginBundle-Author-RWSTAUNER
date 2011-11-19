@@ -36,7 +36,7 @@ use Dist::Zilla::Plugin::PkgVersion ();
 #use Dist::Zilla::Plugin::OurPkgVersion 0.002 ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::Prepender 1.112280 ();
-use Pod::Markdown 1.110731 (); # verbatim indentation fix [rt-72414]
+use Pod::Markdown 1.120 ();
 use Dist::Zilla::Plugin::ReadmeMarkdownFromPod 0.103510 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
