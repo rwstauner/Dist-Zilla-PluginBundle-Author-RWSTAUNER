@@ -294,7 +294,6 @@ sub configure {
       CheckExtraTests
       CheckChangesHasContent
       TestRelease
-      ConfirmRelease
     ),
 
   );
@@ -302,6 +301,12 @@ sub configure {
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle( '@Git' => {allow_dirty => [qw(Changes README.mkdn)]} )
     if $self->use_git_bundle;
+
+  $self->add_plugins(
+    qw(
+      ConfirmRelease
+    ),
+  );
 
   # release
   my $releaser = $self->fake_release ? 'FakeRelease' : $self->releaser;
