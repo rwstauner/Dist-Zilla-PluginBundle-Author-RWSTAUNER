@@ -112,6 +112,10 @@ foreach my $test (
   &$has_not('ExtraTests');
   &$has_not('GenerateManifestSkip', 1);
 
+  $bundle = init_bundle({'-remove' => [qw(Test::Compile ExtraTests)]});
+  &$has_not('Test::Compile');
+  &$has_not('ExtraTests');
+
   $bundle = init_bundle({disable_tests => 'EOLTests,Test::Compile'});
   &$has_not('EOLTests');
   &$has_not('Test::Compile');

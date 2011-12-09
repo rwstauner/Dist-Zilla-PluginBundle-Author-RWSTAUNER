@@ -11,6 +11,7 @@ use Dist::Zilla 4.200005;
 with qw(
   Dist::Zilla::Role::PluginBundle::Easy
   Dist::Zilla::Role::PluginBundle::Config::Slicer
+  Dist::Zilla::Role::PluginBundle::PluginRemover
 );
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
@@ -421,15 +422,24 @@ as it is included by the Bundle.
 
 See L<Config::MVP::Slicer/CONFIGURATION SYNTAX> for more information.
 
-If your situation is more complicated you can use the C<skip_plugins>
-attribute to have the Bundle ignore that plugin
+If your situation is more complicated you can use the C<-remove> attribute
+(courtesy of L<Dist::Zilla::Role::PluginBundle::PluginRemover>)
+to have the Bundle ignore that plugin
 and then you can add it yourself:
 
   [MetaNoIndex]
   directory = one-dir
   directory = another-dir
   [@Author::RWSTAUNER]
-  skip_plugins = MetaNoIndex
+  -remove = MetaNoIndex
+
+C<-remove> can be specified multiple times.
+
+Alternatively you can use the C<skip_plugins> attribute (only once)
+which is a regular expression that matches plugin name or package.
+
+  [@Author::RWSTAUNER]
+  skip_plugins = MetaNoIndex|SomethingElse
 
 =head1 EQUIVALENT F<dist.ini>
 
@@ -528,6 +538,7 @@ This bundle is roughly equivalent to:
 * L<Dist::Zilla>
 * L<Dist::Zilla::Role::PluginBundle::Easy>
 * L<Dist::Zilla::Role::PluginBundle::Config::Slicer>
+* L<Dist::Zilla::Role::PluginBundle::PluginRemover>
 * L<Pod::Weaver>
 
 =cut
