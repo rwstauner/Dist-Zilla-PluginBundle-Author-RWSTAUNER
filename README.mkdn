@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 3.202
+version 3.203
 
 # SYNOPSIS
 
@@ -65,15 +65,24 @@ as it is included by the Bundle.
 
 See ["CONFIGURATION SYNTAX" in Config::MVP::Slicer](http://search.cpan.org/perldoc?Config::MVP::Slicer#CONFIGURATION SYNTAX) for more information.
 
-If your situation is more complicated you can use the `skip_plugins`
-attribute to have the Bundle ignore that plugin
+If your situation is more complicated you can use the `-remove` attribute
+(courtesy of [Dist::Zilla::Role::PluginBundle::PluginRemover](http://search.cpan.org/perldoc?Dist::Zilla::Role::PluginBundle::PluginRemover))
+to have the Bundle ignore that plugin
 and then you can add it yourself:
 
     [MetaNoIndex]
     directory = one-dir
     directory = another-dir
     [@Author::RWSTAUNER]
-    skip_plugins = MetaNoIndex
+    -remove = MetaNoIndex
+
+`-remove` can be specified multiple times.
+
+Alternatively you can use the `skip_plugins` attribute (only once)
+which is a regular expression that matches plugin name or package.
+
+    [@Author::RWSTAUNER]
+    skip_plugins = MetaNoIndex|SomethingElse
 
 # EQUIVALENT `dist.ini`
 
@@ -171,6 +180,7 @@ This bundle is roughly equivalent to:
 - [Dist::Zilla](http://search.cpan.org/perldoc?Dist::Zilla)
 - [Dist::Zilla::Role::PluginBundle::Easy](http://search.cpan.org/perldoc?Dist::Zilla::Role::PluginBundle::Easy)
 - [Dist::Zilla::Role::PluginBundle::Config::Slicer](http://search.cpan.org/perldoc?Dist::Zilla::Role::PluginBundle::Config::Slicer)
+- [Dist::Zilla::Role::PluginBundle::PluginRemover](http://search.cpan.org/perldoc?Dist::Zilla::Role::PluginBundle::PluginRemover)
 - [Pod::Weaver](http://search.cpan.org/perldoc?Pod::Weaver)
 
 # SUPPORT

@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+3.203     2011-12-10T00:02:58Z
+
   - Consume PluginRemover role to get '-remove' magically
 
 3.202     2011-11-19T18:25:57Z
