@@ -21,7 +21,6 @@ use Dist::Zilla::PluginBundle::Git 1.110500 ();
 use Dist::Zilla::PluginBundle::TestingMania 0.014 ();
 use Dist::Zilla::Plugin::Authority 1.005 (); # accepts any non-whitespace + locate_comment
 use Dist::Zilla::Plugin::Bugtracker ();
-use Dist::Zilla::Plugin::CopyReadmeFromBuild 0.0019 ();
 use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
 use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
@@ -38,7 +37,7 @@ use Dist::Zilla::Plugin::PkgVersion ();
 use Dist::Zilla::Plugin::PodWeaver ();
 use Dist::Zilla::Plugin::Prepender 1.112280 ();
 use Pod::Markdown 1.120 ();
-use Dist::Zilla::Plugin::ReadmeMarkdownFromPod 0.103510 ();
+use Dist::Zilla::Plugin::ReadmeAnyFromPod 0.120120 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
 use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
@@ -200,9 +199,9 @@ sub configure {
   # generated distribution files
     qw(
       License
-      ReadmeMarkdownFromPod
-      CopyReadmeFromBuild
+      Readme
     ),
+    [ ReadmeAnyFromPod => { type => 'pod', location => 'root' } ],
     # @APOCALYPTIC: generate MANIFEST.SKIP ?
 
   # metadata
@@ -300,7 +299,7 @@ sub configure {
   );
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
-  $self->add_bundle( '@Git' => {allow_dirty => [qw(Changes README.mkdn)]} )
+  $self->add_bundle( '@Git' => {allow_dirty => [qw(Changes README.pod)]} )
     if $self->use_git_bundle;
 
   $self->add_plugins(
@@ -469,8 +468,11 @@ This bundle is roughly equivalent to:
 
   ; generate files
   [License]               ; generate distribution files (dzil core [@Basic])
-  [ReadmeMarkdownFromPod] ; generate markdown from main_module pod
-  [CopyReadmeFromBuild]   ; copy it to root dir for github repo
+  [Readme]                ; simple readme for inclusion in release dist ([@Basic])
+
+  [ReadmeAnyFromPod]      ; generate repo-root README.pod from main_module for github
+  type = pod
+  location = root
 
   ; metadata
   [Bugtracker]            ; include bugtracker URL and email address (uses RT)

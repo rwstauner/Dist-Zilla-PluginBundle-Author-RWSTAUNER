@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Revert to @Basic Readme in dist
+  - Generate README.pod (instead of markdown) in repo root for github
+    (ReadmeAnyFromPod instead of ReadmeMarkdownFromPod + CopyReadmeFromBuild)
+
 3.203     2011-12-10T00:02:58Z
 
   - Consume PluginRemover role to get '-remove' magically
