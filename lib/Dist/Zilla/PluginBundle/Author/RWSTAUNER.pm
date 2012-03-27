@@ -23,7 +23,6 @@ use Dist::Zilla::Plugin::Authority 1.005 (); # accepts any non-whitespace + loca
 use Dist::Zilla::Plugin::Bugtracker ();
 use Dist::Zilla::Plugin::CheckExtraTests ();
 use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
-use Dist::Zilla::Plugin::DualBuilders 1.001 (); # only runs tests once
 use Dist::Zilla::Plugin::Git::NextVersion ();
 use Dist::Zilla::Plugin::GithubMeta 0.10 ();
 use Dist::Zilla::Plugin::InstallRelease 0.006 ();
@@ -39,7 +38,6 @@ use Dist::Zilla::Plugin::Prepender 1.112280 ();
 use Dist::Zilla::Plugin::ReadmeAnyFromPod 0.120120 ();
 use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
 use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
-use Dist::Zilla::Plugin::TaskWeaver 0.101620 ();
 #use Dist::Zilla::Plugin::Test::Pod::No404s ();
 use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
 
