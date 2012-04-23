@@ -59,6 +59,7 @@ sub mvp_bundle_config {
     # extra
     [ 'Usage',       _exp('Generic'), {} ],
 
+    ['Class Methods',_exp('Collect'), { command => 'class_method' } ], # header => 'CLASS METHODS',
     # default
     [ 'Attributes',  _exp('Collect'), { command => 'attr'   } ],
     [ 'Methods',     _exp('Collect'), { command => 'method' } ],
