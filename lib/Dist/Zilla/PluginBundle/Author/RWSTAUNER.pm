@@ -263,9 +263,7 @@ sub configure {
 
   $self->add_plugins(
   # generated t/ tests
-    qw(
-      ReportVersions::Tiny
-    ),
+    [ 'Test::ReportPrereqs' => { ':version' => '0.004' } ], # include/exclude
 
   # generated xt/ tests
     # Test::Pod::Spelling::CommonMistakes ?
