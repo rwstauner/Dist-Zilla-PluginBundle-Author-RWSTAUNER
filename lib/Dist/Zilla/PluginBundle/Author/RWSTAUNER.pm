@@ -7,7 +7,8 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 
 use Moose;
 use List::Util qw(first); # core
-use Dist::Zilla 4.200005;
+use Dist::Zilla 4.300018; # :version support for add_bundle, %V in NextRelease
+
 with qw(
   Dist::Zilla::Role::PluginBundle::Easy
   Dist::Zilla::Role::PluginBundle::Config::Slicer
@@ -177,7 +178,7 @@ sub configure {
       NextRelease => {
         # w3cdtf
         time_zone => 'UTC',
-        format => q[%-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d],
+        format => q[%-9V %{yyyy-MM-dd'T'HH:mm:ss'Z'}d],
       }
     ],
     ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
@@ -287,14 +288,20 @@ sub configure {
   # before release
     qw(
       CheckExtraTests
-      CheckChangesHasContent
+    ),
+    [ CheckChangesHasContent => { ':version' => '0.006' } ], # version-TRIAL
+    qw(
       TestRelease
     ),
 
   );
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
-  $self->add_bundle( '@Git' => {allow_dirty => [qw(Changes README.pod)]} )
+  $self->add_bundle('@Git' => {
+    ':version' => '1.110500',
+    allow_dirty => [qw(Changes README.pod)],
+    commit_msg  => 'v%v%t%n%n%c'
+  })
     if $self->use_git_bundle;
 
   $self->add_plugins(
