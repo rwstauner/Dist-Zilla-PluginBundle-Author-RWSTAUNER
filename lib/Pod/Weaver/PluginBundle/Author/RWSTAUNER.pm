@@ -100,8 +100,9 @@ sub mvp_bundle_config {
     # plugins
     [ 'List',        _exp('-Transformer'), { 'transformer' => 'List' } ],
 
-    # my dictionary doesn't like that extra 'E' but it looks funny without it
     _plain('-StopWords', {
+      ':version' => '1.005', # after =encoding
+      # my dictionary doesn't like that extra 'E' but it looks funny without it
       include => 'ACKNOWLEDGEMENTS'
     }),
   );
