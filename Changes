@@ -5,6 +5,7 @@ Revision history for {{$dist->name}}
   - Revert to @Basic Readme in dist
   - Generate README.pod (instead of markdown) in repo root for github
     (ReadmeAnyFromPod instead of ReadmeMarkdownFromPod + CopyReadmeFromBuild)
+  - Remove 'disable_tests' attribute since '-remove' is sufficient
 
 3.203     2011-12-10T00:02:58Z
 

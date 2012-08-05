@@ -100,6 +100,17 @@ sub _generate_attribute {
     for keys %{ __PACKAGE__->_default_attributes };
 }
 
+around BUILDARGS => sub {
+  my ($orig, $class, @args) = @_;
+  my $attr = $class->$orig(@args);
+  foreach my $gone ( qw( disable_tests ) ){
+    if( $attr->{ $gone } ){
+      die "$class no longer supports '$gone'.\n  Please use the '-remove' attribute instead\n";
+    }
+  }
+  return $attr;
+};
+
 # main
 after configure => sub {
   my ($self) = @_;
@@ -277,9 +288,9 @@ sub configure {
     $self->log("Test::PodSpelling Plugin failed to load.  Pleese dunt mayke ani misteaks.\n");
   }
 
-  $self->add_bundle(
-    '@TestingMania' => $self->config_slice({ disable_tests => 'disable' })
-  );
+  $self->add_bundle('@TestingMania' => {
+    ':version' => '0.014',
+  });
 
   $self->add_plugins(
   # manifest: must come after all generated files
@@ -386,7 +397,6 @@ Possible options and their default values:
 
   auto_prereqs   = 1  ; enable AutoPrereqs
   builder        = eumm ; or 'mb' or 'both'
-  disable_tests  =    ; corresponds to @TestingMania.disable
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
