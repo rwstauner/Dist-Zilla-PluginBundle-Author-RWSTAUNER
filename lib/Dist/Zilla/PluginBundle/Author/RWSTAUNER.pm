@@ -62,7 +62,6 @@ sub _default_attributes {
   use Moose::Util::TypeConstraints 1.01;
   return {
     auto_prereqs    => [Bool => 1],
-    disable_tests   => [Str  => ''],
     fake_release    => [Bool => $ENV{DZIL_FAKERELEASE}],
     # cpanm will choose the best place to install
     install_command => [Str  => 'cpanm -v -i .'],
