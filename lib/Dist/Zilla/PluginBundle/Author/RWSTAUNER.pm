@@ -149,6 +149,8 @@ sub configure {
     [ PruneFiles => 'PruneDevelCoverDatabase' => { match => '^(cover_db/.+)' } ],
     # Code::Stat report
     [ PruneFiles => 'PruneCodeStatCollection' => { match => '^codestat\.out' } ],
+    # generated tags file... useful for development but noisy to commit
+    [ PruneFiles => 'PruneTags' => { match => '^tags$' } ],
 
   # munge files
     [
