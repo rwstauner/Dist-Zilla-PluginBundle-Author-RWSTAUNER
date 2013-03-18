@@ -46,6 +46,7 @@ sub _default_attributes {
     skip_prereqs    => [Str  => ''],
     weaver_config   => [Str  => $_[0]->_bundle_name],
     use_git_bundle  => [Bool => 1],
+    max_target_perl => [Str  => '5.008'],
     builder         => [enum( [ both => keys %builders ] ) => 'eumm'],
   };
 }
@@ -278,7 +279,8 @@ sub configure {
 
   # NOTE: A newer TestingMania might duplicate plugins if new tests are added
   $self->add_bundle('@TestingMania' => {
-    ':version' => '0.014',
+    ':version' => '0.019',      # max_target_petl
+    max_target_perl => $self->max_target_perl,
   });
 
   $self->add_plugins(
