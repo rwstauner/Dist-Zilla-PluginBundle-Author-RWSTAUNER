@@ -225,7 +225,7 @@ sub configure {
       }
     ],
 
-    [ MinimumPerl => { ':version' => '0.02' } ],
+    [ MinimumPerl => { ':version' => '1.003' } ],
     qw(
       MetaConfig
       MetaYAML
@@ -293,7 +293,7 @@ sub configure {
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle('@Git' => {
-    ':version' => '1.110500',
+    ':version' => '2.004', # improved changelog parsing
     allow_dirty => [qw(Changes README.pod)],
     commit_msg  => 'v%v%t%n%n%c'
   })
