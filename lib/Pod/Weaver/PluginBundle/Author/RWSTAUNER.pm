@@ -5,15 +5,6 @@ use warnings;
 package Pod::Weaver::PluginBundle::Author::RWSTAUNER;
 # ABSTRACT: RWSTAUNER's Pod::Weaver config
 
-use Pod::Weaver 3.101632 ();
-use Pod::Weaver::PluginBundle::Default ();
-use Pod::Weaver::Plugin::StopWords 1.001005 ();
-use Pod::Weaver::Plugin::Transformer ();
-use Pod::Weaver::Plugin::WikiDoc ();
-use Pod::Weaver::Section::Support 1.001 ();
-use Pod::Elemental 0.102360 ();
-use Pod::Elemental::Transformer::List ();
-
 use Pod::Weaver::Config::Assembler;
 sub _exp { Pod::Weaver::Config::Assembler->expand_package($_[0]) }
 
@@ -81,6 +72,7 @@ sub mvp_bundle_config {
     # include Support section with various cpan links and github repo
     [ 'Support',     _exp('Support'),
       {
+        ':version' => '1.001',
         repository_content => '',
         repository_link => 'both',
         # NOTE: it may be worth watching the module to see if more are added

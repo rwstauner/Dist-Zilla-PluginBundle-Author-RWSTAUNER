@@ -16,32 +16,6 @@ with qw(
 );
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
-use Dist::Zilla::PluginBundle::Basic (); # use most of the plugins included
-use Dist::Zilla::PluginBundle::Git 1.110500 ();
-# NOTE: A newer TestingMania might duplicate plugins if new tests are added
-use Dist::Zilla::PluginBundle::TestingMania 0.014 ();
-use Dist::Zilla::Plugin::Authority 1.005 (); # accepts any non-whitespace + locate_comment
-use Dist::Zilla::Plugin::Bugtracker ();
-use Dist::Zilla::Plugin::CheckExtraTests ();
-use Dist::Zilla::Plugin::CheckChangesHasContent 0.003 ();
-use Dist::Zilla::Plugin::Git::NextVersion ();
-use Dist::Zilla::Plugin::GithubMeta 0.10 ();
-use Dist::Zilla::Plugin::InstallRelease 0.006 ();
-#use Dist::Zilla::Plugin::MetaData::BuiltWith (); # FIXME: see comment below
-use Dist::Zilla::Plugin::MetaNoIndex 1.101130 ();
-use Dist::Zilla::Plugin::MetaProvides::Package 1.11044404 ();
-use Dist::Zilla::Plugin::MinimumPerl 0.02 ();
-use Dist::Zilla::Plugin::NextRelease ();
-use Dist::Zilla::Plugin::PkgVersion ();
-#use Dist::Zilla::Plugin::OurPkgVersion 0.002 ();
-use Dist::Zilla::Plugin::PodWeaver ();
-use Dist::Zilla::Plugin::Prepender 1.112280 ();
-use Dist::Zilla::Plugin::ReadmeAnyFromPod 0.120120 ();
-use Dist::Zilla::Plugin::Repository 0.16 (); # deprecates github_http
-use Dist::Zilla::Plugin::ReportVersions::Tiny 1.01 ();
-#use Dist::Zilla::Plugin::Test::Pod::No404s ();
-use Pod::Weaver::PluginBundle::Author::RWSTAUNER ();
-
 # don't require it in case it won't install somewhere
 my $spelling_tests = eval 'require Dist::Zilla::Plugin::Test::PodSpelling';
 
@@ -179,6 +153,7 @@ sub configure {
   # munge files
     [
       Authority => {
+        ':version'     => '1.005', # accepts any non-whitespace + locate_comment
         do_munging     => 1,
         do_metadata    => 1,
         locate_comment => $self->placeholder_comments,
@@ -194,6 +169,7 @@ sub configure {
     ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
     [
       Prepender => {
+        ':version' => '1.112280', # 'skip' attribute
         # don't prepend to tests
         skip => '^x?t/.+',
       }
@@ -209,15 +185,21 @@ sub configure {
       License
       Readme
     ),
-    [ ReadmeAnyFromPod => { type => 'pod', location => 'root' } ],
-    # @APOCALYPTIC: generate MANIFEST.SKIP ?
+    [
+      # generate README.pod in repo root for github
+      ReadmeAnyFromPod => {
+        ':version' => '0.120120',
+        type       => 'pod',
+        location   => 'root',
+      }
+    ],
 
   # metadata
     'Bugtracker',
     # won't find git if not in repository root (!-e ".git")
-    'Repository',
+    [ Repository => { ':version' => '0.16' } ], # deprecates github_http
     # overrides [Repository] if repository is on github
-    'GithubMeta',
+    [ GithubMeta => { ':version' => '0.10' } ],
   );
 
   $self->add_plugins(
@@ -229,6 +211,7 @@ sub configure {
 #   [ 'MetaData::BuiltWith' => { show_uname => 1 } ], # currently DZ::Util::EmulatePhase causes problems
     [
       MetaNoIndex => {
+        ':version' => 1.101130,
         # could use grep { -d $_ } but that will miss any generated files
         directory => [qw(corpus examples inc share t xt)],
         namespace => [qw(Local t::lib)],
@@ -237,12 +220,13 @@ sub configure {
     ],
     [   # AFTER MetaNoIndex
       'MetaProvides::Package' => {
+        ':version'   => '1.14000001',
         meta_noindex => 1
       }
     ],
 
+    [ MinimumPerl => { ':version' => '0.02' } ],
     qw(
-      MinimumPerl
       MetaConfig
       MetaYAML
       MetaJSON
@@ -287,6 +271,7 @@ sub configure {
     $self->log("Test::PodSpelling Plugin failed to load.  Pleese dunt mayke ani misteaks.\n");
   }
 
+  # NOTE: A newer TestingMania might duplicate plugins if new tests are added
   $self->add_bundle('@TestingMania' => {
     ':version' => '0.014',
   });
@@ -327,7 +312,7 @@ sub configure {
     if $releaser;
 
   $self->add_plugins(
-    [ InstallRelease => { install_command => $self->install_command } ]
+    [ InstallRelease => { ':version' => '0.006', install_command => $self->install_command } ]
   )
     if $self->install_command;
 
