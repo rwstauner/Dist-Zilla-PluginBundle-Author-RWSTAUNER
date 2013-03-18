@@ -85,8 +85,9 @@ sub mvp_bundle_config {
 
     [ 'Acknowledgements', _exp('Generic'), {header => 'ACKNOWLEDGEMENTS'} ],
 
-    # default
     _plain('Authors'),
+    _plain('Contributors'),
+
     _plain('Legal'),
 
     # plugins

@@ -203,6 +203,7 @@ sub configure {
     [ Repository => { ':version' => '0.16' } ], # deprecates github_http
     # overrides [Repository] if repository is on github
     [ GithubMeta => { ':version' => '0.10' } ],
+    [ ContributorsFromGit => { ':version' => '0.005' } ],
   );
 
   $self->add_plugins(
