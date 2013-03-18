@@ -89,6 +89,7 @@ around BUILDARGS => sub {
 after configure => sub {
   my ($self) = @_;
 
+  # TODO: accept this from ENV
   my $skip = $self->skip_plugins;
   $skip &&= qr/$skip/;
 
