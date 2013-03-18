@@ -168,6 +168,7 @@ sub configure {
         format => q[%-9V %{yyyy-MM-dd'T'HH:mm:ss'Z'}d],
       }
     ],
+    'Git::Describe',
     ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
     [
       Prepender => {
