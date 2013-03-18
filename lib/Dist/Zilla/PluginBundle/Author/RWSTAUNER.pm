@@ -263,6 +263,7 @@ sub configure {
   $self->add_plugins(
   # generated t/ tests
     [ 'Test::ReportPrereqs' => { ':version' => '0.004' } ], # include/exclude
+    [ 'Test::ChangesHasContent' => { ':version' => '0.006' } ], # version-TRIAL
 
   # generated xt/ tests
     # Test::Pod::Spelling::CommonMistakes ?
