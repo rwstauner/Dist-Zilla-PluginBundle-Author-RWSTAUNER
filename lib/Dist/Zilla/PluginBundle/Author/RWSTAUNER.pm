@@ -291,6 +291,8 @@ sub configure {
     ),
     [ CheckChangesHasContent => { ':version' => '0.006' } ], # version-TRIAL
     qw(
+      CheckMetaResources
+      CheckPrereqsIndexed
       TestRelease
     ),
 
