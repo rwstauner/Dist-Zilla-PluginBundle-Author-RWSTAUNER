@@ -1,7 +1,8 @@
 # vim: set ts=2 sts=2 sw=2 expandtab smarttab:
 use strict;
 use warnings;
-package Dist::Zilla::Plugin::No_Op_Releaser;
+package # no_index
+  Dist::Zilla::Plugin::No_Op_Releaser;
 # ABSTRACT: Release by doing nothing (no-op)
 
 use Moose;
