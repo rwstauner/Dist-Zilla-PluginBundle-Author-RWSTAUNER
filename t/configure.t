@@ -18,6 +18,7 @@ my $noindex = (
   grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
       @{ init_bundle()->plugins }
 )[0]->[-1];
+delete $noindex->{':version'}; # but ignore this
 
 my $noindex_dirs = $noindex->{directory};
 
@@ -59,6 +60,7 @@ foreach my $test (
 
     my $matched = exists $exp->{$plugname} ? $plugname : exists $exp->{$name} ? $name : next;
     if( exists $exp->{$matched} ){
+      delete $payload->{':version'}; # ignore any versions in comparison
       is_deeply($payload, $exp->{$matched}, "expected configuration for $matched")
         or diag explain [$payload, $matched, $exp->{$matched}];
       ++$checked->{$matched};
