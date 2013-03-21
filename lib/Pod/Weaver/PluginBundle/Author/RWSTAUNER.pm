@@ -109,8 +109,6 @@ sub mvp_bundle_config {
 
 1;
 
-=for stopwords PluginBundle WikiDoc
-
 =for Pod::Coverage mvp_bundle_config
 
 =head1 SYNOPSIS

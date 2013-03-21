@@ -363,9 +363,6 @@ no Moose;
 __PACKAGE__->meta->make_immutable;
 1;
 
-=for stopwords PluginBundle PluginBundles DAGOLDEN RJBS dists ini arrayrefs
-releaser
-
 =for Pod::Coverage configure
 log log_fatal
 
@@ -379,11 +376,7 @@ log log_fatal
 
 This is an Author
 L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
-that I use for building my dists.
-
-This Bundle was heavily influenced by the bundles of
-L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
-L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
+that I use for building my distributions.
 
 =head1 CONFIGURATION
 
@@ -401,11 +394,6 @@ Possible options and their default values:
   weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
-
-The C<release> option can be set to an alternate releaser plugin
-or to an empty string to disable adding a releaser.
-This can make it easier to include a plugin that requires configuration
-by just ignoring the default releaser and including your own normally.
 
 B<NOTE>:
 This bundle consumes L<Dist::Zilla::Role::PluginBundle::Config::Slicer>
