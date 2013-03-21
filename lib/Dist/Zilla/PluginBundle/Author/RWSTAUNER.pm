@@ -43,7 +43,6 @@ sub _default_attributes {
     placeholder_comments => [Bool => 0],
     releaser        => [Str  => 'UploadToCPAN'],
     skip_plugins    => [Str  => ''],
-    skip_prereqs    => [Str  => ''],
     weaver_config   => [Str  => $_[0]->_bundle_name],
     use_git_bundle  => [Bool => 1],
     max_target_perl => [Str  => '5.008'],
@@ -77,9 +76,15 @@ sub _generate_attribute {
 around BUILDARGS => sub {
   my ($orig, $class, @args) = @_;
   my $attr = $class->$orig(@args);
-  foreach my $gone ( qw( disable_tests ) ){
-    if( $attr->{ $gone } ){
-      die "$class no longer supports '$gone'.\n  Please use the '-remove' attribute instead\n";
+
+  # removed attributes
+  my %deprecated = (
+    disable_tests => '-remove',
+    skip_prereqs  => 'AutoPrereqs.skip',
+  );
+  while( my ($old, $new) = each %deprecated ){
+    if( exists $attr->{payload}{ $old } ){
+      die "$class no longer supports '$old'.\n  Please use '$new' instead.\n";
     }
   }
   return $attr;
@@ -208,9 +213,7 @@ sub configure {
     [ ContributorsFromGit => { ':version' => '0.005' } ],
   );
 
-  $self->add_plugins(
-    [ AutoPrereqs => $self->config_slice({ skip_prereqs => 'skip' }) ]
-  )
+  $self->add_plugins('AutoPrereqs')
     if $self->auto_prereqs;
 
   $self->add_plugins(
@@ -390,7 +393,6 @@ Possible options and their default values:
   placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
-  skip_prereqs   =    ; default empty; corresponds to AutoPrereqs.skip
   weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
