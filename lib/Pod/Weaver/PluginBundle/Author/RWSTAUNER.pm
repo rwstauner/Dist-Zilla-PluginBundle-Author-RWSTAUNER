@@ -113,70 +113,22 @@ sub mvp_bundle_config {
 
 =head1 SYNOPSIS
 
-  # weaver.ini
+  ; weaver.ini
 
   [@Author::RWSTAUNER]
 
 or with a F<dist.ini> like so:
 
-  # dist.ini
+  ; dist.ini
 
   [@Author::RWSTAUNER]
 
 you don't need a F<weaver.ini> at all.
 
-=head1 DESCRIPTION
+=head1 ROUGHLY EQUIVALENT
 
-This PluginBundle is like the @Default
-with the following additions:
+This bundle is roughly equivalent to:
 
-=for :list
-* Inserts a SUPPORT section to the POD just before AUTHOR
-* Adds the List Transformer
-* Enables WikiDoc formatting
-* Generates and collects stopwords
-
-It is roughly equivalent to:
-
-  [Encoding]                ; prepend '=encoding utf-8' automatically
-  [WikiDoc]                 ; transform wikidoc sections to POD
-  [@CorePrep]               ; [@Default]
-
-  [Name]                    ; [@Default]
-  [Version]                 ; [@Default]
-
-  [Region  / prelude]       ; [@Default]
-
-  [Generic / SYNOPSIS]      ; [@Default]
-  [Generic / DESCRIPTION]   ; [@Default]
-  [Generic / OVERVIEW]      ; [@Default]
-  [Generic / USAGE]         ; Put USAGE section near the top
-
-  [Collect / ATTRIBUTES]    ; [@Default]
-  command = attr
-
-  [Collect / METHODS]       ; [@Default]
-  command = method
-
-  [Collect / FUNCTIONS]     ; [@Default]
-  command = func
-
-  [Leftovers]               ; [@Default]
-
-  [Region  / postlude]      ; [@Default]
-
-  ; custom section
-  [Support]                 ; =head1 SUPPORT (bugs, cpants, git...)
-  repository_content =
-  repository_link = both
-  websites = search, rt, ratings, testers, testmatrix, deps
-
-  [Authors]                 ; [@Default]
-  [Legal]                   ; [@Default]
-
-  [-Transformer]            ; enable =for :list
-  transformer = List
-
-  [-StopWords]              ; generate some stopwords and gather them together
+=bundle_ini_string
 
 =cut

@@ -436,99 +436,11 @@ which is a regular expression that matches plugin name or package.
   [@Author::RWSTAUNER]
   skip_plugins = MetaNoIndex|SomethingElse
 
-=head1 EQUIVALENT F<dist.ini>
+=head1 ROUGHLY EQUIVALENT
 
-This bundle is roughly equivalent to:
+This bundle is roughly equivalent to the following (generated) F<dist.ini>:
 
-  [Git::NextVersion]      ; autoincrement version from last tag
-
-  ; choose files to include (dzil core [@Basic])
-  [GatherDir]             ; everything under top dir
-  [PruneCruft]            ; default stuff to skip
-  [ManifestSkip]          ; custom stuff to skip
-
-  ; munge files
-  [Authority]             ; inject $AUTHORITY into modules
-  do_metadata = 1         ; default
-  [NextRelease]           ; simplify maintenance of Changes file
-  ; use W3CDTF format for release timestamps (for unambiguous dates)
-  time_zone = UTC
-  format    = %-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
-  [PkgVersion]            ; inject $VERSION (use OurPkgVersion if 'placeholder_comments')
-  [Prepender]             ; add header to source code files
-
-  [PodWeaver]             ; munge POD in all modules
-  config_plugin = @Author::RWSTAUNER
-  ; 'weaver_config' can be set to an alternate Bundle
-  ; set 'is_task = 1' to use TaskWeaver instead
-
-  ; generate files
-  [License]               ; generate distribution files (dzil core [@Basic])
-  [Readme]                ; simple readme for inclusion in release dist ([@Basic])
-
-  [ReadmeAnyFromPod]      ; generate repo-root README.pod from main_module for github
-  type = pod
-  location = root
-
-  ; metadata
-  [Bugtracker]            ; include bugtracker URL and email address (uses RT)
-  [Repository]            ; determine git information (if -e ".git")
-  [GithubMeta]            ; overrides [Repository] if repository is on github
-
-  [AutoPrereqs]
-  ; disable with 'auto_prereqs = 0'
-
-  [MetaNoIndex]           ; encourage CPAN not to index:
-  directory = corpus
-  directory = examples
-  directory = inc
-  directory = share
-  directory = t
-  directory = xt
-  namespace = Local
-  namespace = t::lib
-  package   = DB
-
-  [MetaProvides::Package] ; describe packages included in the dist
-  meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
-
-  [MinimumPerl]           ; automatically determine Perl version required
-
-  [MetaConfig]            ; include Dist::Zilla info in distmeta (dzil core)
-  [MetaYAML]              ; include META.yml (v1.4) (dzil core [@Basic])
-  [MetaJSON]              ; include META.json (v2) (more info than META.yml)
-
-  [Prereqs / TestRequires]
-  Test::More = 0.96       ; require recent Test::More (including subtests)
-
-  [ExtraTests]            ; build system (dzil core [@Basic])
-  [ExecDir]               ; include 'bin/*' as executables
-  [ShareDir]              ; include 'share/' for File::ShareDir
-
-  [MakeMaker]             ; create Makefile.PL (if builder == 'eumm' (default))
-  ; [ModuleBuild]         ; create Build.PL (if builder == 'mb')
-  ; [DualBuilders]        ; only require one of the above two (prefer 'build') (if both)
-
-  ; generate t/ and xt/ tests
-  [ReportVersions::Tiny]  ; show module versions used in test reports
-  [@TestingMania]         ; Lots of dist tests
-  [Test::PodSpelling]     ; spell check POD (if installed)
-
-  [Manifest]              ; build MANIFEST file (dzil core [@Basic])
-
-  ; actions for releasing the distribution (dzil core [@Basic])
-  [CheckExtraTests]       ; xt/
-  [CheckChangesHasContent]
-  [TestRelease]           ; run tests before releasing
-
-  [@Git]                  ; use Git bundle to commit/tag/push after releasing
-  allow_dirty = Changes README.mkdn
-
-  [ConfirmRelease]        ; are you sure?
-  [UploadToCPAN]
-  ; see CONFIGURATION for alternate Release plugin configuration options
-
-  [InstallRelease]        ; install the new dist (using 'install_command')
+=bundle_ini_string
 
 =head1 SEE ALSO
 
