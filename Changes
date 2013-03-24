@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.000     2013-03-24T05:25:29Z
+
   - Use BundleInspector plugin to determine prereq info and generate
     "roughly equivalent" ini configs in pod.
   - Include plugin version requirements in plugin specs as ':version'

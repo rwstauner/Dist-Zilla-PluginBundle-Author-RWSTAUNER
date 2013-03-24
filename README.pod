@@ -1,9 +1,10 @@
-=for :stopwords Randy Stauner ACKNOWLEDGEMENTS RWSTAUNER's PluginBundle PluginBundles
-DAGOLDEN RJBS dists ini arrayrefs releaser cpan testmatrix url annocpan
-anno bugtracker rt cpants kwalitee diff irc mailto metadata placeholders
-metacpan
+=pod
 
 =encoding utf-8
+
+=for :stopwords Randy Stauner ACKNOWLEDGEMENTS RWSTAUNER's PluginBundle cpan testmatrix url
+annocpan anno bugtracker rt cpants kwalitee diff irc mailto metadata
+placeholders metacpan
 
 =head1 NAME
 
@@ -11,7 +12,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 =head1 VERSION
 
-version 3.204
+version 4.000
 
 =head1 SYNOPSIS
 
@@ -23,11 +24,7 @@ version 3.204
 
 This is an Author
 L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle::Easy>
-that I use for building my dists.
-
-This Bundle was heavily influenced by the bundles of
-L<RJBS|Dist::Zilla::PluginBundle::RJBS> and
-L<DAGOLDEN|Dist::Zilla::PluginBundle::DAGOLDEN>.
+that I use for building my distributions.
 
 =for Pod::Coverage configure
 log log_fatal
@@ -38,22 +35,15 @@ Possible options and their default values:
 
   auto_prereqs   = 1  ; enable AutoPrereqs
   builder        = eumm ; or 'mb' or 'both'
-  disable_tests  =    ; corresponds to @TestingMania.disable
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
   placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
-  skip_prereqs   =    ; default empty; corresponds to AutoPrereqs.skip
   weaver_config  = @Author::RWSTAUNER
 
 The C<fake_release> option also respects C<$ENV{DZIL_FAKERELEASE}>.
-
-The C<release> option can be set to an alternate releaser plugin
-or to an empty string to disable adding a releaser.
-This can make it easier to include a plugin that requires configuration
-by just ignoring the default releaser and including your own normally.
 
 B<NOTE>:
 This bundle consumes L<Dist::Zilla::Role::PluginBundle::Config::Slicer>
@@ -94,49 +84,79 @@ which is a regular expression that matches plugin name or package.
   [@Author::RWSTAUNER]
   skip_plugins = MetaNoIndex|SomethingElse
 
-=head1 EQUIVALENT F<dist.ini>
+=head1 ROUGHLY EQUIVALENT
 
-This bundle is roughly equivalent to:
+This bundle is roughly equivalent to the following (generated) F<dist.ini>:
 
-  [Git::NextVersion]      ; autoincrement version from last tag
+  [Git::NextVersion]
 
-  ; choose files to include (dzil core [@Basic])
-  [GatherDir]             ; everything under top dir
-  [PruneCruft]            ; default stuff to skip
-  [ManifestSkip]          ; custom stuff to skip
+  [GenerateFile / GenerateManifestSkip]
+  content     = \B\.git\b
+  content     = \B\.gitignore$
+  content     = ^[\._]build
+  content     = ^blib/
+  content     = ^(Build|Makefile)$
+  content     = \bpm_to_blib$
+  content     = ^MYMETA\.
+  filename    = MANIFEST.SKIP
+  is_template = 1
 
-  ; munge files
-  [Authority]             ; inject $AUTHORITY into modules
-  do_metadata = 1         ; default
-  [NextRelease]           ; simplify maintenance of Changes file
-  ; use W3CDTF format for release timestamps (for unambiguous dates)
+  [GatherDir]
+  [PruneCruft]
+  [ManifestSkip]
+
+  [PruneFiles / PruneDevelCoverDatabase]
+  match = ^(cover_db/.+)
+
+  [PruneFiles / PruneCodeStatCollection]
+  match = ^codestat\.out
+
+  [PruneFiles / PruneTags]
+  match = ^tags$
+
+  [Authority]
+  :version       = 1.005
+  do_metadata    = 1
+  do_munging     = 1
+  locate_comment = 0
+
+  [NextRelease]
+  format    = %-9V %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
   time_zone = UTC
-  format    = %-9v %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
-  [PkgVersion]            ; inject $VERSION (use OurPkgVersion if 'placeholder_comments')
-  [Prepender]             ; add header to source code files
 
-  [PodWeaver]             ; munge POD in all modules
+  [Git::Describe]
+  [PkgVersion]
+
+  [Prepender]
+  :version = 1.112280
+  skip     = ^x?t/.+
+
+  [PodWeaver]
   config_plugin = @Author::RWSTAUNER
-  ; 'weaver_config' can be set to an alternate Bundle
-  ; set 'is_task = 1' to use TaskWeaver instead
 
-  ; generate files
-  [License]               ; generate distribution files (dzil core [@Basic])
-  [Readme]                ; simple readme for inclusion in release dist ([@Basic])
+  [License]
+  [Readme]
 
-  [ReadmeAnyFromPod]      ; generate repo-root README.pod from main_module for github
-  type = pod
+  [ReadmeAnyFromPod]
+  :version = 0.120120
   location = root
+  type     = pod
 
-  ; metadata
-  [Bugtracker]            ; include bugtracker URL and email address (uses RT)
-  [Repository]            ; determine git information (if -e ".git")
-  [GithubMeta]            ; overrides [Repository] if repository is on github
+  [Bugtracker]
+
+  [Repository]
+  :version = 0.16
+
+  [GithubMeta]
+  :version = 0.10
+
+  [ContributorsFromGit]
+  :version = 0.005
 
   [AutoPrereqs]
-  ; disable with 'auto_prereqs = 0'
 
-  [MetaNoIndex]           ; encourage CPAN not to index:
+  [MetaNoIndex]
+  :version  = 1.10113
   directory = corpus
   directory = examples
   directory = inc
@@ -147,46 +167,54 @@ This bundle is roughly equivalent to:
   namespace = t::lib
   package   = DB
 
-  [MetaProvides::Package] ; describe packages included in the dist
-  meta_noindex = 1        ; ignore things excluded by above MetaNoIndex
+  [MetaProvides::Package]
+  :version     = 1.14000001
+  meta_noindex = 1
 
-  [MinimumPerl]           ; automatically determine Perl version required
+  [MinimumPerl]
+  :version = 1.003
 
-  [MetaConfig]            ; include Dist::Zilla info in distmeta (dzil core)
-  [MetaYAML]              ; include META.yml (v1.4) (dzil core [@Basic])
-  [MetaJSON]              ; include META.json (v2) (more info than META.yml)
+  [MetaConfig]
+  [MetaYAML]
+  [MetaJSON]
+  [ExecDir]
+  [ShareDir]
+  [MakeMaker]
 
-  [Prereqs / TestRequires]
-  Test::More = 0.96       ; require recent Test::More (including subtests)
+  [Test::ReportPrereqs]
+  :version = 0.004
 
-  [ExtraTests]            ; build system (dzil core [@Basic])
-  [ExecDir]               ; include 'bin/*' as executables
-  [ShareDir]              ; include 'share/' for File::ShareDir
+  [Test::ChangesHasContent]
+  :version = 0.006
 
-  [MakeMaker]             ; create Makefile.PL (if builder == 'eumm' (default))
-  ; [ModuleBuild]         ; create Build.PL (if builder == 'mb')
-  ; [DualBuilders]        ; only require one of the above two (prefer 'build') (if both)
+  [Test::PodSpelling]
 
-  ; generate t/ and xt/ tests
-  [ReportVersions::Tiny]  ; show module versions used in test reports
-  [@TestingMania]         ; Lots of dist tests
-  [Test::PodSpelling]     ; spell check POD (if installed)
+  [@TestingMania]
+  :version        = 0.019
+  max_target_perl = 5.008
 
-  [Manifest]              ; build MANIFEST file (dzil core [@Basic])
+  [Manifest]
+  [CheckExtraTests]
 
-  ; actions for releasing the distribution (dzil core [@Basic])
-  [CheckExtraTests]       ; xt/
   [CheckChangesHasContent]
-  [TestRelease]           ; run tests before releasing
+  :version = 0.006
 
-  [@Git]                  ; use Git bundle to commit/tag/push after releasing
-  allow_dirty = Changes README.mkdn
+  [CheckMetaResources]
+  [CheckPrereqsIndexed]
+  [TestRelease]
 
-  [ConfirmRelease]        ; are you sure?
+  [@Git]
+  :version    = 2.004
+  allow_dirty = Changes
+  allow_dirty = README.pod
+  commit_msg  = v%v%t%n%n%c
+
+  [ConfirmRelease]
   [UploadToCPAN]
-  ; see CONFIGURATION for alternate Release plugin configuration options
 
-  [InstallRelease]        ; install the new dist (using 'install_command')
+  [InstallRelease]
+  :version        = 0.006
+  install_command = cpanm -v -i .
 
 =head1 SEE ALSO
 
