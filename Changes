@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Bump Pod::Weaver::Section::Support prereq to 1.005 and configure it
+    to only link to metacpan (since that links to everything else).
+
 4.000     2013-03-24T05:25:29Z
 
   - Use BundleInspector plugin to determine prereq info and generate
