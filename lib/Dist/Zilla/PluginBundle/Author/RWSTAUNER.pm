@@ -7,7 +7,6 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 
 use Moose;
 use List::Util qw(first); # core
-use Dist::Zilla 4.300018; # :version support for add_bundle, %V in NextRelease
 
 with qw(
   Dist::Zilla::Role::PluginBundle::Easy
