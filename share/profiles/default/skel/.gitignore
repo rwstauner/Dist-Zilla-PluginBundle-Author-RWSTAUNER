@@ -1,0 +1,5 @@
+/{{$dist->name}}*
+/.build
+/cover_db/
+/nytprof*
+/tags
