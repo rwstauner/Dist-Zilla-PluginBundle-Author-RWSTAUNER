@@ -37,6 +37,7 @@ use Test::File::ShareDir -share => {
     qr/^package $mod_name;/m,     'module package declaration',
     qr/^# ABSTRACT: /m,           'module abstract',
     qr/\n=head1 SYNOPSIS\n\n=head1 DESCRIPTION\n\n=cut\n/, 'module pod',
+    '!', qr/copyright/,           'copyright not prepended to module',
   );
 
   file_like( $tzil, 'Changes',
