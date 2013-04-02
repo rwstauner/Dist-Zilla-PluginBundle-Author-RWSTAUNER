@@ -7,6 +7,8 @@ package Dist::Zilla::MintingProfile::Author::RWSTAUNER;
 use Moose;
 with 'Dist::Zilla::Role::MintingProfile::ShareDir';
 
+no Moose;
+__PACKAGE__->meta->make_immutable;
 1;
 
 =head1 SYNOPSIS
