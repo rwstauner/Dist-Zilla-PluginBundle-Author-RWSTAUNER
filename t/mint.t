@@ -6,10 +6,21 @@ use lib 't/lib';
 use Path::Class;
 use Test::DZil;
 use Git::Wrapper;
+use File::Temp qw( tempfile );
 
 use Test::File::ShareDir -share => {
   -module => { 'Dist::Zilla::MintingProfile::Author::RWSTAUNER' => 'share/profiles' },
 };
+
+(my $tmpfile, $ENV{GIT_CONFIG}) = tempfile( 'git-config.XXXXXX', TMPDIR => 1, UNLINK => 1, );
+print $tmpfile <<'CONFIG';
+[user]
+  name  = Reinhold Messner
+  email = magic.mess@example.com
+[github]
+  user  = narcolepsy
+CONFIG
+close $tmpfile;
 
 {
   my $user = 'rwstauner';
@@ -61,12 +72,17 @@ use Test::File::ShareDir -share => {
 
   my $git = Git::Wrapper->new($mint_dir);
 
+  file_like( $tzil, '.mailmap',
+    qr!^Reinhold Messner <$user\@cpan\.org> <magic\.mess\@example\.com>$!,
+      'mailmap git email to pause email',
+  );
+
   git_like($git, config => ['branch.master.remote'],
     qr/^origin$/,                            'configured git branch remote');
   git_like($git, config => ['branch.master.merge'],
     qr/^refs\/heads\/master$/,               'configured git branch merge');
   git_like($git, remote => ['-v'],
-    qr/git\@github\.com:$user\/$dist_name\.git/, 'configured git remote');
+    qr/git\@github\.com:narcolepsy\/$dist_name\.git/, 'configured git remote');
 
   {
     my @log = $git->log;
