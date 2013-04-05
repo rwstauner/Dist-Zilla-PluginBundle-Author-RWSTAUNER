@@ -50,7 +50,7 @@ use Test::File::ShareDir -share => {
   );
 
   file_like( $tzil, 'README.pod',
-    qr/\A=head1\s+$mod_name/,   'README.pod intialized',
+    qr/\A=head1 NAME\n\n$mod_name - /,   'README.pod intialized',
   );
 
   file_like( $tzil, '.gitignore',

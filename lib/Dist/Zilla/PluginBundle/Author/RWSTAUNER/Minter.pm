@@ -8,9 +8,15 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER::Minter;
 use Moose;
 use MooseX::AttributeShortcuts;
 use Git::Wrapper;
+use Data::Section -setup;
 
 with qw(
   Dist::Zilla::Role::PluginBundle::Easy
+);
+
+has pause_id => (
+  is         => 'ro',
+  default    => sub { ((ref($_[0]) || $_[0]) =~ /Author::([A-Z]+)/)[0] },
 );
 
 has _git => (
@@ -21,6 +27,13 @@ has _git => (
 sub git_config {
   my ($self, $key) = @_;
   return ($self->_git->config($key))[0];
+}
+
+foreach my $attr ( qw( name email ) ){
+  has "git_$attr" => (
+    is         => 'lazy',
+    default    => sub { $_[0]->git_config("user.$attr") },
+  );
 }
 
 has github_user => (
@@ -66,6 +79,32 @@ sub configure {
       },
     ],
   );
+
+  $self->generate_files( $self->merged_section_data );
+  $self->generate_mailmap;
+}
+
+sub generate_files {
+  my ($self, $files) = @_;
+  while( my ($name, $content) = each %$files ){
+    $self->add_plugins(
+      [
+        GenerateFile => "Generate-$name" => {
+          filename    => $name,
+          is_template => 1,
+          content     => $$content,
+        }
+      ],
+    );
+  }
+}
+
+sub generate_mailmap {
+  my ($self) = @_;
+  $self->generate_files({
+    '.mailmap' => \sprintf '%s <%s@cpan.org> <%s>',
+      $self->git_name, lc($self->pause_id), $self->git_email,
+  });
 }
 
 no Moose;
@@ -74,6 +113,8 @@ __PACKAGE__->meta->make_immutable;
 
 =for Pod::Coverage configure
 git_config
+generate_files
+generate_mailmap
 
 =head1 SYNOPSIS
 
@@ -98,3 +139,49 @@ This bundle is roughly equivalent to the following (generated) F<profile.ini>:
 * L<Dist::Zilla::Role::PluginBundle::Easy>
 
 =cut
+
+__DATA__
+__[ .gitignore ]__
+/{{$dist->name}}*
+/.build
+/cover_db/
+/nytprof*
+/tags
+__[ dist.ini ]__
+{{
+  $license = ref $dist->license;
+  if ( $license =~ /^Software::License::(.+)$/ ) {
+    $license = $1;
+  } else {
+    $license = "=$license";
+  }
+
+  $authors = join( "\n", map { "author   = $_" } @{ $dist->authors } );
+  $copyright_year = (localtime)[5] + 1900;
+  '';
+}}name     = {{ $dist->name }}
+{{ $authors }}
+license  = {{ $license }}
+copyright_holder = {{ join( ', ', map { (/^(.+) <.+>/)[0] }@{ $dist->authors } ) }}
+copyright_year   = {{ $copyright_year }}
+
+[@Author::RWSTAUNER]
+__[ Changes ]__
+Revision history for {{$dist->name}}
+
+{{ '{{$NEXT}}' }}
+
+  - Initial release
+__[ README.pod ]__
+{{'='}}head1 NAME
+
+{{ (my $n = $dist->name) =~ s/-/::/g; $n }} - undef
+
+{{'='}}head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) {{ (localtime)[5]+1900 }} by {{ $dist->copyright_holder }}.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+{{'='}}cut
