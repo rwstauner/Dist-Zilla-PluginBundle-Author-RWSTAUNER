@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.100     2013-04-06T03:22:21Z
+
+  - Add MintingProfile and use PluginBundle::Easy to generate mint files
   - Bump Pod::Weaver::Section::Support prereq to 1.005 and configure it
     to only link to metacpan (since that links to everything else).
 
