@@ -58,6 +58,7 @@ close $tmpfile;
 
   file_like( $tzil, 'dist.ini',
     qr/\Aname\s+=\s+$dist_name/, 'dist.ini name',
+    qr/\n\[\@Author::RWSTAUNER\]\n/, 'dist.ini uses author bundle',
   );
 
   file_like( $tzil, 'README.pod',
@@ -104,6 +105,7 @@ sub file_like {
       ? unlike($content, $re, $desc)
       :   like($content, $re, $desc);
   }
+  like $content, qr/\S\n\z/, "$file ends with a single newline";
 }
 
 sub git_like {

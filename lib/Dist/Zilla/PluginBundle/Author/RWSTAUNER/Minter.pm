@@ -87,12 +87,15 @@ sub configure {
 sub generate_files {
   my ($self, $files) = @_;
   while( my ($name, $content) = each %$files ){
+    $content = $$content;
+    # GenerateFile will append a new line
+    $content =~ s/\n+\z//;
     $self->add_plugins(
       [
         GenerateFile => "Generate-$name" => {
           filename    => $name,
           is_template => 1,
-          content     => $$content,
+          content     => $content,
         }
       ],
     );
