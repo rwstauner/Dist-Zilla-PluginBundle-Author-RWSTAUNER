@@ -12,7 +12,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 =head1 VERSION
 
-version 4.100
+version 4.101
 
 =head1 SYNOPSIS
 
