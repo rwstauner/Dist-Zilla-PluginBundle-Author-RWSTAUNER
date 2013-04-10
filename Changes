@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  [Test Fixes]
+  - Fix unintentional failure to stringify dir arg to Git::Wrapper in tests
+    to avoid test report failures with Git::Wrapper 0.028_96 dev release
+
 4.100     2013-04-06T03:22:21Z
 
   - Add MintingProfile and use PluginBundle::Easy to generate mint files

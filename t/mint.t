@@ -71,7 +71,7 @@ close $tmpfile;
     qr!\n/tags\n!,         'ignore vim tags',
   );
 
-  my $git = Git::Wrapper->new($mint_dir);
+  my $git = Git::Wrapper->new($mint_dir->stringify);
 
   file_like( $tzil, '.mailmap',
     qr!^Reinhold Messner <$user\@cpan\.org> <magic\.mess\@example\.com>$!,
