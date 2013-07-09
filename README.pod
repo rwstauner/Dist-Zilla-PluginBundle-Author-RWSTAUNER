@@ -12,7 +12,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 =head1 VERSION
 
-version 4.101
+version 4.102
 
 =head1 SYNOPSIS
 
@@ -38,6 +38,7 @@ Possible options and their default values:
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
+  open_source    = 1  ; include plugins for cpan/meta/repo/xt/change log, etc
   placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
