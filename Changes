@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Add 'open_source' option which can be disabled for darkpan projects
+    to exclude various cpan/meta/repo/xt/change log plugins.
+
 4.101     2013-04-10T05:42:18Z
 
   [Test Fixes]

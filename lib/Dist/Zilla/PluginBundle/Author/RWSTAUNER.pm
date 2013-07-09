@@ -39,8 +39,8 @@ sub _default_attributes {
     # cpanm will choose the best place to install
     install_command => [Str  => 'cpanm -v -i .'],
     is_task         => [Bool => 0],
+    open_source     => [Bool => 1],
     placeholder_comments => [Bool => 0],
-    releaser        => [Str  => 'UploadToCPAN'],
     skip_plugins    => [Str  => ''],
     weaver_config   => [Str  => $_[0]->_bundle_name],
     use_git_bundle  => [Bool => 1],
@@ -65,6 +65,18 @@ sub _generate_attribute {
     }
   );
 }
+
+has releaser => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    my ($self) = @_;
+    exists $self->payload->{releaser}
+      ?    $self->payload->{releaser}
+      :    $self->open_source ? 'UploadToCPAN' : '';
+  },
+);
 
 {
   # generate attributes
@@ -194,6 +206,9 @@ sub configure {
       License
       Readme
     ),
+  );
+
+  $self->add_plugins(
     [
       # generate README.pod in repo root for github
       ReadmeAnyFromPod => {
@@ -210,7 +225,7 @@ sub configure {
     # overrides [Repository] if repository is on github
     [ GithubMeta => { ':version' => '0.10' } ],
     [ ContributorsFromGit => { ':version' => '0.005' } ],
-  );
+  ) if $self->open_source;
 
   $self->add_plugins('AutoPrereqs')
     if $self->auto_prereqs;
@@ -267,12 +282,16 @@ sub configure {
   $self->add_plugins(
   # generated t/ tests
     [ 'Test::ReportPrereqs' => { ':version' => '0.004' } ], # include/exclude
+  );
+
+  $self->add_plugins(
     [ 'Test::ChangesHasContent' => { ':version' => '0.006' } ], # version-TRIAL
 
   # generated xt/ tests
     # Test::Pod::Spelling::CommonMistakes ?
       #Test::Pod::No404s # removed since it's rarely useful
-  );
+  ) if $self->open_source;
+
   if ( $spelling_tests ) {
     $self->add_plugins('Test::PodSpelling');
   }
@@ -280,11 +299,24 @@ sub configure {
     $self->log("Test::PodSpelling Plugin failed to load.  Pleese dunt mayke ani misteaks.\n");
   }
 
-  # NOTE: A newer TestingMania might duplicate plugins if new tests are added
-  $self->add_bundle('@TestingMania' => {
-    ':version' => '0.019',      # max_target_petl
-    max_target_perl => $self->max_target_perl,
-  });
+  # TestingMania is primarily code/dist quality checks.
+  if( $self->open_source ){
+    # NOTE: A newer TestingMania might duplicate plugins if new tests are added
+    $self->add_bundle('@TestingMania' => {
+      ':version'      => '0.019', # max_target_perl
+      max_target_perl =>     $self->max_target_perl,
+    });
+  }
+  # These are for your own protection.
+  else {
+    $self->add_plugins(
+      qw(
+        Test::Compile
+        Test::MinimumVersion
+        PodSyntaxTests
+      ),
+    );
+  }
 
   $self->add_plugins(
   # manifest: must come after all generated files
@@ -294,13 +326,20 @@ sub configure {
     qw(
       CheckExtraTests
     ),
+  );
+
+  $self->add_plugins(
     [ CheckChangesHasContent => { ':version' => '0.006' } ], # version-TRIAL
     qw(
       CheckMetaResources
       CheckPrereqsIndexed
+    )
+  ) if $self->open_source;
+
+  $self->add_plugins(
+    qw(
       TestRelease
     ),
-
   );
 
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
@@ -389,6 +428,7 @@ Possible options and their default values:
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
+  open_source    = 1  ; include plugins for cpan/meta/repo/xt/change log, etc
   placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
   releaser       = UploadToCPAN
   skip_plugins   =    ; default empty; a regexp of plugin names to exclude
