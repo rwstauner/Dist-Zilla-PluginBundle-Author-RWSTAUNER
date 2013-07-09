@@ -130,6 +130,25 @@ foreach my $test (
   &$has_ok('MakeMaker');
   &$has_ok('ModuleBuild');
   &$has_ok('DualBuilders');
+
+  $bundle = init_bundle({open_source => 0});
+  is $bundle->releaser, '', 'no releaser if not open_source';
+  &$has_not('UploadToCPAN');
+  &$has_ok('Test::Compile');
+  &$has_ok('Test::MinimumVersion');
+  &$has_ok('PodSyntaxTests');
+  &$has_not('Test::PerlCritic');
+  &$has_not('CheckChangesHasContent');
+  &$has_not('Test::ChangesHasContent');
+  &$has_not('CheckPrereqsIndexed');
+  &$has_not('Bugtracker');
+  &$has_not('Repository');
+  &$has_not('GithubMeta');
+  &$has_not('ReadmeAnyFromPod');
+
+  $bundle = init_bundle({open_source => 0, releaser => 'CatOutOfTheBag'});
+  is $bundle->releaser, 'CatOutOfTheBag', 'custom releaser with open_source';
+  &$has_not('UploadToCPAN');
 }
 
 # test releaser
