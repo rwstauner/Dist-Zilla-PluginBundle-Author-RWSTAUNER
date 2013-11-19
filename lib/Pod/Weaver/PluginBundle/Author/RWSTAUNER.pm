@@ -28,7 +28,7 @@ sub mvp_bundle_config {
 
   push @plugins, (
     # plugin
-    _plain('-Encoding'),
+    _plain('-SingleEncoding'),
     _plain('-WikiDoc'),
     # default
     _plain('@CorePrep'),
