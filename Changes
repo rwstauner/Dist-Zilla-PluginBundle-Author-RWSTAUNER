@@ -2,6 +2,12 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.200     2014-02-01T16:19:23Z
+
+  - Change Pod::Weaver::Plugin '-Encoding' for the new core '-SingleEncoding'.
+    Thanks, Sergey Romanov!
+  - Change generated README in repo root back to markdown to get metacpan urls.
+
 4.102     2013-07-09T23:28:02Z
 
   - Add 'open_source' option which can be disabled for darkpan projects
