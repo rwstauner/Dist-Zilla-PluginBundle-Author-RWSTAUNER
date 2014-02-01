@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.201     2014-02-01T16:40:02Z
+
+  - Bump Dist::Zilla and Pod::Weaver prereqs for Encoding updates.
+
 4.200     2014-02-01T16:19:23Z
 
   - Change Pod::Weaver::Plugin '-Encoding' for the new core '-SingleEncoding'.
