@@ -219,7 +219,7 @@ sub configure {
       # generate README.pod in repo root for github
       ReadmeAnyFromPod => {
         ':version' => '0.120120',
-        type       => 'pod',
+        type       => 'markdown',
         location   => 'root',
       }
     ],
@@ -351,7 +351,7 @@ sub configure {
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle('@Git' => {
     ':version' => '2.004', # improved changelog parsing
-    allow_dirty => [qw(Changes README.pod)],
+    allow_dirty => [qw(Changes README.mkdn README.pod)],
     commit_msg  => 'v%v%t%n%n%c'
   })
     if $self->use_git_bundle;
