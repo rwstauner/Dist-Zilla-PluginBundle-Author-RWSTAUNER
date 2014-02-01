@@ -1,0 +1,262 @@
+# NAME
+
+Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
+
+# VERSION
+
+version 4.200
+
+# SYNOPSIS
+
+    # dist.ini
+
+    [@Author::RWSTAUNER]
+
+# DESCRIPTION
+
+This is an Author
+[Dist::Zilla::PluginBundle](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::Easy)
+that I use for building my distributions.
+
+# CONFIGURATION
+
+Possible options and their default values:
+
+    auto_prereqs   = 1  ; enable AutoPrereqs
+    builder        = eumm ; or 'mb' or 'both'
+    fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
+    install_command = cpanm -v -i . (passed to InstallRelease)
+    is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
+    open_source    = 1  ; include plugins for cpan/meta/repo/xt/change log, etc
+    placeholder_comments = 0 ; use '# VERSION' and '# AUTHORITY' comments
+    releaser       = UploadToCPAN
+    skip_plugins   =    ; default empty; a regexp of plugin names to exclude
+    weaver_config  = @Author::RWSTAUNER
+
+The `fake_release` option also respects `$ENV{DZIL_FAKERELEASE}`.
+
+__NOTE__:
+This bundle consumes [Dist::Zilla::Role::PluginBundle::Config::Slicer](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::Config::Slicer)
+so you can also specify attributes for any of the bundled plugins.
+The option should be the plugin name and the attribute separated by a dot:
+
+    [@Author::RWSTAUNER]
+    AutoPrereqs.skip = Bad::Module
+
+__Note__ that this is different than
+
+    [@Author::RWSTAUNER]
+    [AutoPrereqs]
+    skip = Bad::Module
+
+which will load the plugin a second time.
+The first example actually alters the plugin configuration
+as it is included by the Bundle.
+
+See ["CONFIGURATION SYNTAX" in Config::MVP::Slicer](https://metacpan.org/pod/Config::MVP::Slicer#CONFIGURATION-SYNTAX) for more information.
+
+If your situation is more complicated you can use the `-remove` attribute
+(courtesy of [Dist::Zilla::Role::PluginBundle::PluginRemover](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::PluginRemover))
+to have the Bundle ignore that plugin
+and then you can add it yourself:
+
+    [MetaNoIndex]
+    directory = one-dir
+    directory = another-dir
+    [@Author::RWSTAUNER]
+    -remove = MetaNoIndex
+
+`-remove` can be specified multiple times.
+
+Alternatively you can use the `skip_plugins` attribute (only once)
+which is a regular expression that matches plugin name or package.
+
+    [@Author::RWSTAUNER]
+    skip_plugins = MetaNoIndex|SomethingElse
+
+# ROUGHLY EQUIVALENT
+
+This bundle is roughly equivalent to the following (generated) `dist.ini`:
+
+    [Git::NextVersion]
+
+    [GenerateFile / GenerateManifestSkip]
+    content     = \B\.git\b
+    content     = \B\.gitignore$
+    content     = ^[\._]build
+    content     = ^blib/
+    content     = ^(Build|Makefile)$
+    content     = \bpm_to_blib$
+    content     = ^MYMETA\.
+    filename    = MANIFEST.SKIP
+    is_template = 1
+
+    [GatherDir]
+    [PruneCruft]
+    [ManifestSkip]
+
+    [PruneFiles / PruneDevelCoverDatabase]
+    match = ^(cover_db/.+)
+
+    [PruneFiles / PruneCodeStatCollection]
+    match = ^codestat\.out
+
+    [PruneFiles / PruneTags]
+    match = ^tags$
+
+    [Authority]
+    :version       = 1.005
+    do_metadata    = 1
+    do_munging     = 1
+    locate_comment = 0
+
+    [NextRelease]
+    format    = %-9V %{yyyy-MM-dd'T'HH:mm:ss'Z'}d
+    time_zone = UTC
+
+    [Git::Describe]
+    [PkgVersion]
+
+    [Prepender]
+    :version = 1.112280
+    skip     = ^x?t/.+
+
+    [PodWeaver]
+    config_plugin = @Author::RWSTAUNER
+
+    [License]
+    [Readme]
+
+    [ReadmeAnyFromPod]
+    :version = 0.120120
+    location = root
+    type     = markdown
+
+    [Bugtracker]
+
+    [Repository]
+    :version = 0.16
+
+    [GithubMeta]
+    :version = 0.10
+
+    [ContributorsFromGit]
+    :version = 0.005
+
+    [AutoPrereqs]
+
+    [MetaNoIndex]
+    :version  = 1.10113
+    directory = corpus
+    directory = examples
+    directory = inc
+    directory = share
+    directory = t
+    directory = xt
+    namespace = Local
+    namespace = t::lib
+    package   = DB
+
+    [MetaProvides::Package]
+    :version     = 1.14000001
+    meta_noindex = 1
+
+    [MinimumPerl]
+    :version = 1.003
+
+    [MetaConfig]
+    [MetaYAML]
+    [MetaJSON]
+    [ExecDir]
+    [ShareDir]
+    [MakeMaker]
+
+    [Test::ReportPrereqs]
+    :version = 0.004
+
+    [Test::ChangesHasContent]
+    :version = 0.006
+
+    [Test::PodSpelling]
+
+    [@TestingMania]
+    :version        = 0.019
+    max_target_perl = 5.008
+
+    [Manifest]
+    [CheckExtraTests]
+
+    [CheckChangesHasContent]
+    :version = 0.006
+
+    [CheckMetaResources]
+    [CheckPrereqsIndexed]
+    [TestRelease]
+
+    [@Git]
+    :version    = 2.004
+    allow_dirty = Changes
+    allow_dirty = README.mkdn
+    allow_dirty = README.pod
+    commit_msg  = v%v%t%n%n%c
+
+    [ConfirmRelease]
+    [UploadToCPAN]
+
+    [InstallRelease]
+    :version        = 0.006
+    install_command = cpanm -v -i .
+
+# SEE ALSO
+
+- [Dist::Zilla](https://metacpan.org/pod/Dist::Zilla)
+- [Dist::Zilla::Role::PluginBundle::Easy](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::Easy)
+- [Dist::Zilla::Role::PluginBundle::Config::Slicer](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::Config::Slicer)
+- [Dist::Zilla::Role::PluginBundle::PluginRemover](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::PluginRemover)
+- [Pod::Weaver](https://metacpan.org/pod/Pod::Weaver)
+
+# SUPPORT
+
+## Perldoc
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc Dist::Zilla::PluginBundle::Author::RWSTAUNER
+
+## Websites
+
+The following websites have more information about this module, and may be of help to you. As always,
+in addition to those websites please use your favorite search engine to discover more resources.
+
+- MetaCPAN
+
+    A modern, open-source CPAN search engine, useful to view POD in HTML format.
+
+    [http://metacpan.org/release/Dist-Zilla-PluginBundle-Author-RWSTAUNER](http://metacpan.org/release/Dist-Zilla-PluginBundle-Author-RWSTAUNER)
+
+## Bugs / Feature Requests
+
+Please report any bugs or feature requests by email to `bug-dist-zilla-pluginbundle-author-rwstauner at rt.cpan.org`, or through
+the web interface at [http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-PluginBundle-Author-RWSTAUNER](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-PluginBundle-Author-RWSTAUNER). You will be automatically notified of any
+progress on the request by the system.
+
+## Source Code
+
+[https://github.com/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER](https://github.com/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER)
+
+    git clone https://github.com/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER.git
+
+# AUTHOR
+
+Randy Stauner <rwstauner@cpan.org>
+
+# CONTRIBUTOR
+
+Sergey Romanov <complefor@rambler.ru>
+
+# COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2010 by Randy Stauner.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
