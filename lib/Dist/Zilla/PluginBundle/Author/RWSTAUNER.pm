@@ -170,6 +170,12 @@ sub configure {
     # generated tags file... useful for development but noisy to commit
     [ PruneFiles => 'PruneTags' => { match => '^tags$' } ],
 
+    # We could specify default binary files
+    # but I can't think of any that are commonly included in dists.
+    # I don't mind being explicit if the case is rare.
+    #[ Encoding => 'DefaultBinaryFiles' =>
+      #{ encoding => 'binary', match => '\.(?x: tar\.(gz|bz2) | sqlite | jpg )$' }],
+
   # munge files
     [
       Authority => {
