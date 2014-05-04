@@ -309,7 +309,7 @@ sub configure {
   if( $self->open_source ){
     # NOTE: A newer TestingMania might duplicate plugins if new tests are added
     $self->add_bundle('@TestingMania' => {
-      ':version'      => '0.019', # max_target_perl
+      ':version'      => '0.22', # max_target_perl, Test::NoTabs
       max_target_perl =>     $self->max_target_perl,
     });
   }

@@ -116,7 +116,7 @@ foreach my $test (
   $bundle = init_bundle({'-remove' => [qw(Test::Compile ExtraTests)]});
   &$has_not('Test::Compile');
   &$has_not('ExtraTests');
-  &$has_ok('NoTabsTests');
+  &$has_ok('Test::NoTabs');
 
   $bundle = init_bundle({});
   &$has_ok('MakeMaker');

@@ -2,6 +2,7 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Bump prereq on @TestingMania to use Test::NoTabs instead of NoTabsTest.
   - Change README minter template from pod to markdown.
 
 4.201     2014-02-01T16:40:02Z
