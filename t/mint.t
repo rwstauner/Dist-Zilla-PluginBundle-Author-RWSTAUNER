@@ -61,8 +61,8 @@ close $tmpfile;
     qr/\n\[\@Author::RWSTAUNER\]\n/, 'dist.ini uses author bundle',
   );
 
-  file_like( $tzil, 'README.pod',
-    qr/\A=head1 NAME\n\n$mod_name - /,   'README.pod intialized',
+  file_like( $tzil, 'README.mkdn',
+    qr/\A# NAME\n\n$mod_name - /,   'README intialized',
   );
 
   file_like( $tzil, '.gitignore',

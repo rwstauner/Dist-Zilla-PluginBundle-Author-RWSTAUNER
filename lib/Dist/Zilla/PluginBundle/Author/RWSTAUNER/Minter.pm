@@ -175,16 +175,14 @@ Revision history for {{$dist->name}}
 {{ '{{$NEXT}}' }}
 
   - Initial release
-__[ README.pod ]__
-{{'='}}head1 NAME
+__[ README.mkdn ]__
+# NAME
 
 {{ (my $n = $dist->name) =~ s/-/::/g; $n }} - undef
 
-{{'='}}head1 COPYRIGHT AND LICENSE
+# COPYRIGHT AND LICENSE
 
 This software is copyright (c) {{ (localtime)[5]+1900 }} by {{ $dist->copyright_holder }}.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
-
-{{'='}}cut
