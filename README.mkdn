@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.201
+version 4.202
 
 # SYNOPSIS
 
@@ -35,7 +35,7 @@ Possible options and their default values:
 
 The `fake_release` option also respects `$ENV{DZIL_FAKERELEASE}`.
 
-__NOTE__:
+**NOTE**:
 This bundle consumes [Dist::Zilla::Role::PluginBundle::Config::Slicer](https://metacpan.org/pod/Dist::Zilla::Role::PluginBundle::Config::Slicer)
 so you can also specify attributes for any of the bundled plugins.
 The option should be the plugin name and the attribute separated by a dot:
@@ -43,7 +43,7 @@ The option should be the plugin name and the attribute separated by a dot:
     [@Author::RWSTAUNER]
     AutoPrereqs.skip = Bad::Module
 
-__Note__ that this is different than
+**Note** that this is different than
 
     [@Author::RWSTAUNER]
     [AutoPrereqs]
@@ -180,7 +180,7 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     [Test::PodSpelling]
 
     [@TestingMania]
-    :version        = 0.019
+    :version        = 0.22
     max_target_perl = 5.008
 
     [Manifest]
