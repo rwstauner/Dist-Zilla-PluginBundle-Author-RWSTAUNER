@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 package Pod::Weaver::PluginBundle::Author::RWSTAUNER;
+
 # ABSTRACT: RWSTAUNER's Pod::Weaver config
 
 use Pod::Weaver::Config::Assembler;

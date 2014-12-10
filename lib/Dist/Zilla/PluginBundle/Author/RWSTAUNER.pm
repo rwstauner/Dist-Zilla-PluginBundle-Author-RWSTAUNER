@@ -3,6 +3,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
+
 # ABSTRACT: RWSTAUNER's Dist::Zilla config
 
 use Moose;

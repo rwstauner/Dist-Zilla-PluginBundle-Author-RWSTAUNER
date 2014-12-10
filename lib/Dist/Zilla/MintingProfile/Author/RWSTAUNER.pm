@@ -2,6 +2,7 @@ use strict;
 use warnings;
 
 package Dist::Zilla::MintingProfile::Author::RWSTAUNER;
+
 # ABSTRACT: Mint a new dist for RWSTAUNER
 
 use Moose;
