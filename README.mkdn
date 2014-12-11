@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.202
+version 4.203
 
 # SYNOPSIS
 
@@ -104,6 +104,8 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     [PruneFiles / PruneTags]
     match = ^tags$
 
+    [PkgVersion]
+
     [Authority]
     :version       = 1.005
     do_metadata    = 1
@@ -115,7 +117,6 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     time_zone = UTC
 
     [Git::Describe]
-    [PkgVersion]
 
     [Prepender]
     :version = 1.112280
@@ -132,10 +133,8 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     location = root
     type     = markdown
 
-    [Bugtracker]
-
-    [Repository]
-    :version = 0.16
+    [AutoMetaResources]
+    bugtracker.rt = 1
 
     [GithubMeta]
     :version = 0.10
@@ -147,12 +146,15 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
 
     [MetaNoIndex]
     :version  = 1.10113
-    directory = corpus
-    directory = examples
-    directory = inc
-    directory = share
     directory = t
     directory = xt
+    directory = inc
+    directory = local
+    directory = perl5
+    directory = fatlib
+    directory = corpus
+    directory = examples
+    directory = share
     namespace = Local
     namespace = t::lib
     package   = DB
@@ -237,7 +239,7 @@ in addition to those websites please use your favorite search engine to discover
 ## Bugs / Feature Requests
 
 Please report any bugs or feature requests by email to `bug-dist-zilla-pluginbundle-author-rwstauner at rt.cpan.org`, or through
-the web interface at [http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-PluginBundle-Author-RWSTAUNER](http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Dist-Zilla-PluginBundle-Author-RWSTAUNER). You will be automatically notified of any
+the web interface at [https://rt.cpan.org/Public/Bug/Report.html?Queue=Dist-Zilla-PluginBundle-Author-RWSTAUNER](https://rt.cpan.org/Public/Bug/Report.html?Queue=Dist-Zilla-PluginBundle-Author-RWSTAUNER). You will be automatically notified of any
 progress on the request by the system.
 
 ## Source Code

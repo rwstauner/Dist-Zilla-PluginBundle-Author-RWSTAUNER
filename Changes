@@ -2,6 +2,12 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.203     2014-12-11T23:47:53Z
+
+  - Trade Bugtracker and Repository for AutoMetaResources.
+  - Put PkgVersion before other FileMunger plugins
+  - Add local, perl5, and fatlib as no_index directories
+
 4.202     2014-05-05T03:31:07Z
 
   - Bump prereq on @TestingMania to use Test::NoTabs instead of NoTabsTest.
