@@ -178,6 +178,8 @@ sub configure {
       #{ encoding => 'binary', match => '\.(?x: tar\.(gz|bz2) | sqlite | jpg )$' }],
 
   # munge files
+    # Do PkgVersion first so other mungers don't eat the blank line after package.
+    ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
     [
       Authority => {
         ':version'     => '1.005', # accepts any non-whitespace + locate_comment
@@ -194,7 +196,6 @@ sub configure {
       }
     ],
     'Git::Describe',
-    ($self->placeholder_comments ? 'OurPkgVersion' : 'PkgVersion'),
     [
       Prepender => {
         ':version' => '1.112280', # 'skip' attribute
