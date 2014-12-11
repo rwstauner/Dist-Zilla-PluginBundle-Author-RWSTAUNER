@@ -141,8 +141,7 @@ foreach my $test (
   &$has_not('CheckChangesHasContent');
   &$has_not('Test::ChangesHasContent');
   &$has_not('CheckPrereqsIndexed');
-  &$has_not('Bugtracker');
-  &$has_not('Repository');
+  &$has_not('AutoMetaResources');
   &$has_not('GithubMeta');
   &$has_not('ReadmeAnyFromPod');
 

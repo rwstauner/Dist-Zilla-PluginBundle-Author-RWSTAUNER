@@ -227,10 +227,13 @@ sub configure {
     ],
 
   # metadata
-    'Bugtracker',
-    # won't find git if not in repository root (!-e ".git")
-    [ Repository => { ':version' => '0.16' } ], # deprecates github_http
-    # overrides [Repository] if repository is on github
+    [
+      AutoMetaResources => {
+        'bugtracker.rt' => 1,
+        # Currently GithubMeta sets the homepage and this conflicts.
+        #'homepage' => 'http://metacpan.org/release/%{dist}',
+      }
+    ],
     [ GithubMeta => { ':version' => '0.10' } ],
     [ ContributorsFromGit => { ':version' => '0.005' } ],
   ) if $self->open_source;
