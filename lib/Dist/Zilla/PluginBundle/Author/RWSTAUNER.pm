@@ -244,7 +244,19 @@ sub configure {
       MetaNoIndex => {
         ':version' => 1.101130,
         # could use grep { -d $_ } but that will miss any generated files
-        directory => [qw(corpus examples inc share t xt)],
+        directory => [
+          # By default skip all directories that PAUSE skips:
+          't',        # skip "t" - libraries in ./t are test libraries!
+          'xt',       # skip "xt" - libraries in ./xt are author test libraries!
+          'inc',      # skip "inc" - libraries in ./inc are usually install libraries
+          'local',    # skip "local" - somebody shipped his carton setup!
+          'perl5',    # skip 'perl5" - somebody shipped her local::lib!
+          'fatlib',   # skip 'fatlib' - somebody shipped their fatpack lib!
+          # Also skip a few other directories commonly used for other things.
+          'corpus',   # Documentation and/or test data.
+          'examples', # Example
+          'share',    # File::ShareDir... misc files distributed with release.
+        ],
         namespace => [qw(Local t::lib)],
         'package' => [qw(DB)],
       }
