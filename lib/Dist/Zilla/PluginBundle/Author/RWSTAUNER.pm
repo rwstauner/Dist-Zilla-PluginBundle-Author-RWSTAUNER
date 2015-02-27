@@ -8,6 +8,7 @@ package Dist::Zilla::PluginBundle::Author::RWSTAUNER;
 
 use Moose;
 use List::Util qw(first); # core
+use Moose::Util::TypeConstraints 1.01;
 
 with qw(
   Dist::Zilla::Role::PluginBundle::Easy
@@ -31,59 +32,121 @@ sub _bundle_name {
   join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
 }
 
-# TODO: consider an option for using ReportPhase
-sub _default_attributes {
-  use Moose::Util::TypeConstraints 1.01;
-  return {
-    auto_prereqs    => [Bool => 1],
-    fake_release    => [Bool => $ENV{DZIL_FAKERELEASE}],
-    # cpanm will choose the best place to install
-    install_command => [Str  => 'cpanm -v -i .'],
-    is_task         => [Bool => 0],
-    open_source     => [Bool => 1],
-    placeholder_comments => [Bool => 0],
-    skip_plugins    => [Str  => ''],
-    weaver_config   => [Str  => $_[0]->_bundle_name],
-    use_git_bundle  => [Bool => 1],
-    max_target_perl => [Str  => '5.008'],
-    builder         => [enum( [ both => keys %builders ] ) => 'eumm'],
-  };
+
+sub _config {
+  my ($self, $key, $default) = @_;
+  exists $self->payload->{$key} ? $self->payload->{$key} : $default;
+}
 }
 
-sub _generate_attribute {
-  my ($self, $key) = @_;
-  has $key => (
-    is      => 'ro',
-    isa     => $self->_default_attributes->{$key}[0],
-    lazy    => 1,
-    default => sub {
-      # if it exists in the payload
-      exists $_[0]->payload->{$key}
-        # use it
-        ?  $_[0]->payload->{$key}
-        # else get it from the defaults (for subclasses)
-        :  $_[0]->_default_attributes->{$key}[1];
-    }
-  );
-}
+has auto_prereqs => (
+  is         => 'ro',
+  isa        => 'Bool',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(auto_prereqs => 1);
+  }
+);
+
+has builder => (
+  is         => 'ro',
+  isa        => enum( [ both => keys %builders ] ),
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(builder => 'eumm');
+  }
+);
+
+has fake_release => (
+  is         => 'ro',
+  isa        => 'Bool',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(fake_release => $ENV{DZIL_FAKERELEASE});
+  }
+);
+
+has install_command => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    # cpanm will choose the best place to install
+    $_[0]->_config(install_command => 'cpanm -v -i .');
+  }
+);
+
+has is_task => (
+  is         => 'ro',
+  isa        => 'Bool',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(is_task => 0);
+  }
+);
+
+has max_target_perl => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(max_target_perl => '5.008');
+  }
+);
+
+has open_source => (
+  is         => 'ro',
+  isa        => 'Bool',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(open_source => 1);
+  }
+);
+
+has placeholder_comments => (
+  is         => 'ro',
+  isa        => 'Bool',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(placeholder_comments => 0);
+  }
+);
 
 has releaser => (
   is         => 'ro',
   isa        => 'Str',
   lazy       => 1,
   default    => sub {
-    my ($self) = @_;
-    exists $self->payload->{releaser}
-      ?    $self->payload->{releaser}
-      :    $self->open_source ? 'UploadToCPAN' : '';
+    $_[0]->_config('releaser', $_[0]->open_source ? 'UploadToCPAN' : '');
   },
 );
 
-{
-  # generate attributes
-  __PACKAGE__->_generate_attribute($_)
-    for keys %{ __PACKAGE__->_default_attributes };
-}
+has skip_plugins => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(skip_plugins => '');
+  }
+);
+
+has use_git_bundle => (
+  is         => 'ro',
+  isa        => 'Bool',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(use_git_bundle => 1);
+  }
+);
+
+has weaver_config => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(weaver_config => $_[0]->_bundle_name);
+  }
+);
 
 around BUILDARGS => sub {
   my ($orig, $class, @args) = @_;
@@ -102,7 +165,7 @@ around BUILDARGS => sub {
   return $attr;
 };
 
-# main
+# Alter configuration after setup.
 after configure => sub {
   my ($self) = @_;
 
@@ -145,6 +208,7 @@ after configure => sub {
   }
 };
 
+# Configure plugins.
 sub configure {
   my ($self) = @_;
 
