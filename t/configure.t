@@ -37,13 +37,13 @@ my %default_exp = (
 );
 
 sub configure_ok {
-  my ($config, $exp, $desc) = @_;
+  my ($config, $exp, $desc, $class) = @_;
 
 subtest $desc => sub {
   my $checked = {};
   $exp = { %default_exp, %$exp };
 
-  my @plugins = @{init_bundle($config)->plugins};
+  my @plugins = @{init_bundle($config, $class)->plugins};
 
   foreach my $plugin ( @plugins ){
     my ($moniker, $name, $payload) = @$plugin;
@@ -119,6 +119,26 @@ configure_ok
     MetaNoIndex => { %$noindex, directory => [@$noindex_dirs, 'arr'] },
   },
   'override weaver_config and config-slice array append with bracket syntax';
+
+{
+  package ## no critic (Package)
+    Dist::Zilla::PluginBundle::Author::TeddyTheWonderLizard;
+
+  use Moose;
+  extends $mod;
+
+  main::configure_ok
+    {},
+    {
+      Authority => {
+        %{ $default_exp{Authority} },
+        authority      => 'cpan:TeddyTheWonderLizard',
+      },
+      PodWeaver => { config_plugin => '@Author::TeddyTheWonderLizard' },
+    },
+    'authority and weaver_config set from class name',
+    __PACKAGE__;
+}
 
 # test attributes that alter which plugins are included
 {
@@ -237,14 +257,21 @@ sub new_dzil {
     },
   );
 }
+
 sub init_bundle {
+  my ($payload, $class) = @_;
+  $class ||= $mod;
+
   # compatible with non-easy bundles
-  my @plugins = $mod->bundle_config({name => $BNAME, payload => $_[0] || {}});
+  my @plugins = $class->bundle_config({name => $BNAME, payload => $payload || {}});
+
   # return object with ->plugins method for convenience/sanity
-  my $bundle = $mod->new(name => $BNAME, payload => $_[0] || {}, plugins => \@plugins);
-  isa_ok($bundle, $mod);
+  my $bundle = $class->new(name => $BNAME, payload => $payload || {}, plugins => \@plugins);
+
+  isa_ok($bundle, $class);
   return $bundle;
 }
+
 sub releaser_is {
   my ($dzil, $exp) = @_;
   my @releasers = @{ $dzil->plugins_with(-Releaser) };
