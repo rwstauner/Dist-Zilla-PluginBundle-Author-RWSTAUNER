@@ -33,23 +33,12 @@ my %default_exp = (
   PruneDevelCoverDatabase => { match => '^(cover_db/.+)' },
 );
 
-foreach my $test (
-  [{}, {%default_exp}],
-  [{'placeholder_comments' => 1   },            { %default_exp, Authority => {do_metadata => 1, do_munging => 1, locate_comment => 1} }],
-  [{'PruneFiles.match' => 'fudge'},             { %default_exp, map { ("Prune$_" => {match => 'fudge'}) } qw(CodeStatCollection DevelCoverDatabase) }],
-  [{'PruneDevelCoverDatabase.match' => 'fudge'}, { %default_exp, PruneDevelCoverDatabase => {match => 'fudge'} }],
-  [{'AutoPrereqs.skip' => 'Goober'},            { %default_exp, AutoPrereqs => {skip => 'Goober'} }],
-  [{'MetaNoIndex.directory'  => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} }],
-  #[{'MetaNoIndex.directory@' => 'goober'},      { %default_exp, MetaNoIndex => {%$noindex, directory => ['goober']} }],
-  [{'Test::Compile.fake_home' => 0},            { %default_exp, 'Test::Compile' => {fake_home => 0} }],
-  [{'Test::Portability.options' => 'test_one_dot=0'}, { %default_exp, 'Test::Portability' => {options => 'test_one_dot=0'} }],
-  [{'MetaProvides::Package.meta_noindex' => 0}, { %default_exp, 'MetaProvides::Package' => {meta_noindex => 0} }],
-  [{weaver_config => '@Default', 'MetaNoIndex.directory[]' => 'arr'}, {
-    PodWeaver => {config_plugin => '@Default'},
-    MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'arr']} }],
-){
-  my ($config, $exp) = @$test;
+sub configure_ok {
+  my ($config, $exp, $desc) = @_;
+
+subtest $desc => sub {
   my $checked = {};
+  $exp = { %default_exp, %$exp };
 
   my @plugins = @{init_bundle($config)->plugins};
 
@@ -65,8 +54,63 @@ foreach my $test (
       ++$checked->{$matched};
     }
   }
-  is_deeply { map { $_ => 1 } keys %$exp }, $checked, 'not all tests ran';
+  is_deeply { map { $_ => 1 } keys %$exp }, $checked, 'all tests ran';
+};
+
 }
+
+configure_ok {}, {}, 'default configuration';
+
+configure_ok
+  { 'placeholder_comments' => 1 },
+  { Authority => { %{ $default_exp{Authority} }, locate_comment => 1} },
+  'placeholder_comments enables Authority.locate_comment';
+
+configure_ok
+  { 'PruneFiles.match' => 'fudge' },
+  { map { ("Prune$_" => {match => 'fudge'}) } qw(CodeStatCollection DevelCoverDatabase) },
+  'config-slice on plugin class adds attribute to each instance';
+
+configure_ok
+  { 'PruneDevelCoverDatabase.match' => 'fudge' },
+  {  PruneDevelCoverDatabase => {match => 'fudge'} },
+  'config-slice on plugin name affects single instance';
+
+configure_ok
+  { 'AutoPrereqs.skip'     => 'Goober'   },
+  {  AutoPrereqs => { skip => 'Goober' } },
+  'config-slice AutoPrereqs.skip (instead of custom attribute)';
+
+configure_ok
+  { 'MetaNoIndex.directory'  => 'goober' },
+  {  MetaNoIndex => {%$noindex, directory => [@$noindex_dirs, 'goober']} },
+  'config-slice MetaNoIndex.directory adds dir to list';
+
+configure_ok
+  { 'Test::Compile.fake_home' => 0 },
+  { 'Test::Compile' => { fake_home => 0 } },
+  'config-slice to keep from setting Test::Compile.fake_home';
+
+configure_ok
+  { 'Test::Portability.options' => 'test_one_dot=0' },
+  { 'Test::Portability' => {options => 'test_one_dot=0'} },
+  'config-slice Test::Portability.options';
+
+configure_ok
+  { 'MetaProvides::Package.meta_noindex' => 0 },
+  { 'MetaProvides::Package' => {meta_noindex => 0} },
+  'config-slice to disable MetaProvides::Package.meta_noindex';
+
+configure_ok
+  {
+    weaver_config => '@Default',
+    'MetaNoIndex.directory[]' => 'arr',
+  },
+  {
+    PodWeaver   => { config_plugin => '@Default' },
+    MetaNoIndex => { %$noindex, directory => [@$noindex_dirs, 'arr'] },
+  },
+  'override weaver_config and config-slice array append with bracket syntax';
 
 # test attributes that alter which plugins are included
 {
