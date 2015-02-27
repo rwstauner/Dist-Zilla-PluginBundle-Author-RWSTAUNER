@@ -29,7 +29,10 @@ my %default_exp = (
   AutoPrereqs             => {},
   MetaNoIndex             => {%$noindex, directory => [@$noindex_dirs]},
   'MetaProvides::Package' => {meta_noindex => 1},
-  Authority               => {do_metadata => 1, do_munging => 1, locate_comment => 0},
+  Authority               => {
+    authority   => $mod->_default_authority,
+    do_metadata => 1, do_munging => 1, locate_comment => 0
+  },
   PruneDevelCoverDatabase => { match => '^(cover_db/.+)' },
 );
 
@@ -62,9 +65,14 @@ subtest $desc => sub {
 configure_ok {}, {}, 'default configuration';
 
 configure_ok
-  { 'placeholder_comments' => 1 },
-  { Authority => { %{ $default_exp{Authority} }, locate_comment => 1} },
-  'placeholder_comments enables Authority.locate_comment';
+  { 'placeholder_comments' => 1, authority => 'no:body', },
+  { Authority => {
+      %{ $default_exp{Authority} },
+      authority      => 'no:body',
+      locate_comment => 1,
+    }
+  },
+  'placeholder_comments and authority change Authority attributes';
 
 configure_ok
   { 'PruneFiles.match' => 'fudge' },

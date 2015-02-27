@@ -37,6 +37,18 @@ sub _config {
   my ($self, $key, $default) = @_;
   exists $self->payload->{$key} ? $self->payload->{$key} : $default;
 }
+
+has authority => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(authority => $_[0]->_default_authority);
+  },
+);
+
+sub _default_authority {
+  (ref($_[0]) || $_[0]) =~ /Author::(\w+)/ ? 'cpan:'.$1 : undef;
 }
 
 has auto_prereqs => (
@@ -247,6 +259,7 @@ sub configure {
     [
       Authority => {
         ':version'     => '1.005', # accepts any non-whitespace + locate_comment
+        authority      => $self->authority,
         do_munging     => 1,
         do_metadata    => 1,
         locate_comment => $self->placeholder_comments,
@@ -510,6 +523,7 @@ that I use for building my distributions.
 
 Possible options and their default values:
 
+  authority      = cpan:RWSTAUNER
   auto_prereqs   = 1  ; enable AutoPrereqs
   builder        = eumm ; or 'mb' or 'both'
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'

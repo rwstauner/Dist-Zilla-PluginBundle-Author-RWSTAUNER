@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Set authority to 'cpan:RWSTAUNER' by default so that the bundle
+    operates on computers without a ~/.pause file.
+
 4.203     2014-12-11T23:47:53Z
 
   - Trade Bugtracker and Repository for AutoMetaResources.
