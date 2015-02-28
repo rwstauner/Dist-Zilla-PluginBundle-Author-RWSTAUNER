@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.203
+version 4.204
 
 # SYNOPSIS
 
@@ -22,8 +22,10 @@ that I use for building my distributions.
 
 Possible options and their default values:
 
+    authority      = cpan:RWSTAUNER
     auto_prereqs   = 1  ; enable AutoPrereqs
     builder        = eumm ; or 'mb' or 'both'
+    copy_files     =    ; space-separated list of additional files to copy from build
     fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
     install_command = cpanm -v -i . (passed to InstallRelease)
     is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
@@ -108,6 +110,7 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
 
     [Authority]
     :version       = 1.005
+    authority      = cpan:RWSTAUNER
     do_metadata    = 1
     do_munging     = 1
     locate_comment = 0
@@ -129,9 +132,13 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     [Readme]
 
     [ReadmeAnyFromPod]
-    :version = 0.120120
+    :version = 0.142180
     location = root
+    phase    = release
     type     = markdown
+
+    [CopyFilesFromRelease]
+    filename = LICENSE
 
     [AutoMetaResources]
     bugtracker.rt = 1
@@ -200,6 +207,7 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     allow_dirty = Changes
     allow_dirty = README.mkdn
     allow_dirty = README.pod
+    allow_dirty = LICENSE
     commit_msg  = v%v%t%n%n%c
 
     [ConfirmRelease]
