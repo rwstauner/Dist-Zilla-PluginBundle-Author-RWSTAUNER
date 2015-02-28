@@ -248,8 +248,8 @@ sub configure {
 
   # gather and prune
     $self->_generate_manifest_skip,
+    [ GatherDir => { exclude_filename => [ @{ $self->copy_files } ] } ],
     qw(
-      GatherDir
       PruneCruft
       ManifestSkip
     ),
