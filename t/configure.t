@@ -34,6 +34,7 @@ my %default_exp = (
     do_metadata => 1, do_munging => 1, locate_comment => 0
   },
   PruneDevelCoverDatabase => { match => '^(cover_db/.+)' },
+  CopyFilesFromRelease    => { filename => ['LICENSE'] },
 );
 
 sub configure_ok {
@@ -119,6 +120,11 @@ configure_ok
     MetaNoIndex => { %$noindex, directory => [@$noindex_dirs, 'arr'] },
   },
   'override weaver_config and config-slice array append with bracket syntax';
+
+configure_ok
+  { copy_files => [ ' S47-19J.txt  Triplicate' ] },
+  { CopyFilesFromRelease => { filename => [qw( LICENSE S47-19J.txt Triplicate )] } },
+  'copy space-separated list of files';
 
 {
   package ## no critic (Package)

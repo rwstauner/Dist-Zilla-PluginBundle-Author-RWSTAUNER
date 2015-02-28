@@ -4,6 +4,8 @@ Revision history for {{$dist->name}}
 
   - Set authority to 'cpan:RWSTAUNER' by default so that the bundle
     operates on computers without a ~/.pause file.
+  - Copy LICENSE from build to root and automatically commit it on release.
+  - Add 'copy_files' attribute to specify additional files to copy from build.
 
 4.203     2014-12-11T23:47:53Z
 

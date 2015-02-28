@@ -32,6 +32,9 @@ sub _bundle_name {
   join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
 }
 
+sub mvp_multivalue_args { qw(
+  copy_files
+) }
 
 sub _config {
   my ($self, $key, $default) = @_;
@@ -67,6 +70,16 @@ has builder => (
   default    => sub {
     $_[0]->_config(builder => 'eumm');
   }
+);
+
+has copy_files => (
+  is         => 'ro',
+  isa        => 'ArrayRef[Str]',
+  lazy       => 1,
+  default    => sub {
+    [ qw( LICENSE ),
+      map { /(\S+)/g } @{ $_[0]->_config(copy_files => []) } ]
+  },
 );
 
 has fake_release => (
@@ -302,6 +315,7 @@ sub configure {
         location   => 'root',
       }
     ],
+    [ CopyFilesFromRelease => { filename => $self->copy_files } ],
 
   # metadata
     [
@@ -445,7 +459,10 @@ sub configure {
   # defaults: { tag_format => '%v', push_to => [ qw(origin) ] }
   $self->add_bundle('@Git' => {
     ':version' => '2.004', # improved changelog parsing
-    allow_dirty => [qw(Changes README.mkdn README.pod)],
+    allow_dirty => [
+      qw(Changes README.mkdn README.pod),
+      @{ $self->copy_files }
+    ],
     commit_msg  => 'v%v%t%n%n%c'
   })
     if $self->use_git_bundle;
@@ -526,6 +543,7 @@ Possible options and their default values:
   authority      = cpan:RWSTAUNER
   auto_prereqs   = 1  ; enable AutoPrereqs
   builder        = eumm ; or 'mb' or 'both'
+  copy_files     =    ; space-separated list of additional files to copy from build
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
   is_task        = 0  ; set to true to use TaskWeaver instead of PodWeaver
