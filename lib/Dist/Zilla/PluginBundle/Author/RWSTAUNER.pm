@@ -308,11 +308,12 @@ sub configure {
 
   $self->add_plugins(
     [
-      # generate README.pod in repo root for github
+      # Generate README in repo root for github.
       ReadmeAnyFromPod => {
-        ':version' => '0.120120',
-        type       => 'markdown',
+        ':version' => '0.142180', # 'phase'
+        type       => 'markdown', # L<> to metacpan
         location   => 'root',
+        phase      => 'release',
       }
     ],
     [ CopyFilesFromRelease => { filename => $self->copy_files } ],
