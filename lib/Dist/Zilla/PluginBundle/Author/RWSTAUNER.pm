@@ -316,7 +316,7 @@ sub configure {
         phase      => 'release',
       }
     ],
-    [ CopyFilesFromRelease => { filename => $self->copy_files } ],
+    [ CopyFilesFromRelease => { filename => [ @{ $self->copy_files } ] } ],
 
   # metadata
     [
