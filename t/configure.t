@@ -11,7 +11,7 @@ my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;
 
 # shh...
-local $SIG{__WARN__} = sub { warn(@_) unless $_[0] =~ /^\[$BNAME\].+Including builders:/ };
+local $SIG{__WARN__} = sub { warn(@_) unless $_[0] =~ /^\[\@Author::\w+\].+Including builders:/ };
 
 # get default MetaNoIndex hashref
 my $noindex = (
