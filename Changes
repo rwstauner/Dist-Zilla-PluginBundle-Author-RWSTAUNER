@@ -2,6 +2,10 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.205     2015-02-28T18:12:15Z
+
+  - Don't Gather files copied from release.
+
 4.204     2015-02-28T03:54:45Z
 
   - Set authority to 'cpan:RWSTAUNER' by default so that the bundle

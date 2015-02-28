@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.204
+version 4.205
 
 # SYNOPSIS
 
@@ -94,6 +94,8 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     is_template = 1
 
     [GatherDir]
+    exclude_filename = LICENSE
+
     [PruneCruft]
     [ManifestSkip]
 
