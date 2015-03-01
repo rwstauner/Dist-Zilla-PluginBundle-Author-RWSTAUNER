@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.205
+version 4.206
 
 # SYNOPSIS
 
@@ -184,9 +184,6 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
 
     [Test::ReportPrereqs]
     :version = 0.004
-
-    [Test::ChangesHasContent]
-    :version = 0.006
 
     [Test::PodSpelling]
 
