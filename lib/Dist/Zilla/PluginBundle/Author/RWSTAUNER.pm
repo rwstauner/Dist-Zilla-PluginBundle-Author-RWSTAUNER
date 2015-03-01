@@ -399,13 +399,9 @@ sub configure {
     [ 'Test::ReportPrereqs' => { ':version' => '0.004' } ], # include/exclude
   );
 
-  $self->add_plugins(
-    [ 'Test::ChangesHasContent' => { ':version' => '0.006' } ], # version-TRIAL
-
   # generated xt/ tests
     # Test::Pod::Spelling::CommonMistakes ?
       #Test::Pod::No404s # removed since it's rarely useful
-  ) if $self->open_source;
 
   if ( $spelling_tests ) {
     $self->add_plugins('Test::PodSpelling');

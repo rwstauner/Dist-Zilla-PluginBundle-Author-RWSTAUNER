@@ -2,6 +2,9 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Remove Test::ChangesHasContent so that xt doesn't fail in CI.
+    (Before Release CheckChangeHasContent remains.)
+
 4.205     2015-02-28T18:12:15Z
 
   - Don't Gather files copied from release.
