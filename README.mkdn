@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.206
+version 4.207
 
 # SYNOPSIS
 
