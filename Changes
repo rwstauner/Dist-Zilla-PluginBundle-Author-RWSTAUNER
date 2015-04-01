@@ -3,6 +3,7 @@ Revision history for {{$dist->name}}
 {{$NEXT}}
 
   - Add /x to skip_plugins regexp.
+  - Make skip_plugins work on bundles, too.
 
 4.206     2015-03-01T03:58:20Z
 

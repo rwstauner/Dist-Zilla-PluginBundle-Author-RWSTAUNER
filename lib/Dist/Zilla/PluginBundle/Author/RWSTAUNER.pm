@@ -233,6 +233,12 @@ after configure => sub {
   }
 };
 
+around add_bundle => sub {
+  my ($orig, $self, $name, @args) = @_;
+  return if $self->skip_plugins && $self->skip_plugins =~ $name;
+  $self->$orig($name, @args);
+};
+
 # Configure plugins.
 sub configure {
   my ($self) = @_;

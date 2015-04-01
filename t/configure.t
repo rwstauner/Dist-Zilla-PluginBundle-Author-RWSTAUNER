@@ -193,6 +193,14 @@ subtest 'skip_plugins uses /x' => sub {
   &$has_not('GenerateManifestSkip', 1);
 };
 
+  subtest 'skip_plugins works on bundles, too' => sub {
+    $bundle = init_bundle({skip_plugins => '@TestingMania'});
+    &$has_not('Test::Compile');
+
+    $bundle = init_bundle({skip_plugins => '@Blah'});
+    &$has_ok('Test::Compile');
+  };
+
   $bundle = init_bundle({'-remove' => [qw(Test::Compile ExtraTests)]});
   &$has_not('Test::Compile');
   &$has_not('ExtraTests');
