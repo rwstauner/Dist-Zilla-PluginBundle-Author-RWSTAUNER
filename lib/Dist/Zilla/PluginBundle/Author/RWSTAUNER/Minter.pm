@@ -175,6 +175,11 @@ Revision history for {{$dist->name}}
 {{ '{{$NEXT}}' }}
 
   - Initial release
+__[ LICENSE ]__
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
 __[ README.mkdn ]__
 # NAME
 

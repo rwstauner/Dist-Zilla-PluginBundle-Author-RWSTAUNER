@@ -4,6 +4,7 @@ Revision history for {{$dist->name}}
 
   - Add /x to skip_plugins regexp.
   - Make skip_plugins work on bundles, too.
+  - Add basic LICENSE file when minting.
 
 4.206     2015-03-01T03:58:20Z
 
