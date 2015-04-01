@@ -148,10 +148,11 @@ has releaser => (
 
 has skip_plugins => (
   is         => 'ro',
-  isa        => 'Str',
+  isa        => 'Maybe[Regexp]',
   lazy       => 1,
   default    => sub {
-    $_[0]->_config(skip_plugins => '');
+    my $skip = $_[0]->_config(skip_plugins => '');
+    return $skip ? qr/$skip/x : undef;
   }
 );
 
@@ -196,7 +197,6 @@ after configure => sub {
 
   # TODO: accept this from ENV
   my $skip = $self->skip_plugins;
-  $skip &&= qr/$skip/;
 
   my $dynamic = $self->payload;
   # sneak this config in behind @TestingMania's back

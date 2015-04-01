@@ -186,10 +186,12 @@ configure_ok
   &$has_ok('Goober');
   &$has_not('UploadToCPAN');
 
-  $bundle = init_bundle({skip_plugins => '\b(Test::Compile|ExtraTests|GenerateManifestSkip)$'});
+subtest 'skip_plugins uses /x' => sub {
+  $bundle = init_bundle({skip_plugins => '\b( Test::Compile | ExtraTests | GenerateManifestSkip )$'});
   &$has_not('Test::Compile');
   &$has_not('ExtraTests');
   &$has_not('GenerateManifestSkip', 1);
+};
 
   $bundle = init_bundle({'-remove' => [qw(Test::Compile ExtraTests)]});
   &$has_not('Test::Compile');
