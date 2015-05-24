@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Remove 'builder' option and just use MakeMaker.
+    Any dist can '-remove = MakeMaker' and add ModuleBuild/DualBuilders.
+    This also removes this dist's dependency on MB and DB.
+    Thanks to Karen Etheridge for prompting me to clean the cruft! [rt-104634]
+
 4.207     2015-04-01T05:14:25Z
 
   - Add /x to skip_plugins regexp.

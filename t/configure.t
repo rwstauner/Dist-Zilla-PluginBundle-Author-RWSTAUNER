@@ -11,9 +11,6 @@ my $BNAME = "\@$NAME";
 my $mod = "Dist::Zilla::PluginBundle::$NAME";
 eval "require $mod" or die $@;
 
-# shh...
-local $SIG{__WARN__} = sub { warn(@_) unless $_[0] =~ /^\[\@Author::\w+\].+Including builders:/ };
-
 # get default MetaNoIndex hashref
 my $noindex = (
   grep { ref($_) && $_->[0] =~ 'MetaNoIndex' }
@@ -215,14 +212,12 @@ subtest 'skip_plugins uses /x' => sub {
   &$has_ok('MakeMaker');
   &$has_not('ModuleBuild');
   &$has_not('DualBuilders');
-  $bundle = init_bundle({builder => 'mb'});
-  &$has_ok('ModuleBuild');
+
+  removed_attribute_ok(builder => '-remove');
+
+  # We can remove the 'builder' config if it's easy to swap builders another way.
+  $bundle = init_bundle({'-remove' => ['MakeMaker']});
   &$has_not('MakeMaker');
-  &$has_not('DualBuilders');
-  $bundle = init_bundle({builder => 'both'});
-  &$has_ok('MakeMaker');
-  &$has_ok('ModuleBuild');
-  &$has_ok('DualBuilders');
 
   $bundle = init_bundle({open_source => 0});
   is $bundle->releaser, '', 'no releaser if not open_source';

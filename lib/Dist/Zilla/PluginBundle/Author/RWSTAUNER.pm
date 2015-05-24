@@ -20,12 +20,6 @@ with qw(
 # don't require it in case it won't install somewhere
 my $spelling_tests = eval 'require Dist::Zilla::Plugin::Test::PodSpelling';
 
-# available builders
-my %builders = (
-  eumm => 'MakeMaker',
-  mb   => 'ModuleBuild',
-);
-
 # cannot use $self->name for class methods
 sub _bundle_name {
   my $class = @_ ? ref $_[0] || $_[0] : __PACKAGE__;
@@ -60,15 +54,6 @@ has auto_prereqs => (
   lazy       => 1,
   default    => sub {
     $_[0]->_config(auto_prereqs => 1);
-  }
-);
-
-has builder => (
-  is         => 'ro',
-  isa        => enum( [ both => keys %builders ] ),
-  lazy       => 1,
-  default    => sub {
-    $_[0]->_config(builder => 'eumm');
   }
 );
 
@@ -180,6 +165,7 @@ around BUILDARGS => sub {
 
   # removed attributes
   my %removed = (
+    builder       => '-remove',
     disable_tests => '-remove',
     skip_prereqs  => 'AutoPrereqs.skip',
   );
@@ -389,16 +375,9 @@ sub configure {
     qw(
       ExecDir
       ShareDir
+      MakeMaker
     ),
   );
-
-  {
-    my @builders = $self->builder eq 'both'
-      ? (values %builders, 'DualBuilders')
-      : ($builders{ $self->builder });
-    $self->log("Including builders: @builders\n");
-    $self->add_plugins(@builders);
-  }
 
   $self->add_plugins(
   # generated t/ tests
@@ -545,7 +524,6 @@ Possible options and their default values:
 
   authority      = cpan:RWSTAUNER
   auto_prereqs   = 1  ; enable AutoPrereqs
-  builder        = eumm ; or 'mb' or 'both'
   copy_files     =    ; space-separated list of additional files to copy from build
   fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
   install_command = cpanm -v -i . (passed to InstallRelease)
