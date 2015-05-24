@@ -1,11 +1,19 @@
 language: perl
 perl:
   - "5.20"
-  - "5.8"
 
 env:
   global:
     - COVERAGE=1
 
 before_install:
+
+  # Set git config values that mod/tests will look for.
+  # The build will short-circuit if `git` returns non-zero.
+  - |
+    gc () { git config --global "$1" "$2"; }
+    gc github.user travis
+    gc user.name   travis
+    gc user.email  travis@example.com
+
   - eval $(curl https://travis-perl.github.io/init) --auto
