@@ -179,11 +179,11 @@ around BUILDARGS => sub {
   my $attr = $class->$orig(@args);
 
   # removed attributes
-  my %deprecated = (
+  my %removed = (
     disable_tests => '-remove',
     skip_prereqs  => 'AutoPrereqs.skip',
   );
-  while( my ($old, $new) = each %deprecated ){
+  while( my ($old, $new) = each %removed ){
     if( exists $attr->{payload}{ $old } ){
       die "$class no longer supports '$old'.\n  Please use '$new' instead.\n";
     }

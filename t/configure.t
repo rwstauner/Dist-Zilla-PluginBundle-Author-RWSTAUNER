@@ -4,6 +4,7 @@ use warnings;
 use Test::More 0.96;
 use lib 't/lib';
 use Test::DZil;
+use Test::Fatal;
 
 my $NAME = 'Author::RWSTAUNER';
 my $BNAME = "\@$NAME";
@@ -174,6 +175,8 @@ configure_ok
   $bundle = init_bundle({auto_prereqs => 0});
   &$has_not('AutoPrereqs');
 
+  removed_attribute_ok(skip_prereqs => 'AutoPrereqs.skip');
+
   $bundle = init_bundle({fake_release => 1});
   &$has_ok('FakeRelease');
   &$has_not('UploadToCPAN');
@@ -205,6 +208,8 @@ subtest 'skip_plugins uses /x' => sub {
   &$has_not('Test::Compile');
   &$has_not('ExtraTests');
   &$has_ok('Test::NoTabs');
+
+  removed_attribute_ok(disable_tests => '-remove');
 
   $bundle = init_bundle({});
   &$has_ok('MakeMaker');
@@ -299,4 +304,14 @@ sub releaser_is {
     is(scalar @releasers, 1, 'single releaser');
     like($releasers[0]->plugin_name, qr/\b$exp$/, "expected releaser: $exp");
   }
+}
+
+sub removed_attribute_ok {
+  my ($old, $new) = @_;
+  like
+    exception {
+      init_bundle({$old => 'anything'});
+    },
+    qr/no longer supports '$old'.+use '$new' instead/ms,
+    "attribute '$old' removed in favor of '$new'";
 }
