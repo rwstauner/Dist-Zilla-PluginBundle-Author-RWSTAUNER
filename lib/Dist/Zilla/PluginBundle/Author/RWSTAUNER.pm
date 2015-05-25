@@ -18,7 +18,7 @@ with qw(
 # Dist::Zilla::Role::DynamicConfig is not necessary: payload is already dynamic
 
 # don't require it in case it won't install somewhere
-my $spelling_tests = eval 'require Dist::Zilla::Plugin::Test::PodSpelling';
+my $spelling_tests = eval { require Dist::Zilla::Plugin::Test::PodSpelling; };
 
 # cannot use $self->name for class methods
 sub _bundle_name {
