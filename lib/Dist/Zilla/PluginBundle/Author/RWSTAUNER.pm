@@ -493,6 +493,7 @@ sub _generate_manifest_skip {
 ^(Build|Makefile)$
 \bpm_to_blib$
 ^MYMETA\.
+^cover_db/
 
 EOF_MANIFEST_SKIP
     }
