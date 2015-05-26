@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.207
+version 4.208
 
 # SYNOPSIS
 
@@ -24,7 +24,6 @@ Possible options and their default values:
 
     authority      = cpan:RWSTAUNER
     auto_prereqs   = 1  ; enable AutoPrereqs
-    builder        = eumm ; or 'mb' or 'both'
     copy_files     =    ; space-separated list of additional files to copy from build
     fake_release   = 0  ; if true will use FakeRelease instead of 'releaser'
     install_command = cpanm -v -i . (passed to InstallRelease)
@@ -90,6 +89,7 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     content     = ^(Build|Makefile)$
     content     = \bpm_to_blib$
     content     = ^MYMETA\.
+    content     = ^cover_db/
     filename    = MANIFEST.SKIP
     is_template = 1
 

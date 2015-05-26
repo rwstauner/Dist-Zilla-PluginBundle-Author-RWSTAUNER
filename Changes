@@ -2,10 +2,14 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.208     2015-05-26T01:30:53Z
+
   - Remove 'builder' option and just use MakeMaker.
     Any dist can '-remove = MakeMaker' and add ModuleBuild/DualBuilders.
     This also removes this dist's dependency on MB and DB.
     Thanks to Karen Etheridge for prompting me to clean the cruft! [rt-104634]
+  - Remove DZP Test::PodSpelling from prereqs (recommends only).
+  - Add cover_db to generated manifest skip file.
 
 4.207     2015-04-01T05:14:25Z
 
