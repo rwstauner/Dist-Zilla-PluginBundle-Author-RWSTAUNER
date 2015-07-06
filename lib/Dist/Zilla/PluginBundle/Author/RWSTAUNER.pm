@@ -319,7 +319,7 @@ sub configure {
       }
     ],
     [ GithubMeta => { ':version' => '0.10' } ],
-    [ ContributorsFromGit => { ':version' => '0.005' } ],
+    [ 'Git::Contributors' ],
   ) if $self->open_source;
 
   $self->add_plugins('AutoPrereqs')
