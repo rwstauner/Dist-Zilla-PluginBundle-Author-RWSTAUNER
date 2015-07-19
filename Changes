@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.209     2015-07-19T02:13:42Z
+
+  - Replace ContributorsFromGit with Git::Contributors.
+    Thanks to Karen Etheridge for the pull req! (gh-2)
+
 4.208     2015-05-26T01:30:53Z
 
   - Remove 'builder' option and just use MakeMaker.

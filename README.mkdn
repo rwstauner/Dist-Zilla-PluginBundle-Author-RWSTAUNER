@@ -4,7 +4,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.208
+version 4.209
 
 # SYNOPSIS
 
@@ -148,9 +148,7 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     [GithubMeta]
     :version = 0.10
 
-    [ContributorsFromGit]
-    :version = 0.005
-
+    [Git::Contributors]
     [AutoPrereqs]
 
     [MetaNoIndex]
@@ -259,9 +257,10 @@ progress on the request by the system.
 
 Randy Stauner <rwstauner@cpan.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-Sergey Romanov <complefor@rambler.ru>
+- Karen Etheridge <ether@cpan.org>
+- Sergey Romanov <complefor@rambler.ru>
 
 # COPYRIGHT AND LICENSE
 
