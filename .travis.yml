@@ -16,4 +16,25 @@ before_install:
     gc user.name   travis
     gc user.email  travis@example.com
 
-  - eval $(curl https://travis-perl.github.io/init) --auto
+  # eval $(curl https://travis-perl.github.io/init) --auto
+  - |
+    helper_dir="$(mktemp -d -t travis-perl-helpers-XXXXXX)";
+    git clone --depth 1 git://github.com/travis-perl/helpers "$helper_dir";
+    source "$helper_dir/init"
+
+    build-perl
+
+    depdir="$(mktemp -d -t authordeps-XXXXXX)";
+
+    INSPECTOR=Dist::Zilla::Config::BundleInspector
+    BUNDLE=Dist::Zilla::PluginBundle::Author::RWSTAUNER
+
+    # Install author deps once to get bundle inspector, roles, etc.
+    $helper_dir/bin/cpan-install `dzil authordeps | grep -v $BUNDLE`
+
+    perl -Ilib -M$INSPECTOR -e "print $INSPECTOR->new(bundle_class => q[$BUNDLE])->ini_string" >> $depdir/dist.ini
+
+    # Now install the deps the inpector told us about.
+    $helper_dir/bin/cpan-install `dzil authordeps --root $depdir`
+
+    setup-auto
