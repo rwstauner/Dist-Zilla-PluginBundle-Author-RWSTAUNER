@@ -11,6 +11,7 @@ before_install:
   # Set git config values that mod/tests will look for.
   # The build will short-circuit if `git` returns non-zero.
   - |
+    : # configure git for tests
     gc () { git config --global "$1" "$2"; }
     gc github.user travis
     gc user.name   travis
@@ -18,6 +19,7 @@ before_install:
 
   # eval $(curl https://travis-perl.github.io/init) --auto
   - |
+    : # travis helpers
     helper_dir="$(mktemp -d -t travis-perl-helpers-XXXXXX)";
     git clone --depth 1 git://github.com/travis-perl/helpers "$helper_dir";
     source "$helper_dir/init"
