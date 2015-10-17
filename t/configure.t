@@ -32,6 +32,8 @@ my %default_exp = (
     do_metadata => 1, do_munging => 1, locate_comment => 0
   },
   PruneDevelCoverDatabase => { match => '^(cover_db/.+)' },
+  ReadmeAnyFromPod        => { phase => 'release', location => 'root', type => 'markdown', },
+  'GitHubREADME::Badge'   => { phase => 'release', badges => [qw( travis coveralls cpants )], },
   CopyFilesFromRelease    => { filename => ['LICENSE'] },
 );
 
@@ -102,6 +104,32 @@ configure_ok
   { 'Test::Portability.options' => 'test_one_dot=0' },
   { 'Test::Portability' => {options => 'test_one_dot=0'} },
   'config-slice Test::Portability.options';
+
+{
+  my $readmes = sub {
+    my $phase = shift;
+    return {
+      ReadmeAnyFromPod      => { %{ $default_exp{ReadmeAnyFromPod} }, phase => $phase },
+      'GitHubREADME::Badge' => { %{ $default_exp{'GitHubREADME::Badge'} }, phase => $phase },
+    };
+  };
+
+  configure_ok
+    {},
+    $readmes->('release'),
+    'readme plugins default config';
+
+  configure_ok
+    { readme_phase => 'build' },
+    $readmes->('build'),
+    'readme plugins changed with dist.ini';
+
+  local $ENV{DZIL_README_PHASE} = 'build';
+  configure_ok
+    {},
+    $readmes->('build'),
+    'readme plugins changed with env';
+}
 
 configure_ok
   { 'MetaProvides::Package.meta_noindex' => 0 },

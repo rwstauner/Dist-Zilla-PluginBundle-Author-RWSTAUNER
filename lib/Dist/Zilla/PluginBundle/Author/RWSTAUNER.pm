@@ -131,6 +131,15 @@ has releaser => (
   },
 );
 
+has readme_phase => (
+  is         => 'ro',
+  isa        => 'Str',
+  lazy       => 1,
+  default    => sub {
+    $_[0]->_config(readme_phase => $ENV{DZIL_README_PHASE} || 'release');
+  }
+);
+
 has skip_plugins => (
   is         => 'ro',
   isa        => 'Maybe[Regexp]',
@@ -305,14 +314,14 @@ sub configure {
         ':version' => '0.142180', # 'phase'
         type       => 'markdown', # L<> to metacpan
         location   => 'root',
-        phase      => 'release',
+        phase      => $self->readme_phase,
       }
     ],
     [
       # ... and add status badges to it.
       'GitHubREADME::Badge' => {
         ':version' => '0.16', # 'phase', svg
-        phase      => 'release',
+        phase      => $self->readme_phase,
         badges     => [qw(
           travis
           coveralls
