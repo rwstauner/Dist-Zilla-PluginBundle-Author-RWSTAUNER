@@ -1,10 +1,14 @@
+[![Build Status](https://travis-ci.org/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER.svg?branch=master)](https://travis-ci.org/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER)
+[![Coverage Status](https://coveralls.io/repos/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER/badge.svg?branch=master)](https://coveralls.io/r/rwstauner/Dist-Zilla-PluginBundle-Author-RWSTAUNER?branch=master)
+[![Kwalitee status](http://cpants.cpanauthors.org/dist/Dist-Zilla-PluginBundle-Author-RWSTAUNER.png)](http://cpants.charsbar.org/dist/overview/Dist-Zilla-PluginBundle-Author-RWSTAUNER)
+
 # NAME
 
 Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.209
+version 4.210
 
 # SYNOPSIS
 
@@ -139,6 +143,13 @@ This bundle is roughly equivalent to the following (generated) `dist.ini`:
     phase    = release
     type     = markdown
 
+    [GitHubREADME::Badge]
+    :version = 0.16
+    badges   = travis
+    badges   = coveralls
+    badges   = cpants
+    phase    = release
+
     [CopyFilesFromRelease]
     filename = LICENSE
 
@@ -255,12 +266,12 @@ progress on the request by the system.
 
 # AUTHOR
 
-Randy Stauner <rwstauner@cpan.org>
+Randy Stauner &lt;rwstauner@cpan.org>
 
 # CONTRIBUTORS
 
-- Karen Etheridge <ether@cpan.org>
-- Sergey Romanov <complefor@rambler.ru>
+- Karen Etheridge &lt;ether@cpan.org>
+- Sergey Romanov &lt;complefor@rambler.ru>
 
 # COPYRIGHT AND LICENSE
 

@@ -2,6 +2,11 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.210     2015-10-17T17:16:14Z
+
+  - Add GitHubREADME::Badge
+  - Allow overriding readme building phase from ENV.
+
 4.209     2015-07-19T02:13:42Z
 
   - Replace ContributorsFromGit with Git::Contributors.
