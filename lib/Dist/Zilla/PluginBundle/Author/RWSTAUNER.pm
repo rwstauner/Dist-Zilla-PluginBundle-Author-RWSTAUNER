@@ -308,6 +308,18 @@ sub configure {
         phase      => 'release',
       }
     ],
+    [
+      # ... and add status badges to it.
+      'GitHubREADME::Badge' => {
+        ':version' => '0.16', # 'phase', svg
+        phase      => 'release',
+        badges     => [qw(
+          travis
+          coveralls
+          cpants
+        )],
+      }
+    ],
     [ CopyFilesFromRelease => { filename => [ @{ $self->copy_files } ] } ],
 
   # metadata
