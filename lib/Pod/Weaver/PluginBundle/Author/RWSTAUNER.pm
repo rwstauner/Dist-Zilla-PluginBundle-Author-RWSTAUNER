@@ -20,6 +20,11 @@ sub _bundle_name {
   join('', '@', ($class =~ /^.+::PluginBundle::(.+)$/));
 }
 
+sub _for {
+  my ($region) = @_;
+  [ $region, _exp('Region'),  { region_name => $region, allow_nonpod => 1 } ],
+}
+
 sub mvp_bundle_config {
   ## ($self, $bundle) = @_; $bundle => {payload => {}, name => '@...'}
   my ($self) = @_;
@@ -41,9 +46,13 @@ sub mvp_bundle_config {
 
     # Any pod inside a =begin/end :prelude will go at the top
     [ 'Prelude',     _exp('Region'),  { region_name => 'prelude' } ],
+
+    # Before Synopsis.
+    _for('test_synopsis'),
   );
 
   for my $plugin (
+
     # default
     [ 'Synopsis',    _exp('Generic'), {} ],
     [ 'Description', _exp('Generic'), {} ],
