@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+4.211     2016-03-05T14:56:26Z
+
   - Weave 'test_synopsis' region before Synopsis for Test::Synopsis.
 
 4.210     2015-10-17T17:16:14Z
