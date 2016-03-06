@@ -22,7 +22,7 @@ sub _bundle_name {
 
 sub _for {
   my ($region) = @_;
-  [ $region, _exp('Region'),  { region_name => $region, allow_nonpod => 1 } ],
+  [ $region, _exp('Region'),  { region_name => $region, allow_nonpod => 1, flatten => 0 } ],
 }
 
 sub mvp_bundle_config {
