@@ -2,6 +2,8 @@ Revision history for {{$dist->name}}
 
 {{$NEXT}}
 
+  - Require dzil v6 so that tests work with Path::Tiny.
+
 4.213     2016-06-17T03:22:00Z
 
   - Change tests to not expect Path::Class for compatibility with dzil v6.
