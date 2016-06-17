@@ -8,7 +8,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.213
+version 6.001
 
 # SYNOPSIS
 
