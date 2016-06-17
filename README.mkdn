@@ -8,7 +8,7 @@ Dist::Zilla::PluginBundle::Author::RWSTAUNER - RWSTAUNER's Dist::Zilla config
 
 # VERSION
 
-version 4.212
+version 4.213
 
 # SYNOPSIS
 
@@ -266,12 +266,12 @@ progress on the request by the system.
 
 # AUTHOR
 
-Randy Stauner <rwstauner@cpan.org>
+Randy Stauner &lt;rwstauner@cpan.org>
 
 # CONTRIBUTORS
 
-- Karen Etheridge <ether@cpan.org>
-- Sergey Romanov <complefor@rambler.ru>
+- Karen Etheridge &lt;ether@cpan.org>
+- Sergey Romanov &lt;complefor@rambler.ru>
 
 # COPYRIGHT AND LICENSE
 
