@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Test::More 0.96;
 use lib 't/lib';
-use Path::Class;
+use Path::Tiny;
 use Test::DZil;
 use Git::Wrapper;
 use File::Temp qw( tempfile );
@@ -31,13 +31,13 @@ close $tmpfile;
   my $tzil = Minter->_new_from_profile(
     [ 'Author::RWSTAUNER' => 'default' ],
     { name    => $dist_name ,},
-    { global_config_root => dir(qw( corpus global ))->absolute },
+    { global_config_root => path(qw( corpus global ))->absolute },
   );
 
   $tzil->mint_dist();
 
-  my $mint_dir = $tzil->tempdir->subdir('mint');
-  my $dir = $mint_dir->subdir('t');
+  my $mint_dir = path($tzil->tempdir)->child('mint');
+  my $dir = $mint_dir->child('t');
 
   ok -d $dir, 'created t in mint dir';
 
